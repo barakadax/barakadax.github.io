@@ -372,6 +372,10 @@ body .header .content {
    background-image: url('../projImg/pyvirus.png');
 }
 
+.card:nth-child(14):before {
+   background-image: url('../projImg/wifiEx.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
