@@ -10,7 +10,7 @@ body {
    height: 100%;
    overflow-x: hidden;
    font-family: montserrat;
-   background-color: black;
+   background: linear-gradient(#000000, #020202, #050505, #080808);
 }
 
 span {
@@ -31,6 +31,15 @@ footer {
    padding: 10px 0 10px 0;
    /*bottom: 0px;*/
    margin: 10px 0 0 0;
+   border-radius: 50px 50px 0px 0px;
+}
+
+h3 {
+   text-shadow: 1px 1px 1px white, 0 0 1em white, 0 0 0.2em white;
+}
+
+#noStyle {
+   text-shadow: none;
 }
 
 #title {
@@ -89,10 +98,6 @@ footer {
    font-size: 30px;
 }
 
-#PET {
-   color: #ff8c00;
-}
-
 #projects {
    display: grid;
    place-items: center;
@@ -118,12 +123,16 @@ footer {
    }
 }
 
+.linkStyles {
+   color: #ff8c00;
+}
+
 .showOff {
    width: 900px;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
    font-size: 22px;
-   gap: 20px;
+   gap: 30px;
    padding: 20px 0 40px 0;
 }
 
@@ -373,7 +382,7 @@ body .header .content {
 }
 
 .card:nth-child(14):before {
-   background-image: url('../projImg/wifiEx.png');
+   background-image: url('../projImg/wifi.png');
 }
 
 .content {
