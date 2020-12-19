@@ -4,11 +4,14 @@
    <title>Barak's Portfolio</title>
    <link rel="icon" href="img/icon.png">
    <link href="css/style.css" rel="stylesheet">
+   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
    <link href="https://fonts.googleapis.com/css2?family=Montserrat&amp;display=swap" rel="stylesheet">
    <meta name="viewport" content="initial-scale=1.0 minimum-scale=1.0 width=device-width" />
    <meta charset=utf-8 />
 </head>
 <body>
+   <script>AOS.init({duration: 2000,})</script>
    <div class="header">
       <div id="title">
          <h1>Barak Taya</h1>
@@ -167,7 +170,7 @@
             </div>
          </div>
          <div id="textAboutMe">
-            <h3 id="noStyle">About me</h3>
+            <h3>About me</h3>
             I'm a practical software engineer from the northern part of Israel.<br>
             I've graduated from <a class="linkStyles" href="https://www.pet.ac.il/" target="_blank">Practical engineering Technion</a>
             as an exceeding student with GPA of 86.9.<br>
@@ -177,8 +180,9 @@
             I've experience as technical support tier 2 & information technology.
          </div>
       </div>
+      <!--https://michalsnik.github.io/aos/-->
       <h3>Programing languages</h3>
-      <div class="showOff">
+      <div class="showOff" data-aos="zoom-out-left">
          <p>
             <img class="smallIcons" src="img/assembly.png" alt="Assembly">
             <span>Assembly</span>
@@ -213,7 +217,7 @@
          </p>
       </div>
       <h3>Databases</h3>
-      <div class="showOff">
+      <div class="showOff" data-aos="fade-right">
          <p>
             <img class="smallIcons" src="img/postgresql.png" alt="Postgresql">
             <span>Postgresql</span>
@@ -240,7 +244,7 @@
          </p>
       </div>
       <h3>Frameworks</h3>
-      <div class="showOff">
+      <div class="showOff" data-aos="zoom-in-right">
          <p>
             <img class="smallIcons" src="img/django.png" alt="Django">
             <span>Django</span>
@@ -267,7 +271,7 @@
          </p>
       </div>
       <h3>Others</h3>
-      <div class="showOff">
+      <div class="showOff" data-aos="fade-up">
          <p>
             <img class="smallIcons" src="img/html.png" alt="HTML">
             <span>HTML</span>
@@ -294,7 +298,7 @@
          </p>
       </div>
       <h3>Personality traits</h3>
-      <div class="showOff">
+      <div class="showOff" data-aos="zoom-in-up">
          <p>
             <img class="smallIcons" src="img/passion.png" alt="Passion">
             <span>Passion</span>
