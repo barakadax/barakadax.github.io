@@ -10,7 +10,7 @@ body {
    height: 100%;
    overflow-x: hidden;
    font-family: montserrat;
-   background: linear-gradient(#000000, #020202, #050505, #080808);
+   background-color: black;
 }
 
 span {
@@ -120,6 +120,29 @@ h3 {
    }
 }
 
+#simpleButtonOrder {
+   width: 50%;
+   padding: 0 0 10px 0;
+}
+
+.simpleButtons {
+   padding: 5px 10px 5px 10px;
+   background-color: transparent;
+   border: 2px #ff8c00 solid;
+   color: white;
+   font-size: 30px;
+   border-radius: 25px 25px 25px 25px;
+   outline: none;
+}
+
+.simpleButtons:hover {
+   border: 2px white solid;
+}
+
+.simpleButtons:active {
+   transform: translateY(4px);
+}
+
 .linkStyles {
    color: #ff8c00;
 }
@@ -129,7 +152,7 @@ h3 {
    width: 900px;
    display: grid;
    font-size: 22px;
-   padding: 20px 0 40px 0;
+   padding: 20px 0 35px 0;
    grid-template-columns: repeat(4, 1fr);
 }
 
@@ -187,6 +210,12 @@ h3 {
    .showOff {
       grid-template-columns: 1fr;
       width: 100%;
+   }
+   #simpleButtonOrder {
+      width: 90%;
+   }
+   h3 {
+      font-size: 40px;
    }
    p {
       width: 50%;
