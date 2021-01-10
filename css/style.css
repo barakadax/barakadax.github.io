@@ -410,6 +410,10 @@ body .header .content {
    background-image: url('../projImg/wifi.png');
 }
 
+.card:nth-child(15):before {
+   background-image: url('../projImg/searchengineimg.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
