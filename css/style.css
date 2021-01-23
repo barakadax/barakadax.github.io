@@ -414,6 +414,10 @@ body .header .content {
    background-image: url('../projImg/searchengineimg.png');
 }
 
+.card:nth-child(16):before {
+   background-image: url('../projImg/gif_creator.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
