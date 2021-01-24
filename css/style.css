@@ -418,6 +418,10 @@ body .header .content {
    background-image: url('../projImg/gif_creator.png');
 }
 
+.card:nth-child(17):before {
+   background-image: url('../projImg/sharpStore.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
