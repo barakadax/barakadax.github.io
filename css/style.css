@@ -426,6 +426,10 @@ body .header .content {
    background-image: url('../projImg/sharpStore.png');
 }
 
+.card:nth-child(19):before {
+   background-image: url('../projImg/self.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
