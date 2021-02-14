@@ -9,7 +9,7 @@
     ''"'',,}{,,*/
 'use strict';
 
-let programing_language_list = ["ALL", "X86", "ANSI", "PY", "PHP", "SHARP", "JAVA", "JS"]; // "DART"
+let programing_language_list = ["ALL", "X86", "ANSI", "PY", "PHP", "DART", "SHARP", "JAVA", "JS"];
 
 // Creating a dictionary of buttons by id & adding event listner with specific language name
 let buttons = {};

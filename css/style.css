@@ -430,6 +430,10 @@ body .header .content {
    background-image: url('../projImg/self.png');
 }
 
+.card:nth-child(20):before {
+   background-image: url('../projImg/chatDesign.jpeg');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
