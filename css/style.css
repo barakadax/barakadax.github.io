@@ -162,6 +162,7 @@ h3 {
 
 .imgLink {
    width: 60px;
+   border-radius: 50%;
    margin: 0 20px 0 20px;
 }
 
@@ -530,4 +531,9 @@ body .header .content {
       -webkit-transition-duration: 0s;
       transition-duration: 0s;
    }
+}
+
+.imgLink:hover {
+   background: rgba(255, 140, 0, 0.2);
+   box-shadow: #ff8c00 0 0 100px 8px;
 }
