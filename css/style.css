@@ -435,6 +435,10 @@ body .header .content {
    background-image: url('../projImg/chatDesign.jpeg');
 }
 
+.card:nth-child(21):before {
+   background-image: url('../projImg/nslookupAll.png');
+}
+
 .content {
    position: relative;
    display: -webkit-box;
