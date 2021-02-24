@@ -2,6 +2,7 @@
    margin: 0;
    padding: 0;
    box-sizing: border-box;
+   scroll-behavior: smooth;
 }
 
 body {
@@ -29,8 +30,7 @@ footer {
    background-color: #ff8c00;
    font-size: 20px;
    padding: 10px 0 10px 0;
-   /*bottom: 0px;*/
-   margin: 10px 0 0 0;
+   margin: 14px 0 0 0;
    border-radius: 50px 50px 0px 0px;
 }
 
@@ -172,6 +172,10 @@ h3 {
   position: relative;
 }
 
+.middleScreenText {
+   text-align: center;
+}
+
 @media only screen and (max-width: 1024px) {  /*Just for the ipad pro *(sigh)* */
    #information {
       width: 90%;
@@ -193,9 +197,6 @@ h3 {
       justify-items: start;
       grid-template-columns: 1fr;
    }
-   #informationContainer {
-      text-align: center;
-   }
    #information {
       width: 100%;
       flex-direction: column;
@@ -208,8 +209,11 @@ h3 {
       padding: 10px 0 0 0;
    }
    .showOff {
-      grid-template-columns: 1fr;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
    }
    #simpleButtonOrder {
       width: 90%;
@@ -217,8 +221,10 @@ h3 {
    h3 {
       font-size: 40px;
    }
-   p {
-      width: 50%;
+   span {
+      position: relative;
+      display: inline-block;
+      transform:translateY(-75%);
    }
 }
 
