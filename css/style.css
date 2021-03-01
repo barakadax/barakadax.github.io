@@ -15,8 +15,8 @@ body {
 }
 
 span {
-   position:absolute;
-   transform:translateY(50%);
+   display: inline-block;
+   transform:translateY(-75%);
 }
 
 a {
@@ -176,6 +176,10 @@ h3 {
    text-align: center;
 }
 
+.stringTooLong {
+   width: 140%;
+}
+
 @media only screen and (max-width: 1024px) {  /*Just for the ipad pro *(sigh)* */
    #information {
       width: 90%;
@@ -221,10 +225,8 @@ h3 {
    h3 {
       font-size: 40px;
    }
-   span {
-      position: relative;
-      display: inline-block;
-      transform:translateY(-75%);
+   .stringTooLong {
+      width: auto;
    }
 }
 
