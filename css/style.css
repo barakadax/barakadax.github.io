@@ -363,87 +363,87 @@ body .header .content {
    transition: transform calc(var(--d) * 2) var(--e), -webkit-transform calc(var(--d) * 2) var(--e);
 }
 
-.card:nth-child(1):before {
+.card:nth-child(1):before {  /* Python - Silent messaging */
    background-image: url('../projImg/silentMsg.png');
 }
 
-.card:nth-child(2):before {
+.card:nth-child(2):before {  /* PHP - Student system*/
    background-image: url('../projImg/phpStuSys.png');
 }
 
-.card:nth-child(3):before {
+.card:nth-child(3):before {  /* C - Tic Tac Toe */
    background-image: url('../projImg/tictactoe.png');
 }
 
-.card:nth-child(4):before {
+.card:nth-child(4):before {  /* C - Student system */
    background-image: url('../projImg/cStudent.png');
 }
 
-.card:nth-child(5):before {
+.card:nth-child(5):before {  /* C - Triangle definer */
    background-image: url('../projImg/tri.png');
 }
 
-.card:nth-child(6):before {
+.card:nth-child(6):before {  /* C - RLE */
    background-image: url('../projImg/rle.png');
 }
 
-.card:nth-child(7):before {
+.card:nth-child(7):before {  /* JS - Notes */
    background-image: url('../projImg/jsnotes.png');
 }
 
-.card:nth-child(8):before {
+.card:nth-child(8):before {  /* Python - Login */
    background-image: url('../projImg/pyLogin.png');
 }
 
-.card:nth-child(9):before {
+.card:nth-child(9):before {  /* X86 - Snake */
    background-image: url('../projImg/x86snake.png');
 }
 
-.card:nth-child(10):before {
+.card:nth-child(10):before {  /* JS - Colour game */
    background-image: url('../projImg/colourGame.png');
 }
 
-.card:nth-child(11):before {
+.card:nth-child(11):before {  /* Java - Log handler */
    background-image: url('../projImg/loghandel.png');
 }
 
-.card:nth-child(12):before {
+.card:nth-child(12):before {  /* Python - Steganography */
    background-image: url('../projImg/pySteg.png');
 }
 
-.card:nth-child(13):before {
+.card:nth-child(13):before {  /* Java - Multiply game */
    background-image: url('../projImg/javamulgame.png');
 }
 
-.card:nth-child(14):before {
+.card:nth-child(14):before {  /* Python - Virus */
    background-image: url('../projImg/pyvirus.png');
 }
 
-.card:nth-child(15):before {
+.card:nth-child(15):before {  /* Python - Wifi extractor */
    background-image: url('../projImg/wifi.png');
 }
 
-.card:nth-child(16):before {
+.card:nth-child(16):before {  /* JS - Search engine */
    background-image: url('../projImg/searchengineimg.png');
 }
 
-.card:nth-child(17):before {
+.card:nth-child(17):before {  /* Python - GIF creator */
    background-image: url('../projImg/gif_creator.png');
 }
 
-.card:nth-child(18):before {
+.card:nth-child(18):before {  /* C# - Store management */
    background-image: url('../projImg/sharpStore.png');
 }
 
-.card:nth-child(19):before {
+.card:nth-child(19):before {  /* JS - Portfolio */
    background-image: url('../projImg/self.png');
 }
 
-.card:nth-child(20):before {
+.card:nth-child(20):before {  /* DART - chat design */
    background-image: url('../projImg/chatDesign.jpeg');
 }
 
-.card:nth-child(21):before {
+.card:nth-child(21):before {  /* Python - Users search */
    background-image: url('../projImg/nslookupAll.png');
 }
 
