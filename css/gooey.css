@@ -1,0 +1,82 @@
+.backgroundSpaceForBubbles {
+   width: 100%;
+   height: 15px;
+   background-image: linear-gradient(var(--Blue-color), transparent);
+}
+
+.bubbles {
+   width: 100%;
+   overflow-x: clip;
+   filter: url("#blob");
+   position: -webkit-sticky;
+   -webkit-filter: url("#blob");
+}
+ 
+.bubble {
+   position: absolute;
+   border-radius: 100%;
+   left: var(--position, 50%);
+   transform: translate(-50%, 130%);
+   background-color: var(--Blue-color);
+   -webkit-transform: translate(-50%, 130%);
+   animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s), bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);/*, bubble-colour var(--time, 4s) ease-in infinite var(--delay, 0s);*/
+   -webkit-animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s), bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);/*, bubble-colour var(--time, 4s) ease-in infinite var(--delay, 0s);*/
+}
+ 
+@-webkit-keyframes bubble-size {
+   0%, 75% {
+      width: var(--size, 4rem);
+      height: var(--size, 4rem);
+   }
+   100% {
+      width: 0;
+      height: 0;
+   }
+}
+ 
+@keyframes bubble-size {
+   0%, 75% {
+      width: var(--size, 4rem);
+      height: var(--size, 4rem);
+   }
+   100% {
+      width: 0;
+      height: 0;
+   }
+}
+ 
+@-webkit-keyframes bubble-move {
+   0% {
+      bottom: 4rem;
+   }
+   100% {
+      bottom: var(--distance, 10rem);
+   }
+}
+ 
+@keyframes bubble-move {
+   0% {
+      bottom: 4rem;
+   }
+   100% {
+      bottom: var(--distance, 10rem);
+   }
+}
+
+/*@-webkit-keyframes bubble-colour {
+   0%, 50% {
+      background-color: var(--Blue-color);
+   }
+   100% {
+      background-color: black;
+   }
+}
+ 
+@keyframes bubble-colour {
+   0%, 50% {
+      background-color: var(--Blue-color);
+   }
+   100% {
+      background-color: black;
+   }
+}*/

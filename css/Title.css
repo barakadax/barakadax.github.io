@@ -1,0 +1,16 @@
+#title {
+    width: 100%;
+    color: black;
+    font-size: 40px;
+    text-align: center;
+    padding: 5px 0 40px 0;
+    background-color: var(--Blue-color);
+}
+
+#title h1 {
+    text-shadow: 1px 1px 4px white;
+}
+
+#title h2 {
+    text-shadow: 1px 1px 4px white;
+}

@@ -1,0 +1,51 @@
+#aboutMe {
+    display: flex;
+    align-items: center;
+}
+
+#myself {
+    width: 300px;
+    border-radius: 50%;
+    margin: 0 0 20px 0;
+}
+
+#AvatarGithubLinkedinContainer {
+    display: flex;
+    margin: 0 50px 0 0;
+    align-items: center;
+    flex-direction: column;
+}
+
+#NCR {
+    color: var(--NCR-color);
+}
+
+.imgLink {
+    width: 60px;
+    border-radius: 50%;
+    margin: 0 20px 0 20px;
+}
+
+.imgLink:hover {
+    background: rgba(var(--Orange-color), 0.2);
+    box-shadow: var(--Orange-color) 0 0 50px 8px;
+}
+
+@media only screen and (max-width: 1024px) {
+    #textAboutMe {
+        max-width: 600px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #aboutMe {
+        text-align: center;
+        flex-direction: column;
+    }
+    #textAboutMe {
+        max-width: 90%;
+    }
+    #AvatarGithubLinkedinContainer {
+        margin: 0 0 15px 0;
+    }
+}

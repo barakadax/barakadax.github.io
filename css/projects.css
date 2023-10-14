@@ -1,0 +1,102 @@
+#projectsButton {
+    text-align: center;
+    margin: 10px 0 10px 0;
+}
+
+#projectsPattern {
+    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.card {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    font-size: 20px;
+    text-align: center;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    background-size: cover;
+}
+
+/*.card:hover {
+    border: solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to bottom, var(--Red-color), var(--Purple-color));
+    animation: animateGlow 6s ease infinite;
+}*/
+
+/*@keyframes animateGlow {
+    0% {
+       background-position: 50% 0%;
+    }
+    50% {
+       background-position: 0% 75%;
+    }
+    100% {
+       background-position: 50% 0%;
+    }
+}*/
+
+.card > h3 {
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    color: black;
+    position: absolute;
+    text-shadow: 1px 1px 1px white, 0 0 1em white, 0 0 0.2em white;
+}
+
+.card:hover > h3 {
+    top: 0;
+    color: white;
+    text-shadow: none;
+    background-color: rgba(0, 0 ,0, 0.5);
+    /*text-shadow: 1px 1px 1px black, 0 0 1em white, 0 0 0.2em white;*/
+}
+
+.card > i {
+    bottom: 0;
+    padding: 10px;
+    color: transparent;
+    position: absolute;
+}
+
+.card:hover > i {
+    color: white;
+    /*text-shadow: 1px 1px 1px black, 0 0 1em white, 0 0 0.2em white;*/
+}
+
+@media only screen and (max-width: 1024px) {
+    #projectsPattern {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .card > h3 {
+        top: 0;
+        color: white;
+        text-shadow: none;
+        background-color: rgba(0, 0 ,0, 0.5);
+    }
+    .card > i {
+        color: white;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #projectsPattern {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 525px) {
+    #projectsPattern {
+        display: contents;
+    }
+    .card {
+        width: 94%;
+        height: 200px;
+        margin: 0 0 20px 0;
+    }
+}
