@@ -6,8 +6,7 @@
 
 .bubbles {
    width: 100%;
-   overflow-x: visible;
-   position: relative;
+   position: inherit;
    filter: url("#blob");
    -webkit-filter: url("#blob");
 }
