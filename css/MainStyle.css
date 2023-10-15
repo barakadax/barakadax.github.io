@@ -39,7 +39,7 @@ main {
 }
 
 h1, h2 {
-   text-shadow: 1px 1px 1px white, 0 0 1em white, 0 0 0.2em white;
+   text-shadow: 1px 1px 1px white, 0 0 1px white, 0 0 0.2em white;
 }
 
 footer {
