@@ -6,7 +6,6 @@
 
 .bubbles {
    width: 100%;
-   position: sticky;
    filter: url("#blob");
    position: -webkit-sticky;
    -webkit-filter: url("#blob");
