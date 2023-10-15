@@ -6,8 +6,9 @@
 
 .bubbles {
    width: 100%;
+   overflow-x: clip;
+   position: relative;
    filter: url("#blob");
-   position: -webkit-sticky;
    -webkit-filter: url("#blob");
 }
  
