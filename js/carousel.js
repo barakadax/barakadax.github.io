@@ -14,7 +14,13 @@ class carousel{
         this.skillsAndPersonalityCounter = 0;
         this.visualIndexInGUI = document.getElementsByClassName("index");
         this.allSkillsAndPersonality = document.getElementsByClassName("skillsAndPersonality");
+        this.touchStartX = 0;
+        this.touchEndX = 0;
         this.Initialize();
+
+        this.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
+        this.carouselElement.addEventListener("touchstart", (e) => this.TouchStart(e));
+        this.carouselElement.addEventListener("touchend", (e) => this.TouchEnd(e));
     }
 
     Initialize() {
@@ -49,5 +55,20 @@ class carousel{
         this.visualIndexInGUI[targetIndex].setAttribute("class", "index meInIndex");
         this.allSkillsAndPersonality[targetIndex].style.display = "";
         this.skillsAndPersonalityCounter = targetIndex;
+    }
+
+    TouchStart(event) {
+        this.touchStartX = event.touches[0].clientX;
+    }
+
+    TouchEnd(event) {
+        this.touchEndX = event.changedTouches[0].clientX;
+        const touchThreshold = 5;
+
+        if (this.touchStartX - this.touchEndX > touchThreshold) {
+            this.next();
+        } else if (this.touchEndX - this.touchStartX > touchThreshold) {
+            this.previous();
+        }
     }
 }
