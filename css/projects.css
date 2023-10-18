@@ -46,7 +46,7 @@
     padding: 10px;
     color: black;
     position: absolute;
-    text-shadow: 1px 1px 1px white, 0 0 1em white, 0 0 0.2em white;
+    text-shadow: 1px 1px 1px white, 0 0 1px white, 0 0 0.2em white;
 }
 
 .card:hover > h3 {
