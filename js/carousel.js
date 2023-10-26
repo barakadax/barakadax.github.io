@@ -9,66 +9,89 @@
     ''"'',,}{,,*/
 'use strict';
 
-class carousel{
-    constructor() {
-        this.skillsAndPersonalityCounter = 0;
-        this.visualIndexInGUI = document.getElementsByClassName("index");
-        this.allSkillsAndPersonality = document.getElementsByClassName("skillsAndPersonality");
-        this.touchStartX = 0;
-        this.touchEndX = 0;
-        this.Initialize();
+function getCarousel() {
+    let carousel = Object.create(null);
+    carousel.skillsAndPersonalityCounter = 0;
+    carousel.visualIndexInGUI = document.getElementsByClassName("index");
+    carousel.allSkillsAndPersonality = document.getElementsByClassName("skillsAndPersonality");
+    carousel.touchStartX = 0;
+    carousel.touchEndX = 0;
 
-        this.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
-        this.carouselElement.addEventListener("touchstart", (e) => this.TouchStart(e));
-        this.carouselElement.addEventListener("touchend", (e) => this.TouchEnd(e));
-    }
-
-    Initialize() {
-        for (let divIndex = 1; divIndex < this.allSkillsAndPersonality.length; divIndex++)
-            this.allSkillsAndPersonality[divIndex].style.display = "none";
-        this.changeVisualGUIIndex();
-    }
-
-    changeVisualGUIIndex() {
-        for (let divIndex = 0; divIndex < this.allSkillsAndPersonality.length; divIndex++)
-            this.visualIndexInGUI[divIndex].setAttribute("class", "index");
-        this.visualIndexInGUI[this.skillsAndPersonalityCounter].setAttribute("class", "index meInIndex");
-    }
-
-    next() {
-        this.allSkillsAndPersonality[this.skillsAndPersonalityCounter].style.display = "none";
-        this.skillsAndPersonalityCounter = (this.skillsAndPersonalityCounter + 1) % this.allSkillsAndPersonality.length;
-        this.allSkillsAndPersonality[this.skillsAndPersonalityCounter].style.display = "";
-        this.changeVisualGUIIndex();
-    }
-
-    previous() {
-        this.allSkillsAndPersonality[this.skillsAndPersonalityCounter].style.display = "none";
-        this.skillsAndPersonalityCounter = this.skillsAndPersonalityCounter - 1 < 0 ? this.allSkillsAndPersonality.length - 1 : this.skillsAndPersonalityCounter - 1;
-        this.allSkillsAndPersonality[this.skillsAndPersonalityCounter].style.display = "";
-        this.changeVisualGUIIndex();
-    }
-
-    setAtIndex(targetIndex) {
-        this.visualIndexInGUI[this.skillsAndPersonalityCounter].setAttribute("class", "index");
-        this.allSkillsAndPersonality[this.skillsAndPersonalityCounter].style.display = "none";
-        this.visualIndexInGUI[targetIndex].setAttribute("class", "index meInIndex");
-        this.allSkillsAndPersonality[targetIndex].style.display = "";
-        this.skillsAndPersonalityCounter = targetIndex;
-    }
-
-    TouchStart(event) {
-        this.touchStartX = event.touches[0].clientX;
-    }
-
-    TouchEnd(event) {
-        this.touchEndX = event.changedTouches[0].clientX;
-        const touchThreshold = 5;
-
-        if (this.touchStartX - this.touchEndX > touchThreshold) {
-            this.next();
-        } else if (this.touchEndX - this.touchStartX > touchThreshold) {
-            this.previous();
+    Object.defineProperty(carousel, 'ChangeVisualGUIIndex', {
+        writable: false,
+        value: function() {
+            for (let divIndex = 0; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
+                carousel.visualIndexInGUI[divIndex].setAttribute("class", "index");
+            carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index meInIndex");
         }
-    }
+    });
+
+    Object.defineProperty(carousel, 'Initialize', {
+        writable: false,
+        value: function() {
+            for (let divIndex = 1; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
+                carousel.allSkillsAndPersonality[divIndex].style.display = "none";
+            carousel.ChangeVisualGUIIndex();
+        }
+    });
+
+    Object.defineProperty(carousel, 'Next', {
+        writable: false,
+        value: function() {
+            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
+            carousel.skillsAndPersonalityCounter = (carousel.skillsAndPersonalityCounter + 1) % carousel.allSkillsAndPersonality.length;
+            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
+            carousel.ChangeVisualGUIIndex();
+        }
+    });
+
+    Object.defineProperty(carousel, 'Previous', {
+        writable: false,
+        value: function() {
+            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
+            carousel.skillsAndPersonalityCounter = carousel.skillsAndPersonalityCounter - 1 < 0 ? carousel.allSkillsAndPersonality.length - 1 : carousel.skillsAndPersonalityCounter - 1;
+            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
+            carousel.ChangeVisualGUIIndex();
+        }
+    });
+
+    Object.defineProperty(carousel, 'SetAtIndex', {
+        writable: false,
+        value: function(targetIndex) {
+            carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index");
+            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
+            carousel.visualIndexInGUI[targetIndex].setAttribute("class", "index meInIndex");
+            carousel.allSkillsAndPersonality[targetIndex].style.display = "";
+            carousel.skillsAndPersonalityCounter = targetIndex;
+        }
+    });
+
+    Object.defineProperty(carousel, 'TouchStart', {
+        writable: false,
+        value: function(event) {
+            carousel.touchStartX = event.touches[0].clientX;
+        }
+    });
+
+    Object.defineProperty(carousel, 'TouchEnd', {
+        writable: false,
+        value: function(event) {
+            carousel.touchEndX = event.changedTouches[0].clientX;
+            const touchThreshold = 10;
+    
+            if (carousel.touchStartX - carousel.touchEndX > touchThreshold) {
+                carousel.Next();
+            } else if (carousel.touchEndX - carousel.touchStartX > touchThreshold) {
+                carousel.Previous();
+            }
+        }
+    });
+
+    carousel.Initialize();
+
+    carousel.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
+    carousel.carouselElement.addEventListener("touchstart", (e) => carousel.TouchStart(e));
+    carousel.carouselElement.addEventListener("touchend", (e) => carousel.TouchEnd(e));
+
+    return carousel;
 }

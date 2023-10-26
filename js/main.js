@@ -9,18 +9,21 @@
     ''"'',,}{,,*/
 'use strict';
 
-let contentIndex = new carousel();
-let projectsShowOff = new projectsCards();
-projectsShowOff.execute();
+getProjectsFromGitHub();
+
+let contentIndex = getCarousel();
 
 document.getElementById("nextInfo").addEventListener("click", function() {
-   contentIndex.next();
+   contentIndex.Next();
 });
 
 document.getElementById("prevInfo").addEventListener("click", function() {
-   contentIndex.previous();
+   contentIndex.Previous();
 });
 
 function carouselSetIndex(carouselContentIndex) {
-   contentIndex.setAtIndex(carouselContentIndex);
-}
+   contentIndex.SetAtIndex(carouselContentIndex);
+};
+
+let projectsShowOff = new projectsCards();
+projectsShowOff.execute();

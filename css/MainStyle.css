@@ -7,6 +7,7 @@
    padding: 0;
    box-sizing: border-box;
    scroll-behavior: smooth;
+   --SAP-color: #00A6E1;
    --NCR-color: #51b948;
    --Red-color: #f1181b;
    --gray-color: #808080;
@@ -46,11 +47,11 @@ footer {
    width: 90%;
    text-align: center;
    margin: 20px 0 0 0;
+   background-size: 200% 200%;
    border-radius: 50px 50px 0 0;
    padding: 10px 20px 10px 20px;
    animation: animateGlow 6s ease infinite;
    background: linear-gradient(180deg, var(--Red-color), var(--Purple-color));
-   background-size: 200% 200%;
 }
 
 @keyframes animateGlow {
@@ -108,12 +109,6 @@ css-doodle {
    -khtml-user-select: none;
    -webkit-user-select: none;
    -webkit-touch-callout: none; 
-}
-
-@media only screen and (max-width: 525px) {
-   footer {
-      margin: 0;
-   }
 }
 
 @keyframes shake {

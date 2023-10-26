@@ -67,7 +67,7 @@
          </div>
          <main id="textAboutMe">
             <h2>About me</h2>
-            I work at <a href="https://www.sap.com/products/acquired-brands/what-is-gigya.html" target="_blank">SAP Gigya</a> as a Software Engineer.<br>
+            I work at <a id="SapGigya" href="https://www.sap.com/products/acquired-brands/what-is-gigya.html" target="_blank">SAP Gigya</a> as a Software Engineer.<br>
             <!--Published Nugets <a href="https://www.nuget.org/profiles/Barakadax" target="_blank">Nugets</a>.<br>
             I have graduated from <a href="https://www.pet.ac.il/" target="_blank">Practical Engineering Technion</a>
              as an honorary student in Practical Software Engineering with a GPA of 87.<br>-->
@@ -167,13 +167,13 @@
                      <div class="iconAndTextSameLine"><img class="smallIcons" src="img/Docker.png" alt="Docker">Docker</div>
                   </div>
                </div>
-               <div class="skillsAndPersonality">
+               <!--<div class="skillsAndPersonality">
                   <h2>Runtime environments</h2>
                   <div class="skillsAndPersonalityContent">
                      <div class="iconAndTextSameLine"><img class="smallIcons" src="img/nodeJs.png" alt="Node.JS">Node.JS</div>
                   </div>
                </div>
-               <!--<div class="skillsAndPersonality">
+               <div class="skillsAndPersonality">
                   <h2>CI/CD</h2>
                   <div class="skillsAndPersonalityContent">
                      <div class="iconAndTextSameLine"><img class="smallIcons" src="img/jenkins.png" alt="Jenkins">Jenkins</div>
@@ -216,8 +216,8 @@
                <div class="index" onclick="carouselSetIndex(5)"></div>
                <div class="index" onclick="carouselSetIndex(6)"></div>
                <div class="index" onclick="carouselSetIndex(7)"></div>
-               <div class="index" onclick="carouselSetIndex(8)"></div>
-               <!--<div class="index" onclick="carouselSetIndex(9)"></div>
+               <!--<div class="index" onclick="carouselSetIndex(8)"></div>
+               <div class="index" onclick="carouselSetIndex(9)"></div>
                <div class="index" onclick="carouselSetIndex(10)"></div>
                <div class="index" onclick="carouselSetIndex(11)"></div>-->
             </div>
@@ -237,139 +237,20 @@
       <h2>Projects</h2>
       <div id="projectsButton">
          <button id="ALL">All</button>
-         <button id="PY">Python</button>
-         <button id="ANSI">C</button>
-         <button id="SHARP">C#</button>
-         <button id="JS">JS</button>
-         <button id="JAVA">Java</button>
+         <button id="Python">Python</button>
+         <button id="CLang">C</button>
+         <button id="C#">C#</button>
+         <button id="JavaScript">JS</button>
+         <button id="JavaLang">Java</button>
          <button id="PHP">PHP</button>
-         <button id="DART">Dart</button>
-         <button id="X86">Assembly</button>
+         <button id="Dart">Dart</button>
+         <button id="Assembly">Assembly</button>
          <button id="Scala">Scala</button>
       </div>
-      <div id="projectsPattern">
-         <a target="_blank" href="https://github.com/barakadax/PySilentMessaging" class="card PY PHP" style="background-image: url('projImg/silentMsg.png')">
-            <h3>Python - Silent messaging</h3>
-            <i>Chat service that is secured from man in the middle & SQL injection attacks.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/OrleansMapReduce" class="card SHARP" style="background-image: url('projImg/OrleansMapReduceCSharp.png')">
-            <h3>C# - Orleans MapReduce</h3>
-            <i>Find out how many words have the same letter length.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/RLEpictures" class="card ANSI" style="background-image: url('projImg/rle.png')">
-            <h3>C - RLE</h3>
-            <i>Create, save & open RLE format pictures.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/DocumentationJS" class="card JS" style="background-image: url('projImg/Documentation.png')">
-            <h3>JS - Documentation</h3>
-            <i>Self document everything you might need with easy to use GUI.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/WakeOnLanPY" class="card PY" style="background-image: url('projImg/WOL.png')">
-            <h3>Python - Wake On Lan</h3>
-            <i>Create the WOL object, Execute(mac list, IP lists), magic packet.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/WikiLinkSolver" class="card SHARP" style="background-image: url('projImg/wikiLinkSolver.png')">
-            <h3>C# - Wiki link solver</h3>
-            <i>Find how many links it takes from one page to another.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/Nunit-debugging-extensions" class="card SHARP" style="background-image: url('projImg/NunitExtensions.png')">
-            <h3>C# - Nunit debugging extensions</h3>
-            <i>Extra tools to debug from a test nuget.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/ScrapeImagesPY" class="card PY" style="background-image: url('projImg/scraper.png')">
-            <h3>Python - Scraper</h3>
-            <i>Supply an URL & given depth of how many links to go in to scrape images.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/StudentSysPHP" class="card PHP JS" style="background-image: url('projImg/phpStuSys.png')"> <!--Need to rewrite the project-->
-            <h3>PHP - Student system</h3>
-            <i>System for students to read their scores from.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/DartSilentMessagingDesgin" class="card DART" style="background-image: url('projImg/chatDesign.jpeg')">
-            <h3>DART - Chat design</h3>
-            <i>Designed GUI look for silent messaging application.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/wifiExtractorPy" class="card PY" style="background-image: url('projImg/wifi.png')">
-            <h3>Python - Wi-Fi extractor</h3>
-            <i>Windows only, get used networks names & passwords.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/C_TicTacToe" class="card ANSI" style="background-image: url('projImg/tictactoe.png')">
-            <h3>C - Tic Tac Toe</h3>
-            <i>Can you win against code that randoms it's placements?.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/multiplyGameJava" class="card JAVA" style="background-image: url('projImg/javamulgame.png')"> <!--Need to refactor & clean the code-->
-            <h3>Java - Multiply game</h3>
-            <i>You get 1 multiplication question & need to choose the right answer.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/pySearchDevicesOverNetworksLin" class="card PY" style="background-image: url('projImg/nslookupAll.png')">
-            <h3>Python - Network users finder</h3>
-            <i>Linux only, searches on all networks for connected devices ip.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/CSharpBroadcastChat" class="card SHARP" style="background-image: url('projImg/broadcastCSharp.png')">
-            <h3>C# - Broadcasting</h3>
-            <i>Easy telnet connection broadcasting chat server & client.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/VirusLayoutPython" class="card PY" style="background-image: url('projImg/pyvirus.png')">
-            <h3>Python - Virus layout</h3>
-            <i>Layout for recursive self replicating virus, virus itself not included in the code.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/Game-of-life-python" class="card PY" style="background-image: url('projImg/GameOfLifeResult.png')">
-            <h3>Python - Game of life</h3>
-            <i>Simple tkinter example of game of life.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/SnakeLikeX86" class="card X86" style="background-image: url('projImg/x86snake.png')">
-            <h3>Assembly - Snake</h3>
-            <i>Simulate aspect of the legacy snake game.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/ColourGameJS" class="card JS" style="background-image: url('projImg/colourGame.png')">
-            <h3>JS - Colour game</h3>
-            <i>1 RGB code & 3 coloured circles, only 1 is correct.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/logHandlerJava" class="card JAVA" style="background-image: url('projImg/loghandel.png')"> <!--Needs to refactor & clean the code-->
-            <h3>Java - Log handler</h3>
-            <i>Retrieve data from log file into a DB & vice versa.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/triangleDefinerC" class="card ANSI" style="background-image: url('projImg/tri.png')">
-            <h3>C - Triangle definer</h3>
-            <i>Input the sides of a triangle, get which type of triangle it is.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/PythonGifCreator" class="card PY" style="background-image: url('projImg/gif_creator.png')"> <!--Needs to refactor the code-->
-            <h3>Python - GIF creator</h3>
-            <i>Create your own GIF & choose the amount of FPS.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/StudentSysC" class="card ANSI" style="background-image: url('projImg/cStudent.png')"> <!--Needs to rewrite the code-->
-            <h3>C - Student system</h3>
-            <i>5 scores per student, name, address & calculate average.</i>
-         </a>
-         <!--<a target="_blank" href="https://github.com/barakadax/loginPython" class="card PY" style="background-image: url('projImg/pyLogin.png')">
-            <h3>Python - Login</h3>
-            <i>Auto create passwords for simple signing.</i>
-         </a>-->
-         <a target="_blank" href="https://github.com/barakadax/CSharpStoreManagement" class="card SHARP" style="background-image: url('projImg/sharpStore.png')"> <!--Need to rewrite the project-->
-            <h3>C# - Store management</h3>
-            <i>Makes having a store storage much easier to manage.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/NotesJS" class="card JS" style="background-image: url('projImg/jsnotes.png')"> <!--Delete?-->
-            <h3>JS - Notes</h3>
-            <i>Simple notes website with add, delete all, search, magic button & more.</i>
-         </a>
-         <!--<a target="_blank" href="https://github.com/barakadax/IisLogCleaner" class="card PY" style="background-image: url('projImg/pyIis.png')">
-            <h3>Python IIS & log cleaner</h3>
-            <i>Stops IIS from running, cleaning your chosen folders & restarting IIS.</i>
-         </a>-->
-         <a target="_blank" href="https://github.com/barakadax/TouchBar" class="card DART" style="background-image: url('projImg/touchBarDart.png')">
-            <h3>DART - Touch bar</h3>
-            <i>Designed dynamic JSON based touch bar GUI.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/wordCount/" class="card Scala" style="background-image: url('projImg/wordCountScala.png')">
-            <h3>Scala - Kafka words counter</h3>
-            <i>Includes Docker compose, run and send messages to kafka, counter for all words in all the messages.</i>
-         </a>
-         <a target="_blank" href="https://github.com/barakadax/barakadax.github.io" class="card JS" style="background-image: url('projImg/self.png')">
-            <h3>JS - Portfolio</h3>
-            <i>This website.</i>
-         </a>
+      <div id="projectsColumn">
       </div>
       <footer>GNU Affero General Public License v3.0</footer>
+      <script src="js/github.js"></script>
       <script src="js/projectsCards.js"></script>
       <script src="js/carousel.js"></script>
       <script src="js/doodle.js"></script>
