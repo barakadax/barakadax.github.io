@@ -10,6 +10,7 @@
 'use strict';
 
 function getProjectsFromGitHub() {
+    console.error("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
     const xhr = new XMLHttpRequest();
 
     let functions = Object.create(null);
@@ -49,6 +50,9 @@ function getProjectsFromGitHub() {
     Object.defineProperty(functions, 'setProjectImage', {
         writable: false,
         value: function(element, newProjectLink) {
+            let newProjectImageHolder = document.createElement("div");
+            newProjectImageHolder.className = "projImagesHolder";
+
             let newProjectImage = document.createElement("img");
             newProjectImage.className = "projImages";
             newProjectImage.alt = element.name;
@@ -58,7 +62,8 @@ function getProjectsFromGitHub() {
                 newProjectImage.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
             };
 
-            newProjectLink.appendChild(newProjectImage);
+            newProjectImageHolder.appendChild(newProjectImage);
+            newProjectLink.appendChild(newProjectImageHolder);
         }
     });
 
@@ -131,6 +136,3 @@ function getProjectsFromGitHub() {
     
     xhr.send();
 }
-
-
-

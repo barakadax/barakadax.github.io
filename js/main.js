@@ -1,8 +1,8 @@
 /*
    _____ 	   |￣￣￣￣￣￣￣￣￣￣￣￣|
-/~/~    ~\ 	   |                    |
-| |   MY  \ 	| code by Barak Taya |
-\ \  SLEEP \	|                    |
+/~/~    ~\ 	   |                      |
+| |   MY  \ 	|  code by Barak Taya  |
+\ \  SLEEP \	|                      |
  \ \        \	|＿＿＿＿＿＿＿＿＿＿＿＿|
 --\ \       .\''          ||
 --==\ \     ,,i!!i,	     ||
@@ -25,5 +25,4 @@ function carouselSetIndex(carouselContentIndex) {
    contentIndex.SetAtIndex(carouselContentIndex);
 };
 
-let projectsShowOff = new projectsCards();
-projectsShowOff.execute();
+setProjectButton();
