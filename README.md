@@ -1,6 +1,6 @@
 # barakadax.github.io
 Portfolio to show a bit about myself & a lot of what I can do.
 
-## Old version of the site:
-<img src="v1.png" title="v1" alt="v1">
-<img src="gooey.gif" title="v1" alt="v1">
+## Changed styles:
+<img src="projectsV1Design.png" title="projectsV1Design" alt="projectsV1Design">
+<img src="titleV1Design.gif" title="titleV1Design" alt="titleV1Design">
