@@ -10,7 +10,7 @@
 'use strict';
 
 function getProjectsFromGitHub() {
-    console.error("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
+    console.warn("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
     const xhr = new XMLHttpRequest();
 
     let functions = Object.create(null);
@@ -50,9 +50,6 @@ function getProjectsFromGitHub() {
     Object.defineProperty(functions, 'setProjectImage', {
         writable: false,
         value: function(element, newProjectLink) {
-            let newProjectImageHolder = document.createElement("div");
-            newProjectImageHolder.className = "projImagesHolder";
-
             let newProjectImage = document.createElement("img");
             newProjectImage.className = "projImages";
             newProjectImage.alt = element.name;
@@ -62,8 +59,7 @@ function getProjectsFromGitHub() {
                 newProjectImage.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
             };
 
-            newProjectImageHolder.appendChild(newProjectImage);
-            newProjectLink.appendChild(newProjectImageHolder);
+            newProjectLink.appendChild(newProjectImage);
         }
     });
 
@@ -118,10 +114,11 @@ function getProjectsFromGitHub() {
             const response = JSON.parse(xhr.responseText);
             response.forEach((element, _) => {
                 let newProjectLink = functions.getProjectLink(element);
-                functions.setProjectImage(element, newProjectLink);
+                
                 let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
                 functions.setProjectTitle(element, newProjectInfoDiv);
                 functions.setProjectDescription(element, newProjectInfoDiv);
+                functions.setProjectImage(element, newProjectLink);
 
                 projectsColumn.appendChild(newProjectLink);
             });

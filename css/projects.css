@@ -24,22 +24,21 @@
     align-items: center;
     flex-direction: row;
     padding-bottom: 10px;
+    justify-content: space-between;
     border-bottom: 1px solid var(--Red-color);
 }
 
 .projectInfo {
     max-width: 680px;
+    padding-left: 2px;
     word-break: break-word;
 }
 
-.projImagesHolder {
-    width: 240px;
-    margin: 0 10px 0 0;
-}
-
 .projImages {
+    margin-left: 5px;
     max-width: 240px;
     max-height: 200px;
+    padding-right: 2px;
 }
 
 .projTitle {
@@ -54,16 +53,10 @@
 
 @media only screen and (max-width: 1024px) {
     #projectsButton {
-        max-width: 90%;
+        max-width: 94%;
     }
     #projectsColumn {
-        max-width: 90%;
-    }
-}
-
-@media only screen and (max-width: 768px) {
-    .projImagesHolder {
-        width: auto;
+        max-width: 94%;
     }
 }
 
