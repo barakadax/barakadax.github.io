@@ -7,6 +7,7 @@
 }
 
 #projectsColumn {
+    width: 920px;
     display: flex;
     max-width: 1400px;
     position: relative;
@@ -85,3 +86,15 @@
         max-height: 110px;
     }
 }
+
+@keyframes borderAnimation {
+    0% {
+      border-color: var(--Red-color);
+    }
+    50% {
+      border-color: var(--Purple-color);
+    }
+    100% {
+        border-color: var(--Red-color);
+    }
+  }

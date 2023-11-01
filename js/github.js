@@ -129,7 +129,7 @@ function getProjectsFromGitHub() {
         xhr.abort();
     };
     
-    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&direction=desc&type=all", true);
+    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=50", true);
     
     xhr.send();
 }
