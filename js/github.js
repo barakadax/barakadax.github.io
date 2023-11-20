@@ -39,6 +39,12 @@ function getProjectsFromGitHub() {
             else if (element.language === "Java") {
                 newProjectLink.className = "projectsRow " + "JavaLang";
             }
+            else if (element.language === "PHP") {
+                newProjectLink.className = "projectsRow " + element.language + " JavaScript";
+            }
+            else if (element.name === "SilentMessaging") {
+                newProjectLink.className = "projectsRow " + element.language + " PHP";
+            }
             else {
                 newProjectLink.className = "projectsRow " + element.language;
             }
@@ -84,8 +90,8 @@ function getProjectsFromGitHub() {
             if (element.language === "XSLT") {
                 newProjectTitle.innerHTML = "Scala - " + element.name;
             }
-            else if (element.language === "HTML"){
-                newProjectTitle.innerHTML = "JavaScript - " + element.name;
+            else if (element.language === "HTML" || element.language === "JavaScript"){
+                newProjectTitle.innerHTML = "JS - " + element.name;
             }
             else if (element.name === "TouchBar") {
                 newProjectTitle.innerHTML = "Dart - " + element.name;
@@ -122,8 +128,10 @@ function getProjectsFromGitHub() {
 
                 projectsColumn.appendChild(newProjectLink);
             });
+            projectsColumn.removeChild(projectsColumn.firstElementChild);
         } else {
             console.log("Error loading data.");
+            projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";
         }
     
         xhr.abort();

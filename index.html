@@ -7,6 +7,7 @@
       <link href="css/waves.css" rel="stylesheet">
       <link href="css/Title.css" rel="stylesheet">
       <link href="css/aboutMe.css" rel="stylesheet">
+      <link href="css/loading.css" rel="stylesheet">
       <link href="css/carousel.css" rel="stylesheet">
       <link href="css/projects.css" rel="stylesheet">
       <link href="css/MainStyle.css" rel="stylesheet">
@@ -35,7 +36,7 @@
          <h1>Barak Taya</h1>
          <h2>Software Engineer</h2>
       </div>
-      <css-doodle> <!--https://css-doodle.com/-->
+      <css-doodle id="titleEffect">
          @size: 10px;
          @grid: 100 x 12;
          background: var(--Blue-color);
@@ -52,7 +53,7 @@
             0%, 50%, 90% { scale: 1; opacity: 1 }
             25%, 75%, 100% { scale: 0; opacity: 0 }
          }
-       </css-doodle>
+      </css-doodle>
       <div id="aboutMe">
          <div id="AvatarGithubLinkedinContainer">
             <img id="myself" src="img/me.jpg" alt="Barak Taya">
@@ -248,6 +249,19 @@
          <button id="Scala">Scala</button>
       </div>
       <div id="projectsColumn">
+         <div class="loadingContainer">
+            <div class="cube">
+              <div class="sides">
+                <div class="top"></div>
+                <div class="right"></div>
+                <div class="bottom"></div>
+                <div class="left"></div>
+                <div class="front"></div>
+                <div class="back"></div>
+              </div>
+            </div>
+            <div class="loadingText">Loading</div>
+          </div>
       </div>
       <footer>GNU Affero General Public License v3.0</footer>
       <script defer src="js/github.js"></script>

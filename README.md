@@ -1,4 +1,4 @@
-# barakadax.github.io
+# <a href="barakadax.github.io" target="_blank">barakadax.github.io</a>
 Portfolio to show a bit about myself & a lot of what I can do.
 
 ## Changed styles:
