@@ -27,7 +27,7 @@ function getProjectsFromGitHub() {
             if (element.language === "XSLT") {
                 newProjectLink.className = "projectsRow " + "Scala";
             }
-            else if (element.language === "HTML"){
+            else if (element.language === "HTML" || element.language === "CSS"){
                 newProjectLink.className = "projectsRow " + "JavaScript";
             }
             else if (element.name === "TouchBar") {
@@ -90,7 +90,7 @@ function getProjectsFromGitHub() {
             if (element.language === "XSLT") {
                 newProjectTitle.innerHTML = "Scala - " + element.name;
             }
-            else if (element.language === "HTML" || element.language === "JavaScript"){
+            else if (element.language === "HTML" || element.language === "JavaScript" || element.language === "CSS") {
                 newProjectTitle.innerHTML = "JS - " + element.name;
             }
             else if (element.name === "TouchBar") {
