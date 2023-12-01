@@ -119,6 +119,10 @@ function getProjectsFromGitHub() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             response.forEach((element, _) => {
+                if (element.name === "barakadax") {
+                    return;
+                }
+                
                 let newProjectLink = functions.getProjectLink(element);
                 
                 let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
