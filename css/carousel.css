@@ -167,4 +167,7 @@
         width: 30px;
         height: 30px;
     }
+    .skillsAndPersonality h2 {
+        font-size: 32px;
+    }
 }
