@@ -45,6 +45,9 @@ function getProjectsFromGitHub() {
             else if (element.name === "SilentMessaging") {
                 newProjectLink.className = "projectsRow " + element.language + " PHP";
             }
+            else if (element.name === "Wordle") {
+                newProjectLink.className = "projectsRow " + "Python" + " Rust";
+            }
             else {
                 newProjectLink.className = "projectsRow " + element.language;
             }
