@@ -42,6 +42,9 @@ function getProjectsFromGitHub() {
             else if (element.language === "PHP") {
                 newProjectLink.className = "projectsRow " + element.language + " JavaScript";
             }
+            else if (element.language === "TypeScript") {
+                newProjectLink.className = "projectsRow " + element.language + " JavaScript";
+            }
             else if (element.name === "SilentMessaging") {
                 newProjectLink.className = "projectsRow " + element.language + " PHP";
             }
@@ -99,6 +102,9 @@ function getProjectsFromGitHub() {
             else if (element.name === "TouchBar") {
                 newProjectTitle.innerHTML = "Dart - " + element.name;
             }
+            else if (element.language === "TypeScript") {
+                newProjectTitle.innerHTML = "TS - " + element.name;
+            }
             else {
                 newProjectTitle.innerHTML = element.language + " - " + element.name;
             }
@@ -144,7 +150,7 @@ function getProjectsFromGitHub() {
         xhr.abort();
     };
     
-    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=50", true);
+    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=100", true);
     
     xhr.send();
 }
