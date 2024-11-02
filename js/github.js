@@ -48,6 +48,12 @@ function getProjectsFromGitHub() {
             else if (element.name === "SilentMessaging") {
                 newProjectLink.className = "projectsRow " + element.language + " PHP";
             }
+            else if (element.name === "keychron-optical-keyboard") {
+                newProjectLink.className = "projectsRow " + element.language + " Hardware";
+            }
+            else if (element.name === "SerialCommunication") {
+                newProjectLink.className = "projectsRow " + element.language + " Python";
+            }
             else if (element.name === "Wordle") {
                 newProjectLink.className = "projectsRow " + "Python" + " Rust";
             }
@@ -101,6 +107,9 @@ function getProjectsFromGitHub() {
             }
             else if (element.name === "TouchBar") {
                 newProjectTitle.innerHTML = "Dart - " + element.name;
+            }
+            else if (element.name === "keychron-optical-keyboard") {
+                newProjectTitle.innerHTML = "Hardware - " + element.name;
             }
             else if (element.language === "TypeScript") {
                 newProjectTitle.innerHTML = "TS - " + element.name;
