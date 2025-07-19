@@ -130,7 +130,7 @@ function getProjectsFromGitHub() {
             newProjectDescription.innerHTML = element.description;
 
             if (Array.isArray(element.topics) && element.topics.length > 0) {
-                newProjectDescription.innerHTML += "<br><br>Status: " + element.topics[0];
+                newProjectDescription.innerHTML += '<br><br><u>Tags:</u> ' + element.topics.join(', ');
             }
 
             newProjectInfoDiv.appendChild(newProjectDescription);
