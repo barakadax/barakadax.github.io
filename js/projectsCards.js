@@ -15,7 +15,7 @@ function setProjectButton() {
 
     document.getElementsByTagName("button")[0].style.boxShadow = pressedButtonBoxShadowStyle;
     document.getElementsByTagName("button")[0].style.textShadow = pressedButtonTextShadowStyle;
-    
+
     Array.prototype.forEach.call(document.getElementsByTagName("button"), cardButton => cardButton.addEventListener("click", function() {
         Array.prototype.forEach.call(document.getElementsByClassName("projectsRow"), projectCard => {
             cardButton.id === "ALL" ? projectCard.style.display = "" : !projectCard.className.includes(cardButton.id) ? projectCard.style.display = "none" : projectCard.style.display = "";
@@ -28,12 +28,12 @@ function setProjectButton() {
                 setNoStyleToButton(document.getElementsByTagName("button")[buttonIndex]);
             setStyleToButton(targetButton);
         }
-    
+
         function setNoStyleToButton(button) {
             button.style.boxShadow = "";
             button.style.textShadow = "";
         }
-    
+
         function setStyleToButton(button) {
             button.style.boxShadow = pressedButtonBoxShadowStyle;
             button.style.textShadow = pressedButtonTextShadowStyle;

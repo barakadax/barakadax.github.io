@@ -77,8 +77,8 @@ function getCarousel() {
         writable: false,
         value: function(event) {
             carousel.touchEndX = event.changedTouches[0].clientX;
-            const touchThreshold = 20;
-    
+            const touchThreshold = 40;
+
             if (carousel.touchStartX - carousel.touchEndX > touchThreshold) {
                 carousel.Next();
             } else if (carousel.touchEndX - carousel.touchStartX > touchThreshold) {

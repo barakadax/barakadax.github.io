@@ -129,6 +129,10 @@ function getProjectsFromGitHub() {
             newProjectDescription.className = "projDescription";
             newProjectDescription.innerHTML = element.description;
 
+            if (Array.isArray(element.topics) && element.topics.length > 0) {
+                newProjectDescription.innerHTML += "<br><br>Status: " + element.topics[0];
+            }
+
             newProjectInfoDiv.appendChild(newProjectDescription);
         }
     });
@@ -136,13 +140,14 @@ function getProjectsFromGitHub() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
+            response.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
             response.forEach((element, _) => {
                 if (element.name === "barakadax") {
                     return;
                 }
-                
+
                 let newProjectLink = functions.getProjectLink(element);
-                
+
                 let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
                 functions.setProjectTitle(element, newProjectInfoDiv);
                 functions.setProjectDescription(element, newProjectInfoDiv);
@@ -155,11 +160,11 @@ function getProjectsFromGitHub() {
             console.log("Error loading data.");
             projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";
         }
-    
+
         xhr.abort();
     };
-    
+
     xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=100", true);
-    
+
     xhr.send();
 }
