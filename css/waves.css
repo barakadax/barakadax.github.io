@@ -10,7 +10,7 @@
 }
 
 #lowerWaves {
-  margin: 0 0 15px 0;
+  margin: -1px 0 15px 0;
   transform: rotate(180deg);
   -o-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
@@ -46,7 +46,7 @@
   0% {
    transform: translate3d(-90px,0,0);
   }
-  100% { 
+  100% {
     transform: translate3d(85px,0,0);
   }
 }

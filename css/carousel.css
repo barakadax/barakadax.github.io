@@ -1,12 +1,12 @@
 #carouselBackground {
     width: 100%;
     display: flex;
-    color: black;
+    color: var(--Black-color);
     align-items: center;
     justify-content: center;
     background-color: var(--Orange-color);
 }
- 
+
 #carousel {
     width: 85%;
     display: grid;
@@ -17,7 +17,7 @@
     grid-template-rows: repeat(4, auto);
     grid-template-columns: repeat(3, 1fr);
 }
- 
+
 #skillsAndPersonalityMiddleCell {
     grid-row: 1 / 4;
     min-height: 220px;
@@ -60,20 +60,20 @@
     animation: fade var(--time, 0.35s) ease-in var(--delay, 0s);
     -webkit-animation: fade var(--time, 0.35s) ease-in var(--delay, 0s);
 }
- 
+
 .skillsAndPersonalityContent {
     gap: 20px;
     display: grid;
     padding-top: 20px;
     grid-template-columns: repeat(4, 1fr);
 }
- 
+
 .smallIcons {
     width: 50px;
     height: 50px;
     margin: 0 10px 0 0;
 }
- 
+
 .iconAndTextSameLine {
     display: flex;
     align-items: center;
@@ -102,7 +102,7 @@
         opacity: 1;
     }
 }
-  
+
 @keyframes fade {
     from {
         transform: translate3d(0, -10%, 0);
