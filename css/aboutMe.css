@@ -20,10 +20,18 @@
     color: var(--SAP-color);
 }
 
+#textAboutMe {
+    text-align: left;
+}
+
 .imgLink {
     width: 60px;
     border-radius: 50%;
     margin: 0 20px 0 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .imgLink:hover {
@@ -34,6 +42,15 @@
 @media only screen and (max-width: 1024px) {
     #textAboutMe {
         max-width: 600px;
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    #textAboutMe {
+        text-align: center;
+    }
+    #aboutMe {
+        max-width: 95%;
     }
 }
 

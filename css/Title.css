@@ -5,6 +5,9 @@
     text-align: center;
     padding: 5px 0 5px 0;
     background-color: var(--Blue-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #title h1 {
@@ -20,4 +23,10 @@
    height: 170px;
    margin: -2px 0 30px 0;
    background-image: linear-gradient(var(--Blue-color), var(--Black-color) 95%);
+}
+
+@media only screen and (max-width: 768px) {
+    #title h1 {
+        max-width: 95%;
+    }
 }

@@ -46,7 +46,9 @@ h1, h2 {
 }
 
 footer {
+   bottom: 0;
    width: 90%;
+   height: auto;
    text-align: center;
    margin: 20px 0 0 0;
    background-size: 200% 200%;
@@ -77,6 +79,10 @@ button {
    background-color: transparent;
    border: 2px var(--Red-color) solid;
    border-radius: 25px 25px 25px 25px;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 
 h3 {
