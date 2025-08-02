@@ -46,7 +46,9 @@ menuController.menu.addEventListener('touchend', (event) => {
 
 menuController.menu.addEventListener('click', () => {
   menuController.menu.classList.toggle('open');
-  menuController.menuScreen.style.display = menuController.menuScreen.style.display == "flex" ? "none" : "flex";
+  const isOpen = menuController.menu.classList.contains('open');
+  menuController.menuScreen.style.display = isOpen ? "flex" : "none";
+  document.body.classList.toggle('no-scroll', isOpen);
 });
 
 Object.defineProperty(menuController, 'adjustMenuPosition', {
