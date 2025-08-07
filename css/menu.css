@@ -1,32 +1,32 @@
 #menu {
-    background: linear-gradient(135deg, #714fff, #d522bf);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    position: fixed;
-    top: 20px;
-    z-index: 10;
-    box-shadow: 0px 0px 1px 1px white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  background: linear-gradient(135deg, #714fff, #d522bf);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: fixed;
+  top: 20px;
+  z-index: 10;
+  box-shadow: 0px 0px 1px 1px white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #menu span {
-    display: block;
-    width: 25px;
-    height: 4px;
-    background-color: pink;
-    border-radius: 2px;
-    margin: 0 0 0 1px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+  display: block;
+  width: 25px;
+  height: 4px;
+  background-color: pink;
+  border-radius: 2px;
+  margin: 0 0 0 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 #menu.open span:nth-child(1) {
@@ -83,11 +83,11 @@ body.no-scroll {
   border-radius: 0 0 0 50px;
 }
 
-@media only screen and (max-width: 1024px) {
-    #menuLinks {
-        max-width: 94%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    }
+@media only screen and (max-width: 1070px) {
+  #menuLinks {
+    max-width: 94%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
 }
