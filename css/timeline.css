@@ -1,0 +1,123 @@
+#timelineTable {
+  width: 98%;
+  max-width: 1440px;
+  border-collapse: collapse;
+}
+
+#timelineTable th,
+#timelineTable td {
+  text-align: center;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+#timelineTable td {
+    width: 50%;
+    max-width: 720px;
+}
+
+#timelineTable th:first-child,
+#timelineTable td:first-child {
+  position: relative;
+}
+
+#timelineTable th:first-child::after,
+#timelineTable td:first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--Orange-color), var(--Purple-color));
+  background-size: 100% 300%;
+  animation: borderColorAnim 6s ease infinite;
+}
+
+@keyframes borderColorAnim {
+  0% {
+    background-position: 100% 0%;
+  }
+  12% {
+    background-position: 75% 25%;
+  }
+  24% {
+    background-position: 50% 50%;
+  }
+  36% {
+    background-position: 25% 75%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+  62% {
+    background-position: 25% 75%;
+  }
+  74% {
+    background-position: 50% 50%;
+  }
+  86% {
+    background-position: 75% 25%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.timelineImage {
+    width: 180px;
+}
+
+.timelineLinks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.rightPadding {
+    padding: 10px 10px 10px 0;
+}
+
+.leftPadding {
+    padding: 10px 0 10px 10px;
+}
+
+.timelineText {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.timelineText ul {
+  text-align: left;
+  list-style-position: inside;
+}
+
+.timelineText ul li span {
+  margin-left: -20px;
+}
+
+@media only screen and (max-width: 526px) {
+  .timelineText {
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 25px;
+  }
+  .timelineImage {
+    width: 160px;
+  }
+  .rightPadding {
+    padding: 10px 5px 10px 0;
+  }
+  .leftPadding {
+    padding: 10px 0 10px 5px;
+  }
+}

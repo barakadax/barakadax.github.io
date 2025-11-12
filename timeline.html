@@ -1,46 +1,163 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-   <head>
-      <meta charset=utf-8>
-      <title>Barak's Portfolio Timeline</title>
-      <link rel="icon" href="img/icon.png">
-      <link href="css/menu.css" rel="stylesheet">
-      <link href="css/MainStyle.css" rel="stylesheet">
-      <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, viewport-fit=cover, user-scalable=no">
-      <meta name="apple-mobile-web-app-status-bar-style" content="default">
-      <meta name="mobile-web-app-capable" content="yes">
 
-      <!-- Define metadata for search engines -->
-      <meta name="title" content="Barak's Portfolio Timeline">
-      <meta name="author" content="Barak Taya, Barakadax">
-      <meta name="description" content="Portfolio, showing who is Barak Taya, knowledge and projects">
-      <meta name="keywords" content="Portfolio, About, info, knowledge, Technologies, Programing, Programming, UX/UI, web design, Engineering, Practical Engineering, Barakadax, Barak Taya, Software Engineering, developing, program developing, program Engineer, software developing, Practical, back end, backend, big data, front end, fullstack, frontend, projects, git, timeline">
-      <meta name="robots" content="index, follow">
+<head>
+   <meta charset=utf-8>
+   <title>Barak's Portfolio Timeline</title>
+   <link rel="icon" href="img/icon.png">
+   <link href="css/menu.css" rel="stylesheet">
+   <link href="css/MainStyle.css" rel="stylesheet">
+   <link href="css/Title.css" rel="stylesheet">
+   <link href="css/timeline.css" rel="stylesheet">
+   <meta name="viewport"
+      content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, viewport-fit=cover, user-scalable=no">
+   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+   <meta name="mobile-web-app-capable" content="yes">
 
-      <!-- Open Graph Meta Tags (for social media sharing) -->
-      <meta property="og:title" content="Barak's Portfolio Timeline">
-      <meta property="og:description" content="Portfolio, showing who is Barak Taya, knowledge and projects">
-      <meta property="og:type" content="website">
-      <meta property="og:image" content="https://raw.githubusercontent.com/barakadax/barakadax.github.io/master/img/me.jpg">
-      <meta property="og:url" content="https://barakadax.github.io/">
+   <!-- Define metadata for search engines -->
+   <meta name="title" content="Barak's Portfolio Timeline">
+   <meta name="author" content="Barak Taya, Barakadax">
+   <meta name="description" content="Portfolio, showing who is Barak Taya, knowledge and projects">
+   <meta name="keywords"
+      content="Portfolio, About, info, knowledge, Technologies, Programing, Programming, UX/UI, web design, Engineering, Practical Engineering, Barakadax, Barak Taya, Software Engineering, developing, program developing, program Engineer, software developing, Practical, back end, backend, big data, front end, fullstack, frontend, projects, git, timeline">
+   <meta name="robots" content="index, follow">
 
-      <!-- Canonical URL to prevent duplicate content issues -->
-      <link rel="canonical" href="https://barakadax.github.io/">
-   </head>
-   <body>
-      <div id="menu">
-         <span></span>
-         <span></span>
-         <span></span>
+   <!-- Open Graph Meta Tags (for social media sharing) -->
+   <meta property="og:title" content="Barak's Portfolio Timeline">
+   <meta property="og:description" content="Portfolio, showing who is Barak Taya, knowledge and projects">
+   <meta property="og:type" content="website">
+   <meta property="og:image"
+      content="https://raw.githubusercontent.com/barakadax/barakadax.github.io/master/img/me.jpg">
+   <meta property="og:url" content="https://barakadax.github.io/">
+
+   <!-- Canonical URL to prevent duplicate content issues -->
+   <link rel="canonical" href="https://barakadax.github.io/">
+   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+   <div id="menu">
+      <span></span>
+      <span></span>
+      <span></span>
+   </div>
+   <div id="menuScreen">
+      <div id="menuLinks">
+         <a class="menuLink" href="index.html">Homepage</a>
       </div>
-      <div id="menuScreen">
-         <div id="menuLinks">
-            <a class="menuLink" href="index.html">Homepage</a>
-         </div>
-      </div>
-      <div style="flex-grow: 1;">TBH</div>
-      <footer>GNU Affero General Public License v3.0</footer>
-      <script defer src="js/menu.js"></script>
-      <script defer src="js/main.js"></script>
-   </body>
+   </div>
+   <div id="title">
+      <h1>Barak Taya</h1>
+      <h2>Software Engineer</h2>
+   </div>
+   <css-doodle id="timelineTitle">
+      @size: 10px;
+      @grid: 100 x 12;
+      background: var(--Blue-color);
+      scale: 0;
+      opacity: 0;
+      animation: m 4s linear infinite;
+      transform: rotate(45deg) scale(1.6);
+
+      animation-delay: calc(
+      -1s/@I * @i * @sin(@i)
+      );
+
+      @keyframes m {
+      0%, 50%, 90% { scale: 1; opacity: 1 }
+      25%, 75%, 100% { scale: 0; opacity: 0 }
+      }
+   </css-doodle>
+
+   <css-doodle id="auto-doodle">
+      @grid: 18 / 100vmax / #0a0c27;
+      --hue: calc(180 + 1.5 * @x * @y);
+      background: hsl(var(--hue), 50%, 70%);
+      margin: -.5px;
+      transition: @r(.5s) ease;
+      clip-path: polygon(@p(
+      '0 0, 100% 0, 100% 100%',
+      '0 0, 100% 0, 0 100%',
+      '0 0, 100% 100%, 0 100%',
+      '100% 0, 100% 100%, 0 100%'
+      ));
+   </css-doodle>
+
+   <table id="timelineTable">
+      <tbody>
+         <tr>
+            <td class="rightPadding">
+               <a href="https://learn.nvidia.com/certificates?id=k78pQSFfSUCS8ntj5jofow" target="_blank"
+                  data-aos="fade-up-right" data-aos-easing="linear" data-aos-anchor-placement="top-bottom">
+                  <img src="badges/cuda.png" class="timelineImage">
+                  <div class="timelineText">2025 - Nvidia course - final score of 100</div>
+               </a>
+            </td>
+            <td></td>
+         </tr>
+         <tr>
+            <td></td>
+            <td class="leftPadding">
+               <a href="https://www.sap.com/" target="_blank" data-aos="fade-up-left" data-aos-easing="linear"
+                  data-aos-anchor-placement="top-bottom">
+                  <img src="badges/sap.png" class="timelineImage">
+                  <div class="timelineText">
+                     <ul>
+                        <li><span>2024-present - BDC - Software Engineer</span></li>
+                        <li><span>2023-2024 - CDF - Software Engineer</span></li>
+                        <li><span>2022-2023 - CDFL - Software Engineer</span></li>
+                     </ul>
+                  </div>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td class="rightPadding">
+               <a href="https://www.ncr.com/" target="_blank" data-aos="fade-up-right" data-aos-easing="linear"
+                  data-aos-anchor-placement="top-bottom">
+                  <img src="badges/ncr.png" class="timelineImage">
+                  <div class="timelineText">2021-2022 - Jumbo - Professional Specialist Engineer</div>
+               </a>
+            </td>
+            <td></td>
+         </tr>
+         <tr>
+            <td></td>
+            <td class="leftPadding">
+               <a href="https://www.pet.ac.il/" target="_blank" data-aos="fade-up-left" data-aos-easing="linear"
+                  data-aos-anchor-placement="top-bottom">
+                  <img src="badges/pet.png" class="timelineImage">
+                  <div class="timelineText">
+                     2018-2021 - Practical Software Engineer<br>
+                     Honorary student with a GPA of 87
+                  </div>
+               </a>
+            </td>
+         </tr>
+         <!--<tr>
+            <td class="rightPadding">
+               <a
+               href="https://www.netacad.com/courses/it-essentials?courseLang=en-US"
+               target="_blank"
+               data-aos="fade-up-right"
+               data-aos-easing="linear"
+               data-aos-anchor-placement="top-bottom">
+                  <img src="badges/it.png" class="timelineImage">
+                  <div class="timelineText">2015 - Cisco Netacad - IT Essential</div>
+               </a>
+            </td>
+            <td></td>
+         </tr>-->
+      </tbody>
+   </table>
+   <footer>GNU Affero General Public License v3.0</footer>
+   <script defer src="js/menu.js"></script>
+   <script defer src="js/main.js"></script>
+   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+   <script defer src="js/doodle.js"></script>
+   <script>
+      AOS.init();
+   </script>
+</body>
+
 </html>
