@@ -95,15 +95,6 @@
   justify-items: center;
 }
 
-.timelineText ul {
-  text-align: left;
-  list-style-position: inside;
-}
-
-.timelineText ul li span {
-  margin-left: -20px;
-}
-
 @media only screen and (max-width: 526px) {
   .timelineText {
     text-align: left;
