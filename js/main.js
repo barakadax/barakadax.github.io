@@ -13,16 +13,14 @@ getProjectsFromGitHub();
 
 let contentIndex = getCarousel();
 
-document.getElementById("nextInfo").addEventListener("click", function() {
+document.getElementById("nextInfo").addEventListener("click", function () {
    contentIndex.Next();
 });
 
-document.getElementById("prevInfo").addEventListener("click", function() {
+document.getElementById("prevInfo").addEventListener("click", function () {
    contentIndex.Previous();
 });
 
 function carouselSetIndex(carouselContentIndex) {
    contentIndex.SetAtIndex(carouselContentIndex);
 };
-
-setProjectButton();

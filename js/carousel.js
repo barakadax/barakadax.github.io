@@ -19,7 +19,7 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'ChangeVisualGUIIndex', {
         writable: false,
-        value: function() {
+        value: function () {
             for (let divIndex = 0; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
                 carousel.visualIndexInGUI[divIndex].setAttribute("class", "index");
             carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index meInIndex");
@@ -28,7 +28,7 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'Initialize', {
         writable: false,
-        value: function() {
+        value: function () {
             for (let divIndex = 1; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
                 carousel.allSkillsAndPersonality[divIndex].style.display = "none";
             carousel.ChangeVisualGUIIndex();
@@ -37,7 +37,7 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'Next', {
         writable: false,
-        value: function() {
+        value: function () {
             carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
             carousel.skillsAndPersonalityCounter = (carousel.skillsAndPersonalityCounter + 1) % carousel.allSkillsAndPersonality.length;
             carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
@@ -47,7 +47,7 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'Previous', {
         writable: false,
-        value: function() {
+        value: function () {
             carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
             carousel.skillsAndPersonalityCounter = carousel.skillsAndPersonalityCounter - 1 < 0 ? carousel.allSkillsAndPersonality.length - 1 : carousel.skillsAndPersonalityCounter - 1;
             carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
@@ -57,7 +57,7 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'SetAtIndex', {
         writable: false,
-        value: function(targetIndex) {
+        value: function (targetIndex) {
             carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index");
             carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
             carousel.visualIndexInGUI[targetIndex].setAttribute("class", "index meInIndex");
@@ -68,14 +68,14 @@ function getCarousel() {
 
     Object.defineProperty(carousel, 'TouchStart', {
         writable: false,
-        value: function(event) {
+        value: function (event) {
             carousel.touchStartX = event.touches[0].clientX;
         }
     });
 
     Object.defineProperty(carousel, 'TouchEnd', {
         writable: false,
-        value: function(event) {
+        value: function (event) {
             carousel.touchEndX = event.changedTouches[0].clientX;
             const touchThreshold = 40;
 
@@ -90,7 +90,7 @@ function getCarousel() {
     carousel.Initialize();
 
     carousel.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
-    carousel.carouselElement.addEventListener("touchstart", (e) => carousel.TouchStart(e));
+    carousel.carouselElement.addEventListener("touchstart", (e) => carousel.TouchStart(e), { passive: true });
     carousel.carouselElement.addEventListener("touchend", (e) => carousel.TouchEnd(e));
 
     return carousel;

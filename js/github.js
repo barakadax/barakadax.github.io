@@ -18,7 +18,7 @@ function getProjectsFromGitHub() {
 
     Object.defineProperty(functions, 'getProjectLink', {
         writable: false,
-        value: function(element) {
+        value: function (element) {
             let newProjectLink = document.createElement("a");
 
             newProjectLink.target = "_blank";
@@ -27,7 +27,7 @@ function getProjectsFromGitHub() {
             if (element.language === "XSLT") {
                 newProjectLink.className = "projectsRow " + "Scala";
             }
-            else if (element.language === "HTML" || element.language === "CSS"){
+            else if (element.language === "HTML" || element.language === "CSS") {
                 newProjectLink.className = "projectsRow " + "JavaScript";
             }
             else if (element.name === "TouchBar") {
@@ -67,11 +67,11 @@ function getProjectsFromGitHub() {
 
     Object.defineProperty(functions, 'setProjectImage', {
         writable: false,
-        value: function(element, newProjectLink) {
+        value: function (element, newProjectLink) {
             let newProjectImage = document.createElement("img");
             newProjectImage.className = "projImages";
             newProjectImage.alt = element.name;
-            newProjectImage.src="projImg/" + element.name + ".png";
+            newProjectImage.src = "projImg/" + element.name + ".png";
 
             newProjectImage.onerror = function () {
                 newProjectImage.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
@@ -83,7 +83,7 @@ function getProjectsFromGitHub() {
 
     Object.defineProperty(functions, 'getProjectInfoDiv', {
         writable: false,
-        value: function(newProjectLink) {
+        value: function (newProjectLink) {
             let newProjectInfoDiv = document.createElement("div");
             newProjectInfoDiv.className = "projectInfo";
 
@@ -95,7 +95,7 @@ function getProjectsFromGitHub() {
 
     Object.defineProperty(functions, 'setProjectTitle', {
         writable: false,
-        value: function(element, newProjectInfoDiv) {
+        value: function (element, newProjectInfoDiv) {
             let newProjectTitle = document.createElement("h3");
             newProjectTitle.className = "projTitle";
 
@@ -124,7 +124,7 @@ function getProjectsFromGitHub() {
 
     Object.defineProperty(functions, 'setProjectDescription', {
         writable: false,
-        value: function(element, newProjectInfoDiv) {
+        value: function (element, newProjectInfoDiv) {
             let newProjectDescription = document.createElement("div");
             newProjectDescription.className = "projDescription";
             newProjectDescription.innerHTML = element.description;
@@ -141,12 +141,18 @@ function getProjectsFromGitHub() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             response.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+
+            let categories = new Map();
+
             response.forEach((element, _) => {
                 if (element.name === "barakadax") {
                     return;
                 }
 
                 let newProjectLink = functions.getProjectLink(element);
+                newProjectLink.className.split(" ").forEach(c => {
+                    categories.set(c, (categories.get(c) || 0) + 1);
+                });
 
                 let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
                 functions.setProjectTitle(element, newProjectInfoDiv);
@@ -156,6 +162,14 @@ function getProjectsFromGitHub() {
                 projectsColumn.appendChild(newProjectLink);
             });
             projectsColumn.removeChild(projectsColumn.firstElementChild);
+
+            // Sort categories by count (descending)
+            const sortedCategories = Array.from(categories.entries())
+                .sort((a, b) => b[1] - a[1])
+                .map(entry => entry[0]);
+
+            setProjectButton(sortedCategories);
+
         } else {
             console.log("Error loading data.");
             projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";

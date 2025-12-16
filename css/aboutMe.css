@@ -1,6 +1,7 @@
 #aboutMe {
     display: flex;
     align-items: center;
+    margin-top: 25px;
 }
 
 #myself {
@@ -49,6 +50,7 @@
     #textAboutMe {
         text-align: center;
     }
+
     #aboutMe {
         max-width: 95%;
     }
@@ -59,9 +61,11 @@
         text-align: center;
         flex-direction: column;
     }
+
     #textAboutMe {
         max-width: 90%;
     }
+
     #AvatarGithubLinkedinContainer {
         margin: 0 0 15px 0;
     }
