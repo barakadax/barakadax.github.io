@@ -145,7 +145,7 @@ function getProjectsFromGitHub() {
             let categories = new Map();
 
             response.forEach((element, _) => {
-                if (element.name === "barakadax") {
+                if (element.name === "barakadax" || element.name === "blog") {
                     return;
                 }
 
@@ -163,7 +163,6 @@ function getProjectsFromGitHub() {
             });
             projectsColumn.removeChild(projectsColumn.firstElementChild);
 
-            // Sort categories by count (descending)
             const sortedCategories = Array.from(categories.entries())
                 .sort((a, b) => b[1] - a[1])
                 .map(entry => entry[0]);
