@@ -19,7 +19,7 @@
 }
 
 .titleEffect {
-    width: 102%;
+    width: 100%;
     height: 120px;
     margin: -2px 0 5px 0;
     background-image: linear-gradient(var(--Blue-color), var(--Black-color) 95%);
