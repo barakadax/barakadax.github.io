@@ -2,11 +2,10 @@
     display: flex;
     flex: 1;
     width: 100%;
-    max-height: 100%;
     position: relative;
     max-width: 1440px;
     margin: 0 auto;
-    min-height: 80vh;
+    min-height: 100vh;
 }
 
 #blog-sidebar {
@@ -38,7 +37,6 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-y: auto;
     flex-grow: 1;
 }
 
@@ -90,7 +88,6 @@
 
 #blog-scroll-container {
     flex: 1;
-    overflow-y: auto;
     width: 100%;
     position: relative;
     padding-top: 45px;
@@ -229,7 +226,6 @@
     #blog-sidebar {
         width: 100%;
         height: auto;
-        max-height: 300px;
         border-right: none;
         border-bottom: 1px solid var(--Purple-color);
         transform: none;
