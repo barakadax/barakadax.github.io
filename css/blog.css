@@ -1,0 +1,243 @@
+#blog-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    max-height: 100%;
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+#blog-sidebar {
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-right: 1px solid var(--Purple-color);
+    transition: transform 0.3s ease, width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+#blog-sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+    transform: translateX(-250px);
+    border-right: none;
+}
+
+.sidebar-header {
+    padding: 15px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-bottom: 1px solid var(--Purple-color);
+}
+
+#article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.article-item {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+    color: #ddd;
+}
+
+.article-item:hover {
+    background-color: rgb(from var(--Orange-color) r g b / 0.2);
+    color: var(--Orange-color);
+}
+
+.article-item.active {
+    background-color: rgb(from var(--Purple-color) r g b / 0.4);
+    border-left: 4px solid var(--Orange-color);
+    color: white;
+}
+
+#sidebar-toggle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--Purple-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: left 0.3s ease;
+    font-size: 1.2rem;
+    outline: none;
+    align-self: flex-start;
+    z-index: 2;
+    margin: 0;
+}
+
+#blog-content {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#blog-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    position: relative;
+    padding-top: 45px;
+}
+
+#blog-content-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 45px;
+    margin-top: -50px;
+}
+
+#blog-content-inner h1,
+#blog-content-inner h2,
+#blog-content-inner h3 {
+    text-shadow: none;
+    margin-bottom: 10px;
+}
+
+#blog-content-inner h2 {
+    font-size: 2rem;
+}
+
+#blog-content-inner h3 {
+    font-size: 1.5rem;
+}
+
+#blog-content-inner h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--Purple-color);
+    padding-bottom: 5px;
+    padding-top: 10px;
+}
+
+#blog-content-inner p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.2em;
+    color: #eee;
+}
+
+#blog-content-inner a {
+    color: var(--SAP-color);
+    text-decoration: underline;
+}
+
+#blog-content-inner code {
+    background-color: #333;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: var(--Orange-color);
+}
+
+#blog-content-inner pre {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-size: 15px;
+}
+
+#blog-content-inner pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #ddd;
+}
+
+#blog-content-inner ul,
+#blog-content-inner ol {
+    margin-bottom: 0.5em;
+    padding-left: 40px;
+}
+
+#blog-content-inner li {
+    margin-bottom: 0.5em;
+    font-size: 1.1rem;
+}
+
+#blog-content-inner li p {
+    margin-bottom: 0.2rem;
+}
+
+#blog-content-inner img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 20px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#blog-content-inner blockquote {
+    border-left: 5px solid var(--Purple-color);
+    padding-left: 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #aaa;
+}
+
+@media (max-width: 768px) {
+    footer {
+        margin: 0;
+    }
+
+    #sidebar-toggle {
+        border-radius: 0 0 5px 5px;
+        left: unset;
+        right: 0;
+        margin: 0 5px 0 0;
+    }
+
+    #blog-content-inner h1 {
+        padding-top: 0;
+    }
+
+    #blog-content-inner ul,
+    #blog-content-inner ol {
+        padding-left: 20px;
+    }
+
+    #blog-content-inner p {
+        margin-bottom: 0.8rem;
+        line-height: 1.4;
+    }
+
+    #blog-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #blog-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        border-right: none;
+        border-bottom: 1px solid var(--Purple-color);
+        transform: none;
+    }
+
+    #blog-sidebar.collapsed {
+        height: 50px;
+        width: 100%;
+        transform: none;
+    }
+
+    #blog-content-inner {
+        padding: 15px;
+    }
+}
