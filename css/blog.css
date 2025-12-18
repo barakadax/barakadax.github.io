@@ -193,7 +193,7 @@
 
 @media (max-width: 768px) {
     footer {
-        margin: 0;
+        margin: 2px 0 0 0;
     }
 
     #sidebar-toggle {
@@ -215,6 +215,10 @@
     #blog-content-inner p {
         margin-bottom: 0.8rem;
         line-height: 1.4;
+    }
+
+    #blog-content-inner code {
+        padding: 0 5px;
     }
 
     #blog-container {
