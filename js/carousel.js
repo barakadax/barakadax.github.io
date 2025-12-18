@@ -12,8 +12,20 @@
 function getCarousel() {
     let carousel = Object.create(null);
     carousel.skillsAndPersonalityCounter = 0;
-    carousel.visualIndexInGUI = document.getElementsByClassName("index");
     carousel.allSkillsAndPersonality = document.getElementsByClassName("skillsAndPersonality");
+
+    const counter = document.getElementById("counter");
+    if (counter) {
+        counter.innerHTML = '';
+        for (let i = 0; i < carousel.allSkillsAndPersonality.length; i++) {
+            const dot = document.createElement("div");
+            dot.className = "index";
+            dot.onclick = () => carouselSetIndex(i);
+            counter.appendChild(dot);
+        }
+    }
+
+    carousel.visualIndexInGUI = document.getElementsByClassName("index");
     carousel.touchStartX = 0;
     carousel.touchEndX = 0;
 
