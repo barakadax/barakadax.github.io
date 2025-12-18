@@ -41,6 +41,19 @@ if (toggleBtn) {
     });
 }
 
+const backBtn = document.getElementById('back-to-list-btn');
+if (backBtn) {
+    backBtn.onclick = () => {
+        const blogContainer = document.getElementById('blog-container');
+        if (blogContainer) {
+            blogContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (sidebar) {
+            sidebar.classList.remove('collapsed');
+        }
+    };
+}
+
 function setActiveArticle(articleName) {
     const items = document.querySelectorAll('.article-item');
     items.forEach(item => {
@@ -98,8 +111,10 @@ function getArticleContent(articleName) {
     const contentDiv = document.getElementById('blog-content-inner');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Show loading state
     contentDiv.innerHTML = '<div class="loadingText">Loading...</div>';
+    if (backBtn) {
+        backBtn.classList.remove('visible');
+    }
 
     xhr.onload = function () {
         if (xhr.status === 200) {
@@ -117,6 +132,10 @@ function getArticleContent(articleName) {
                 const decodedContent = new TextDecoder().decode(bytes);
                 contentDiv.innerHTML = marked.parse(decodedContent);
                 fixImageLinks(contentDiv, articleName);
+
+                if (backBtn) {
+                    backBtn.classList.add('visible');
+                }
 
             } catch (e) {
                 console.error("Detailed parsing error:", e);
