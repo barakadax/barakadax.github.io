@@ -19,7 +19,7 @@ try {
                 const level = isObject ? arg1.depth : arg2;
 
                 const id = typeof text === 'string'
-                    ? text.toLowerCase().replace(/[^\w]+/g, '-')
+                    ? text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
                     : 'header-' + level;
                 return `<h${level} id="${id}">${text}</h${level}>`;
             }
