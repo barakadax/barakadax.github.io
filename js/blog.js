@@ -9,6 +9,26 @@
     ''"'',,}{,,*/
 'use strict';
 
+
+try {
+    marked.use({
+        renderer: {
+            heading(arg1, arg2) {
+                const isObject = typeof arg1 === 'object' && arg1 !== null;
+                const text = isObject ? arg1.text : arg1;
+                const level = isObject ? arg1.depth : arg2;
+
+                const id = typeof text === 'string'
+                    ? text.toLowerCase().replace(/[^\w]+/g, '-')
+                    : 'header-' + level;
+                return `<h${level} id="${id}">${text}</h${level}>`;
+            }
+        }
+    });
+} catch (e) {
+    console.warn("Marked configuration failed, using default renderer", e);
+}
+
 const repoOwner = "barakadax";
 const repoName = "blog";
 
@@ -86,6 +106,9 @@ function getArticleContent(articleName) {
             const response = JSON.parse(xhr.responseText);
 
             try {
+                if (!response.content) {
+                    throw new Error("No content found in the response.");
+                }
                 const binaryString = atob(response.content.replace(/\s/g, ''));
                 const bytes = new Uint8Array(binaryString.length);
                 for (let i = 0; i < binaryString.length; i++) {
@@ -96,8 +119,8 @@ function getArticleContent(articleName) {
                 fixImageLinks(contentDiv, articleName);
 
             } catch (e) {
-                console.error("Error parsing content", e);
-                contentDiv.innerHTML = "<h1>Error parsing article content</h1><p>The content encoding might be unsupported.</p>";
+                console.error("Detailed parsing error:", e);
+                contentDiv.innerHTML = `<h1>Error parsing article content</h1><p>The content encoding might be unsupported or the content is missing.</p><p style="font-size: 0.8rem; color: #888;">Details: ${e.message}</p>`;
             }
         }
         else {
