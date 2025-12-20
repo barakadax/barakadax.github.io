@@ -33,6 +33,7 @@ const repoName = "blog";
 
 const articleMeta = {};
 const userCache = {};
+let defaultBranch = "Master";
 
 const sidebar = document.getElementById('blog-sidebar');
 const toggleBtn = document.getElementById('sidebar-toggle');
@@ -88,9 +89,27 @@ async function getAllBlogArticlesNames() {
 
     try {
         const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/`);
+
+        if (response.status === 403) {
+            articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px; line-height:1.4;'>I'm happy you're enjoying the website! However, GitHub limits the number of requests I can make. Please wait for the next hour to continue reading.</li>`;
+            return;
+        }
+
         if (!response.ok) throw new Error("Failed to fetch article list");
 
         const contents = await response.json();
+
+        if (contents.length > 0) {
+            const firstItem = contents[0];
+            if (firstItem.html_url) {
+                const parts = firstItem.html_url.split('/');
+                const branchIndex = parts.indexOf('tree') !== -1 ? parts.indexOf('tree') + 1 : parts.indexOf('blob') + 1;
+                if (branchIndex > 0 && branchIndex < parts.length) {
+                    defaultBranch = parts[branchIndex];
+                }
+            }
+        }
+
         const directories = contents.filter(item => item.type === "dir");
 
         const articlesWithMeta = await Promise.all(directories.map(async (dir) => {
@@ -153,8 +172,7 @@ async function getAllBlogArticlesNames() {
     }
 }
 
-function getArticleContent(articleName) {
-    const xhr = new XMLHttpRequest();
+async function getArticleContent(articleName) {
     const contentDiv = document.getElementById('blog-content-inner');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -163,69 +181,54 @@ function getArticleContent(articleName) {
         backBtn.classList.remove('visible');
     }
 
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
+    try {
+        const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/index.md`);
 
-            try {
-                if (!response.content) {
-                    throw new Error("No content found in the response.");
-                }
-                const binaryString = atob(response.content.replace(/\s/g, ''));
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                const decodedContent = new TextDecoder().decode(bytes);
-                contentDiv.innerHTML = marked.parse(decodedContent);
-                fixImageLinks(contentDiv, articleName);
+        if (!response.ok) {
+            throw new Error("Could not fetch the article content.");
+        }
 
-                const h1 = contentDiv.querySelector('h1');
-                if (h1) {
-                    const metaDiv = document.createElement('div');
-                    metaDiv.className = 'article-meta';
+        const decodedContent = await response.text();
+        contentDiv.innerHTML = marked.parse(decodedContent);
+        fixImageLinks(contentDiv, articleName);
 
-                    const authorSpan = document.createElement('span');
-                    authorSpan.className = 'article-author';
-                    const meta = articleMeta[articleName];
-                    authorSpan.textContent = 'By: ' + (meta ? meta.author : 'Barak Taya');
+        const h1 = contentDiv.querySelector('h1');
+        if (h1) {
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'article-meta';
 
-                    const dateSpan = document.createElement('span');
-                    dateSpan.className = 'article-date';
-                    const date = meta ? meta.date : null;
-                    if (date && date.getTime() !== 0) {
-                        dateSpan.textContent = `Last updated: ${date.toLocaleDateString()}`;
-                    } else {
-                        dateSpan.textContent = 'Last updated: ERROR';
-                    }
+            const authorSpan = document.createElement('span');
+            authorSpan.className = 'article-author';
+            const meta = articleMeta[articleName];
+            authorSpan.textContent = 'By: ' + (meta ? meta.author : 'Barak Taya');
 
-                    metaDiv.appendChild(authorSpan);
-                    metaDiv.appendChild(dateSpan);
-                    h1.parentNode.insertBefore(metaDiv, h1.nextSibling);
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'article-date';
+            const date = meta ? meta.date : null;
+            if (date && date.getTime() !== 0) {
+                dateSpan.textContent = `Last updated: ${date.toLocaleDateString()}`;
+            } else {
+                dateSpan.textContent = 'Last updated: ERROR';
+            }
 
-                    const mainAuthorHeader = document.getElementById('author');
-                    if (mainAuthorHeader) {
-                        mainAuthorHeader.textContent = meta ? meta.author : 'Barak Taya';
-                    }
-                }
+            metaDiv.appendChild(authorSpan);
+            metaDiv.appendChild(dateSpan);
+            h1.parentNode.insertBefore(metaDiv, h1.nextSibling);
 
-                if (backBtn) {
-                    backBtn.classList.add('visible');
-                }
-
-            } catch (e) {
-                console.error("Detailed parsing error:", e);
-                contentDiv.innerHTML = `<h1>Error parsing article content</h1><p>The content encoding might be unsupported or the content is missing.</p><p style="font-size: 0.8rem; color: #888;">Details: ${e.message}</p>`;
+            const mainAuthorHeader = document.getElementById('author');
+            if (mainAuthorHeader) {
+                mainAuthorHeader.textContent = meta ? meta.author : 'Barak Taya';
             }
         }
-        else {
-            console.error("Error loading article content.");
-            contentDiv.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article content. Please try again later.</p>";
-        }
-    }
 
-    xhr.open("GET", `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${articleName}/index.md`, true);
-    xhr.send();
+        if (backBtn) {
+            backBtn.classList.add('visible');
+        }
+
+    } catch (e) {
+        console.error("Error loading article content:", e);
+        contentDiv.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article content. Please try again later.</p>";
+    }
 }
 
 function fixImageLinks(container, articleName) {
@@ -233,7 +236,7 @@ function fixImageLinks(container, articleName) {
     images.forEach(img => {
         const src = img.getAttribute('src');
         if (src && !src.startsWith('http') && !src.startsWith('//')) {
-            const newSrc = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/${articleName}/${src}`;
+            const newSrc = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/${src}`;
             img.src = newSrc;
         }
     });
