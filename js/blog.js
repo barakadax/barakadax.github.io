@@ -91,7 +91,7 @@ async function getAllBlogArticlesNames() {
     try {
         const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/`);
 
-        if (response.status === 403) {
+        if (response.status === 403 || response.status === 429) {
             articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px; line-height:1.4;'>I'm happy you're enjoying the website! However, GitHub limits the number of requests I can make. Please wait for the next hour to continue reading.</li>`;
             return;
         }
