@@ -9,7 +9,6 @@
     ''"'',,}{,,*/
 'use strict';
 
-
 try {
     marked.use({
         renderer: {
@@ -31,6 +30,9 @@ try {
 
 const repoOwner = "barakadax";
 const repoName = "blog";
+
+const articleMeta = {};
+const userCache = {};
 
 const sidebar = document.getElementById('blog-sidebar');
 const toggleBtn = document.getElementById('sidebar-toggle');
@@ -54,6 +56,21 @@ if (backBtn) {
     };
 }
 
+async function fetchUserFullName(login) {
+    if (userCache[login]) return userCache[login];
+    try {
+        const response = await fetch(`https://api.github.com/users/${login}`);
+        if (response.ok) {
+            const data = await response.json();
+            userCache[login] = data.name || login;
+            return userCache[login];
+        }
+    } catch (e) {
+        console.warn(`Could not fetch full name for ${login}`, e);
+    }
+    return login;
+}
+
 function setActiveArticle(articleName) {
     const items = document.querySelectorAll('.article-item');
     items.forEach(item => {
@@ -65,45 +82,75 @@ function setActiveArticle(articleName) {
     });
 }
 
-function getAllBlogArticlesNames() {
-    const xhr = new XMLHttpRequest();
+async function getAllBlogArticlesNames() {
     const articleList = document.getElementById('article-list');
+    articleList.innerHTML = '<li class="article-item">Loading articles...</li>';
 
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
+    try {
+        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/`);
+        if (!response.ok) throw new Error("Failed to fetch article list");
 
-            articleList.innerHTML = "";
+        const contents = await response.json();
+        const directories = contents.filter(item => item.type === "dir");
 
-            response.forEach(element => {
-                if (element.type === "dir") {
-                    const li = document.createElement('li');
-                    li.className = 'article-item';
-                    li.textContent = element.name;
-                    li.dataset.name = element.name;
+        const articlesWithMeta = await Promise.all(directories.map(async (dir) => {
+            try {
+                const commitResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${dir.name}/index.md&per_page=1`);
+                if (commitResponse.ok) {
+                    const commits = await commitResponse.json();
+                    if (commits && commits.length > 0) {
+                        const commitData = commits[0];
+                        const date = new Date(commitData.commit.committer.date);
+                        const login = commitData.author ? commitData.author.login : commitData.commit.author.name;
+                        const fullName = commitData.author ? await fetchUserFullName(login) : login;
 
-                    li.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        getArticleContent(element.name);
-                        setActiveArticle(element.name);
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.add('collapsed');
-                        }
-                    });
+                        return {
+                            ...dir,
+                            lastCommitDate: date,
+                            authorName: fullName
+                        };
+                    }
+                }
+            } catch (e) {
+                console.warn(`Could not fetch commit meta for ${dir.name}`, e);
+            }
+            return { ...dir, lastCommitDate: new Date(0), authorName: 'Barak Taya' };
+        }));
 
-                    articleList.appendChild(li);
+        articlesWithMeta.sort((a, b) => {
+            const dateDiff = b.lastCommitDate - a.lastCommitDate;
+            if (dateDiff !== 0) return dateDiff;
+            return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+        });
+
+        articleList.innerHTML = "";
+
+        articlesWithMeta.forEach(element => {
+            articleMeta[element.name] = {
+                date: element.lastCommitDate,
+                author: element.authorName
+            };
+            const li = document.createElement('li');
+            li.className = 'article-item';
+            li.textContent = element.name;
+            li.dataset.name = element.name;
+
+            li.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                getArticleContent(element.name);
+                setActiveArticle(element.name);
+                if (window.innerWidth <= 768 && sidebar) {
+                    sidebar.classList.add('collapsed');
                 }
             });
-        }
-        else {
-            console.error("Error loading article list.");
-            articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
-        }
-    }
 
-    xhr.open("GET", `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`, true);
-    xhr.send();
+            articleList.appendChild(li);
+        });
+    } catch (e) {
+        console.error("Error loading article list:", e);
+        articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
+    }
 }
 
 function getArticleContent(articleName) {
@@ -132,6 +179,35 @@ function getArticleContent(articleName) {
                 const decodedContent = new TextDecoder().decode(bytes);
                 contentDiv.innerHTML = marked.parse(decodedContent);
                 fixImageLinks(contentDiv, articleName);
+
+                const h1 = contentDiv.querySelector('h1');
+                if (h1) {
+                    const metaDiv = document.createElement('div');
+                    metaDiv.className = 'article-meta';
+
+                    const authorSpan = document.createElement('span');
+                    authorSpan.className = 'article-author';
+                    const meta = articleMeta[articleName];
+                    authorSpan.textContent = 'By: ' + (meta ? meta.author : 'Barak Taya');
+
+                    const dateSpan = document.createElement('span');
+                    dateSpan.className = 'article-date';
+                    const date = meta ? meta.date : null;
+                    if (date && date.getTime() !== 0) {
+                        dateSpan.textContent = `Last updated: ${date.toLocaleDateString()}`;
+                    } else {
+                        dateSpan.textContent = 'Last updated: ERROR';
+                    }
+
+                    metaDiv.appendChild(authorSpan);
+                    metaDiv.appendChild(dateSpan);
+                    h1.parentNode.insertBefore(metaDiv, h1.nextSibling);
+
+                    const mainAuthorHeader = document.getElementById('author');
+                    if (mainAuthorHeader) {
+                        mainAuthorHeader.textContent = meta ? meta.author : 'Barak Taya';
+                    }
+                }
 
                 if (backBtn) {
                     backBtn.classList.add('visible');
