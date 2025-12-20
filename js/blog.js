@@ -33,6 +33,7 @@ const repoName = "blog";
 
 const articleMeta = {};
 const userCache = {};
+const articleCache = {};
 let defaultBranch = "Master";
 
 const sidebar = document.getElementById('blog-sidebar');
@@ -182,13 +183,20 @@ async function getArticleContent(articleName) {
     }
 
     try {
-        const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/index.md`);
+        let decodedContent;
+        if (articleCache[articleName]) {
+            decodedContent = articleCache[articleName];
+        } else {
+            const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/index.md`);
 
-        if (!response.ok) {
-            throw new Error("Could not fetch the article content.");
+            if (!response.ok) {
+                throw new Error("Could not fetch the article content.");
+            }
+
+            decodedContent = await response.text();
+            articleCache[articleName] = decodedContent;
         }
 
-        const decodedContent = await response.text();
         contentDiv.innerHTML = marked.parse(decodedContent);
         fixImageLinks(contentDiv, articleName);
 
