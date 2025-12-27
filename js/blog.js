@@ -158,6 +158,10 @@ async function getAllBlogArticlesNames() {
             li.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                const currentUrl = new URL(window.location.href);
+                if (currentUrl.searchParams.get('article') !== element.name) {
+                    history.pushState({ article: element.name }, "", `?article=${encodeURIComponent(element.name)}`);
+                }
                 getArticleContent(element.name);
                 setActiveArticle(element.name);
                 if (window.innerWidth <= 768 && sidebar) {
@@ -167,6 +171,8 @@ async function getAllBlogArticlesNames() {
 
             articleList.appendChild(li);
         });
+
+        loadArticleFromURL();
     } catch (e) {
         console.error("Error loading article list:", e);
         articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
@@ -235,7 +241,7 @@ async function getArticleContent(articleName) {
 
     } catch (e) {
         console.error("Error loading article content:", e);
-        contentDiv.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article content. Please try again later.</p>";
+        contentDiv.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article or it doesn't exist. Please try again later.</p>";
     }
 }
 
@@ -249,5 +255,21 @@ function fixImageLinks(container, articleName) {
         }
     });
 }
+
+function loadArticleFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleName = urlParams.get('article');
+    if (articleName) {
+        getArticleContent(articleName);
+        setActiveArticle(articleName);
+        if (window.innerWidth <= 768 && sidebar) {
+            sidebar.classList.add('collapsed');
+        }
+    }
+}
+
+window.addEventListener('popstate', (event) => {
+    loadArticleFromURL();
+});
 
 getAllBlogArticlesNames();
