@@ -86,7 +86,7 @@ body.no-scroll {
   #menuLinks {
     max-width: 94%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
