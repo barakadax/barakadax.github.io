@@ -50,15 +50,13 @@
   display: none;
   align-items: center;
   flex-direction: column;
-  background-image: linear-gradient(
-    to right,
-    rgba(5, 5, 5, 0.6) 0%,
-    rgba(5, 5, 5, 0.7) 5%,
-    rgba(5, 5, 5, 0.8) 18%,
-    rgba(5, 5, 5, 0.8) 82%,
-    rgba(5, 5, 5, 0.7) 95%,
-    rgba(5, 5, 5, 0.6) 100%
-  );
+  background-image: linear-gradient(to right,
+      rgba(5, 5, 5, 0.6) 0%,
+      rgba(5, 5, 5, 0.7) 5%,
+      rgba(5, 5, 5, 0.8) 18%,
+      rgba(5, 5, 5, 0.8) 82%,
+      rgba(5, 5, 5, 0.7) 95%,
+      rgba(5, 5, 5, 0.6) 100%);
   overflow: auto;
 }
 
@@ -89,6 +87,30 @@ body.no-scroll {
     max-width: 94%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
   }
+}
+
+#shareButton {
+  background: linear-gradient(135deg, #714fff, #d522bf);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: fixed;
+  top: 85px;
+  z-index: 10;
+  box-shadow: 0px 0px 1px 1px white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  font-size: 24px;
+}
+
+#shareButton:active {
+  transform: scale(0.95);
 }

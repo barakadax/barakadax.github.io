@@ -4,6 +4,7 @@ const menuController = Object.create(null);
 menuController.menu = document.getElementById('menu');
 menuController.menu.classList.add('right');
 menuController.menuScreen = document.getElementById('menuScreen');
+menuController.shareButton = document.getElementById('shareButton');
 menuController.touchstartX = 0;
 menuController.touchendX = 0;
 menuController.minSwipeDistance = 40;
@@ -23,6 +24,13 @@ Object.defineProperty(menuController, 'handleSwipe', {
         menuController.menu.style.right = 'auto';
         menuController.menu.classList.remove('right');
         menuController.menu.classList.add('left');
+
+        if (menuController.shareButton) {
+          menuController.shareButton.style.left = menuController.menu.style.left;
+          menuController.shareButton.style.right = 'auto';
+          menuController.shareButton.classList.remove('right');
+          menuController.shareButton.classList.add('left');
+        }
       }
     }
 
@@ -32,6 +40,13 @@ Object.defineProperty(menuController, 'handleSwipe', {
         menuController.menu.style.left = 'auto';
         menuController.menu.classList.remove('left');
         menuController.menu.classList.add('right');
+
+        if (menuController.shareButton) {
+          menuController.shareButton.style.right = menuController.menu.style.right;
+          menuController.shareButton.style.left = 'auto';
+          menuController.shareButton.classList.remove('left');
+          menuController.shareButton.classList.add('right');
+        }
       }
     }
   }
@@ -78,6 +93,9 @@ menuController.menu.addEventListener('click', () => {
   const isOpen = menuController.menu.classList.contains('open');
   menuController.menuScreen.style.display = isOpen ? "flex" : "none";
   document.body.classList.toggle('no-scroll', isOpen);
+  if (menuController.shareButton) {
+    menuController.shareButton.style.display = isOpen ? "none" : "flex";
+  }
 });
 
 Object.defineProperty(menuController, 'adjustMenuPosition', {
@@ -88,6 +106,10 @@ Object.defineProperty(menuController, 'adjustMenuPosition', {
     if (bodyWidth <= 1070) {
       menuController.menu.style.top = '10px';
       menuController.menu.style.right = '10px';
+      if (menuController.shareButton) {
+        menuController.shareButton.style.top = '75px';
+        menuController.shareButton.style.right = '10px';
+      }
     } else if (bodyWidth > 2000) {
       const quotient = Math.ceil(bodyWidth / 64);
       const excessIncrements = quotient - 40;
@@ -100,23 +122,72 @@ Object.defineProperty(menuController, 'adjustMenuPosition', {
         extraWidth += parseInt(extraWidth / 1000) * 50;
       }
 
+      menuController.menu.style.top = '20px';
+      if (menuController.shareButton) {
+        menuController.shareButton.style.top = '85px';
+      }
+
       if (window.getComputedStyle(menuController.menu).getPropertyValue('right') !== 'auto') {
         menuController.menu.style.right = `${extraWidth}px`;
         menuController.menu.style.left = 'auto';
         menuController.menu.classList.remove('left');
         menuController.menu.classList.add('right');
+
+        if (menuController.shareButton) {
+          menuController.shareButton.style.right = `${extraWidth}px`;
+          menuController.shareButton.style.left = 'auto';
+          menuController.shareButton.classList.remove('left');
+          menuController.shareButton.classList.add('right');
+        }
       }
     } else {
+      menuController.menu.style.top = '20px';
+      if (menuController.shareButton) {
+        menuController.shareButton.style.top = '85px';
+      }
+
       if (window.getComputedStyle(menuController.menu).getPropertyValue('right') !== 'auto') {
         menuController.menu.style.right = '20px';
         menuController.menu.style.left = 'auto';
         menuController.menu.classList.remove('left');
         menuController.menu.classList.add('right');
+
+        if (menuController.shareButton) {
+          menuController.shareButton.style.right = '20px';
+          menuController.shareButton.style.left = 'auto';
+          menuController.shareButton.classList.remove('left');
+          menuController.shareButton.classList.add('right');
+        }
       }
     }
   }
 }
 );
+
+if (menuController.shareButton) {
+  menuController.shareButton.addEventListener('click', async () => {
+    const shareData = {
+      title: document.title,
+      text: 'Check out this article!',
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  });
+}
 
 window.addEventListener('load', menuController.adjustMenuPosition);
 window.addEventListener('resize', menuController.adjustMenuPosition);
