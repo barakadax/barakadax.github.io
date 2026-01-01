@@ -256,14 +256,29 @@ function fixImageLinks(container, articleName) {
     });
 }
 
-function loadArticleFromURL() {
+async function loadArticleFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     const articleName = urlParams.get('article');
     if (articleName) {
-        getArticleContent(articleName);
+        await getArticleContent(articleName);
         setActiveArticle(articleName);
         if (window.innerWidth <= 768 && sidebar) {
             sidebar.classList.add('collapsed');
+        }
+
+        if (window.location.hash) {
+            const hash = window.location.hash;
+            try {
+                const computedId = decodeURIComponent(hash.substring(1));
+                const targetElement = document.getElementById(computedId);
+                if (targetElement) {
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                }
+            } catch (e) {
+                console.warn("Could not scroll to anchor", e);
+            }
         }
     }
 }
