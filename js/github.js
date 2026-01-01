@@ -98,25 +98,30 @@ function getProjectsFromGitHub() {
         value: function (element, newProjectInfoDiv) {
             let newProjectTitle = document.createElement("h3");
             newProjectTitle.className = "projTitle";
+            let titleText = "";
 
             if (element.language === "XSLT") {
-                newProjectTitle.innerHTML = "Scala - " + element.name;
+                titleText = "Scala - " + element.name;
             }
             else if (element.language === "HTML" || element.language === "JavaScript" || element.language === "CSS") {
-                newProjectTitle.innerHTML = "JS - " + element.name;
+                titleText = "JS - " + element.name;
             }
             else if (element.name === "TouchBar") {
-                newProjectTitle.innerHTML = "Dart - " + element.name;
+                titleText = "Dart - " + element.name;
             }
             else if (element.name === "keychron-optical-keyboard") {
-                newProjectTitle.innerHTML = "Hardware - " + element.name;
+                titleText = "Hardware - " + element.name;
             }
             else if (element.language === "TypeScript") {
-                newProjectTitle.innerHTML = "TS - " + element.name;
+                titleText = "TS - " + element.name;
             }
             else {
-                newProjectTitle.innerHTML = element.language + " - " + element.name;
+                titleText = element.language + " - " + element.name;
             }
+
+            newProjectTitle.innerHTML = titleText;
+            newProjectTitle.setAttribute("data-full-title", titleText);
+            newProjectTitle.setAttribute("data-name", element.name);
 
             newProjectInfoDiv.appendChild(newProjectTitle);
         }
@@ -177,7 +182,7 @@ function getProjectsFromGitHub() {
         xhr.abort();
     };
 
-    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=100", true);
+    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=200", true);
 
     xhr.send();
 }

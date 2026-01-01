@@ -12,7 +12,7 @@
 
 function setProjectButton(categories = []) {
     const projectsButtonContainer = document.getElementById("projectsButton");
-    projectsButtonContainer.innerHTML = ""; // Clear existing buttons
+    projectsButtonContainer.innerHTML = "";
 
     const buttonLabels = {
         "ALL": "All",
@@ -21,13 +21,11 @@ function setProjectButton(categories = []) {
         "JavaLang": "Java"
     };
 
-    // Add "All" button first
     const allButton = document.createElement("button");
     allButton.id = "ALL";
     allButton.textContent = "All";
     projectsButtonContainer.appendChild(allButton);
 
-    // Filter out duplicates and "projectsRow" class, and explicitly exclude "TypeScript"
     const uniqueCategories = [...new Set(categories)].filter(c => c !== "projectsRow" && c !== "TypeScript");
 
     uniqueCategories.forEach(category => {
@@ -43,7 +41,6 @@ function setProjectButton(categories = []) {
     let pressedButtonTextShadowStyle = "1px 1px 1px white, 0 0 2px white, 0 0 0.2em white";
     let pressedButtonBoxShadowStyle = "1px 1px 1px var(--Red-color), 0 0 2px var(--Red-color), 0 0 0.2em var(--Red-color)";
 
-    // Set initial style for ALL button
     allButton.style.boxShadow = pressedButtonBoxShadowStyle;
     allButton.style.textShadow = pressedButtonTextShadowStyle;
 
@@ -51,11 +48,14 @@ function setProjectButton(categories = []) {
 
     allButtons.forEach(cardButton => cardButton.addEventListener("click", function () {
         Array.prototype.forEach.call(document.getElementsByClassName("projectsRow"), projectCard => {
+            let titleElement = projectCard.querySelector(".projTitle");
             if (cardButton.id === "ALL") {
                 projectCard.style.display = "";
+                if (titleElement) titleElement.innerHTML = titleElement.dataset.fullTitle;
             } else {
                 if (projectCard.classList.contains(cardButton.id)) {
                     projectCard.style.display = "";
+                    if (titleElement) titleElement.innerHTML = titleElement.dataset.name;
                 } else {
                     projectCard.style.display = "none";
                 }
