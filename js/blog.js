@@ -11,6 +11,8 @@
 
 try {
     marked.use({
+        breaks: true,
+        gfm: true,
         renderer: {
             heading(arg1, arg2) {
                 const isObject = typeof arg1 === 'object' && arg1 !== null;
