@@ -4,7 +4,7 @@
   height: 50px;
   border-radius: 50%;
   position: fixed;
-  top: 20px;
+  top: calc(20px + env(safe-area-inset-top));
   z-index: 10;
   box-shadow: 0px 0px 1px 1px white;
   display: flex;
@@ -96,7 +96,7 @@ body.no-scroll {
   height: 50px;
   border-radius: 50%;
   position: fixed;
-  top: 85px;
+  top: calc(85px + env(safe-area-inset-top));
   z-index: 10;
   box-shadow: 0px 0px 1px 1px white;
   display: flex;
