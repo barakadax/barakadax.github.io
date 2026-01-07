@@ -52,10 +52,10 @@ function getProjectsFromGitHub() {
                 newProjectLink.className = "projectsRow " + element.language + " Hardware";
             }
             else if (element.name === "SerialCommunication") {
-                newProjectLink.className = "projectsRow " + element.language + " Python C++";
+                newProjectLink.className = "projectsRow Python C++ Rust";
             }
             else if (element.name === "Wordle") {
-                newProjectLink.className = "projectsRow " + "Python" + " Rust";
+                newProjectLink.className = "projectsRow Python Rust";
             }
             else {
                 newProjectLink.className = "projectsRow " + element.language;

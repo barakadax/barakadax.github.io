@@ -164,6 +164,11 @@ td:last-child {
     padding: 10px 0 10px 0;
 }
 
+#blog-content-inner h4 {
+    font-size: 1.2rem;
+    margin-top: -5px;
+}
+
 #blog-content-inner h1 {
     font-size: 2.5rem;
     border-bottom: 2px solid var(--Purple-color);
