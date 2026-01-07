@@ -3,7 +3,7 @@
     color: var(--Black-color);
     font-size: 40px;
     text-align: center;
-    padding: 5px 0 5px 0;
+    padding: calc(5px + env(safe-area-inset-top)) 0 5px 0;
     background-color: var(--Blue-color);
     display: flex;
     flex-direction: column;

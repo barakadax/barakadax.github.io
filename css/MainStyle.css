@@ -63,7 +63,7 @@ footer {
    gap: 10px;
    background-size: 200% 200%;
    border-radius: 50px 50px 0 0;
-   padding: 10px 20px 10px 20px;
+   padding: 10px 20px calc(10px + env(safe-area-inset-bottom)) 20px;
    animation: animateGlow 6s ease infinite;
    background: linear-gradient(180deg, var(--Red-color), var(--Purple-color));
 }
