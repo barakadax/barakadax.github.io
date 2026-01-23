@@ -341,6 +341,12 @@ td:last-child {
         transform: none;
     }
 
+    #article-list {
+        max-height: 170px;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+    }
+
     #blog-content-inner {
         padding: 15px;
     }
