@@ -74,11 +74,32 @@ td:last-child {
 }
 
 .sidebar-header {
-    padding: 15px;
+    padding: 10px;
     color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
     border-bottom: 1px solid var(--Purple-color);
+}
+
+#article-search {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+#article-search:focus {
+    border-color: var(--Purple-color);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
+}
+
+#article-search::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 #article-list {
@@ -371,5 +392,9 @@ td:last-child {
 
     .back-to-list-btn:active {
         transform: translateY(0);
+    }
+
+    #article-search {
+        width: 88%;
     }
 }

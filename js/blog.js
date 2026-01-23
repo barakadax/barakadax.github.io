@@ -174,6 +174,7 @@ async function getAllBlogArticlesNames() {
             articleList.appendChild(li);
         });
 
+        filterArticles();
         loadArticleFromURL();
     } catch (e) {
         console.error("Error loading article list:", e);
@@ -288,5 +289,27 @@ async function loadArticleFromURL() {
 window.addEventListener('popstate', (event) => {
     loadArticleFromURL();
 });
+
+function filterArticles() {
+    const searchInput = document.getElementById('article-search');
+    if (!searchInput) return;
+
+    const searchTerm = searchInput.value.toLowerCase();
+    const articleItems = document.querySelectorAll('.article-item');
+
+    articleItems.forEach(item => {
+        const articleName = item.dataset.name ? item.dataset.name.toLowerCase() : '';
+        if (articleName.includes(searchTerm)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+const searchInput = document.getElementById('article-search');
+if (searchInput) {
+    searchInput.addEventListener('input', filterArticles);
+}
 
 getAllBlogArticlesNames();
