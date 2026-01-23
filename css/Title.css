@@ -10,12 +10,12 @@
     align-items: center;
 }
 
-#title h1 {
-    text-shadow: 1px 1px 4px white;
-}
-
+#title h1,
 #title h2 {
     text-shadow: 1px 1px 4px white;
+    max-width: 95%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .titleEffect {
@@ -23,10 +23,4 @@
     height: 120px;
     margin: -2px 0 5px 0;
     background-image: linear-gradient(var(--Blue-color), var(--Black-color) 95%);
-}
-
-@media only screen and (max-width: 768px) {
-    #title h1 {
-        max-width: 95%;
-    }
 }

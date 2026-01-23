@@ -125,6 +125,9 @@ async function getAllBlogArticlesNames() {
                         const date = new Date(commitData.commit.committer.date);
                         const login = commitData.author ? commitData.author.login : commitData.commit.author.name;
                         const fullName = commitData.author ? await fetchUserFullName(login) : login;
+                        if (login === fullName) {
+                            console.error("Couldn\'t retrieve the full name for " + login);
+                        }
 
                         return {
                             ...dir,
