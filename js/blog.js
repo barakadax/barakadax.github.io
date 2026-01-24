@@ -91,7 +91,7 @@ async function getAllBlogArticlesNames() {
     articleList.innerHTML = '<li class="article-item">Loading articles...</li>';
 
     try {
-        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/`);
+        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/git/trees/Master?recursive=1`);
 
         if (response.status === 403 || response.status === 429) {
             articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px; line-height:1.4;'>I'm happy you're enjoying the website! However, GitHub limits the number of requests I can make. Please wait for the next hour to continue reading.</li>`;
@@ -100,22 +100,17 @@ async function getAllBlogArticlesNames() {
 
         if (!response.ok) throw new Error("Failed to fetch article list");
 
-        const contents = await response.json();
+        const data = await response.json();
+        const tree = data.tree || [];
 
-        if (contents.length > 0) {
-            const firstItem = contents[0];
-            if (firstItem.html_url) {
-                const parts = firstItem.html_url.split('/');
-                const branchIndex = parts.indexOf('tree') !== -1 ? parts.indexOf('tree') + 1 : parts.indexOf('blob') + 1;
-                if (branchIndex > 0 && branchIndex < parts.length) {
-                    defaultBranch = parts[branchIndex];
-                }
-            }
-        }
+        const directories = tree.filter(item => item.type === "tree" && !item.path.includes('/'));
 
-        const directories = contents.filter(item => item.type === "dir");
+        const contents = directories.map(dir => ({
+            ...dir,
+            name: dir.path
+        }));
 
-        const articlesWithMeta = await Promise.all(directories.map(async (dir) => {
+        const articlesWithMeta = await Promise.all(contents.map(async (dir) => {
             try {
                 const commitResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${dir.name}/index.md&per_page=1`);
                 if (commitResponse.ok) {
