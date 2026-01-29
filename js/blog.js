@@ -34,7 +34,6 @@ const repoOwner = "barakadax";
 const repoName = "blog";
 
 const articleMeta = {};
-const userCache = {};
 const articleCache = {};
 let defaultBranch = "Master";
 
@@ -60,20 +59,6 @@ if (backBtn) {
     };
 }
 
-async function fetchUserFullName(login) {
-    if (userCache[login]) return userCache[login];
-    try {
-        const response = await fetch(`https://api.github.com/users/${login}`);
-        if (response.ok) {
-            const data = await response.json();
-            userCache[login] = data.name || login;
-            return userCache[login];
-        }
-    } catch (e) {
-        console.warn(`Could not fetch full name for ${login}`, e);
-    }
-    return login;
-}
 
 function setActiveArticle(articleName) {
     const items = document.querySelectorAll('.article-item');
@@ -112,33 +97,31 @@ async function getAllBlogArticlesNames() {
 
         const articlesWithMeta = await Promise.all(contents.map(async (dir) => {
             try {
-                const commitResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${dir.name}/index.md&per_page=1`);
-                if (commitResponse.ok) {
-                    const commits = await commitResponse.json();
-                    if (commits && commits.length > 0) {
-                        const commitData = commits[0];
-                        const date = new Date(commitData.commit.committer.date);
-                        const login = commitData.author ? commitData.author.login : commitData.commit.author.name;
-                        const fullName = commitData.author ? await fetchUserFullName(login) : login;
-                        if (login === fullName) {
-                            console.error("Couldn\'t retrieve the full name for " + login);
-                        }
-
-                        return {
-                            ...dir,
-                            lastCommitDate: date,
-                            authorName: fullName
-                        };
-                    }
+                const metaResponse = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${dir.name}/metadata.json`);
+                if (metaResponse.ok) {
+                    const metadata = await metaResponse.json();
+                    return {
+                        ...dir,
+                        ...metadata,
+                        date: new Date(metadata.date)
+                    };
                 }
             } catch (e) {
-                console.warn(`Could not fetch commit meta for ${dir.name}`, e);
+                console.warn(`Could not fetch metadata for ${dir.name}`, e);
             }
-            return { ...dir, lastCommitDate: new Date(0), authorName: 'Barak Taya' };
+
+            console.warn(`Couldn't retrieve the metadata for ${dir.name}, using default values`);
+            return {
+                ...dir,
+                author: 'Barak Taya',
+                date: new Date(0),
+                level: 'Beginner',
+                tags: []
+            };
         }));
 
         articlesWithMeta.sort((a, b) => {
-            const dateDiff = b.lastCommitDate - a.lastCommitDate;
+            const dateDiff = b.date - a.date;
             if (dateDiff !== 0) return dateDiff;
             return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
         });
@@ -147,8 +130,10 @@ async function getAllBlogArticlesNames() {
 
         articlesWithMeta.forEach(element => {
             articleMeta[element.name] = {
-                date: element.lastCommitDate,
-                author: element.authorName
+                date: element.date,
+                author: element.author,
+                level: element.level,
+                tags: [...(element.tags || []), element.name]
             };
             const li = document.createElement('li');
             li.className = 'article-item';
@@ -209,25 +194,36 @@ async function getArticleContent(articleName) {
 
         const h1 = contentDiv.querySelector('h1');
         if (h1) {
+            const meta = articleMeta[articleName];
+
             const metaDiv = document.createElement('div');
             metaDiv.className = 'article-meta';
 
+            const topRow = document.createElement('div');
+            topRow.className = 'article-meta-top';
+
             const authorSpan = document.createElement('span');
             authorSpan.className = 'article-author';
-            const meta = articleMeta[articleName];
             authorSpan.textContent = 'By: ' + (meta ? meta.author : 'Barak Taya');
 
             const dateSpan = document.createElement('span');
             dateSpan.className = 'article-date';
             const date = meta ? meta.date : null;
             if (date && date.getTime() !== 0) {
-                dateSpan.textContent = `Last updated: ${date.toLocaleDateString()}`;
+                dateSpan.textContent = `Published: ${date.toLocaleDateString()}`;
             } else {
-                dateSpan.textContent = 'Last updated: ERROR';
+                dateSpan.textContent = 'Published: ERROR';
             }
 
-            metaDiv.appendChild(authorSpan);
-            metaDiv.appendChild(dateSpan);
+            topRow.appendChild(authorSpan);
+            topRow.appendChild(dateSpan);
+
+            const levelDiv = document.createElement('div');
+            levelDiv.className = 'article-level-row';
+            levelDiv.textContent = `Level: ${meta ? meta.level : 'Unknown'}`;
+
+            metaDiv.appendChild(topRow);
+            metaDiv.appendChild(levelDiv);
             h1.parentNode.insertBefore(metaDiv, h1.nextSibling);
 
             const mainAuthorHeader = document.getElementById('author');
@@ -297,7 +293,10 @@ function filterArticles() {
 
     articleItems.forEach(item => {
         const articleName = item.dataset.name ? item.dataset.name.toLowerCase() : '';
-        if (articleName.includes(searchTerm)) {
+        const meta = articleMeta[item.dataset.name] || {};
+        const tags = (meta.tags || []).map(t => t.toLowerCase());
+
+        if (articleName.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
             item.style.display = '';
         } else {
             item.style.display = 'none';

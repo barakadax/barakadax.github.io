@@ -135,7 +135,7 @@ function getProjectsFromGitHub() {
             newProjectDescription.innerHTML = element.description;
 
             if (Array.isArray(element.topics) && element.topics.length > 0) {
-                newProjectDescription.innerHTML += '<br><br><u>Tags:</u> ' + element.topics.join(', ');
+                newProjectDescription.innerHTML += '<br><br><span class="projTags"><u>Tags:</u> ' + element.topics.join(', ') + '</span>';
             }
 
             newProjectInfoDiv.appendChild(newProjectDescription);
@@ -148,6 +148,7 @@ function getProjectsFromGitHub() {
             response.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
 
             let categories = new Map();
+            let tags = new Map();
 
             response.forEach((element, _) => {
                 if (element.name === "barakadax" || element.name === "blog") {
@@ -158,6 +159,13 @@ function getProjectsFromGitHub() {
                 newProjectLink.className.split(" ").forEach(c => {
                     categories.set(c, (categories.get(c) || 0) + 1);
                 });
+
+                if (Array.isArray(element.topics)) {
+                    element.topics.forEach(topic => {
+                        tags.set(topic, (tags.get(topic) || 0) + 1);
+                        newProjectLink.classList.add(topic);
+                    });
+                }
 
                 let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
                 functions.setProjectTitle(element, newProjectInfoDiv);
@@ -172,7 +180,11 @@ function getProjectsFromGitHub() {
                 .sort((a, b) => b[1] - a[1])
                 .map(entry => entry[0]);
 
-            setProjectButton(sortedCategories);
+            const sortedTags = Array.from(tags.entries())
+                .sort((a, b) => b[1] - a[1])
+                .map(entry => entry[0]);
+
+            setProjectButton(sortedCategories, sortedTags);
 
         } else {
             console.log("Error loading data.");

@@ -4,6 +4,18 @@
     text-align: center;
     margin: 10px 0 0 0;
     padding-bottom: 10px;
+}
+
+button.blueButton {
+    border: 2px var(--Blue-color) solid;
+}
+
+#tagsButton {
+    width: 920px;
+    max-width: 1400px;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--Red-color);
 }
 
@@ -54,9 +66,12 @@
 }
 
 @media only screen and (max-width: 1024px) {
-    #projectsButton {
+
+    #projectsButton,
+    #tagsButton {
         max-width: 94%;
     }
+
     #projectsColumn {
         max-width: 94%;
     }
@@ -66,10 +81,12 @@
     .projTitle {
         font-size: 20px;
     }
+
     .projImages {
         max-width: 200px;
         max-height: 160px;
     }
+
     .projDescription {
         font-size: 14px;
     }
@@ -79,9 +96,11 @@
     .projTitle {
         font-size: 15px;
     }
+
     .projDescription {
         font-size: 12px;
     }
+
     .projImages {
         max-width: 150px;
         max-height: 110px;
@@ -90,11 +109,13 @@
 
 @keyframes borderAnimation {
     0% {
-      border-color: var(--Red-color);
+        border-color: var(--Red-color);
     }
+
     50% {
-      border-color: var(--Purple-color);
+        border-color: var(--Purple-color);
     }
+
     100% {
         border-color: var(--Red-color);
     }

@@ -10,9 +10,14 @@
 'use strict';
 
 
-function setProjectButton(categories = []) {
+let activeCategory = "ALL";
+let activeTag = "ALL";
+
+function setProjectButton(categories = [], tags = []) {
     const projectsButtonContainer = document.getElementById("projectsButton");
+    const tagsButtonContainer = document.getElementById("tagsButton");
     projectsButtonContainer.innerHTML = "";
+    tagsButtonContainer.innerHTML = "";
 
     const buttonLabels = {
         "ALL": "All",
@@ -21,63 +26,91 @@ function setProjectButton(categories = []) {
         "JavaLang": "Java"
     };
 
-    const allButton = document.createElement("button");
-    allButton.id = "ALL";
-    allButton.textContent = "All";
-    projectsButtonContainer.appendChild(allButton);
+    const pressedButtonTextShadowStyle = "1px 1px 1px white, 0 0 2px white, 0 0 0.2em white";
+    const redPressedShadow = "1px 1px 1px var(--Red-color), 0 0 2px var(--Red-color), 0 0 0.2em var(--Red-color)";
+    const bluePressedShadow = "1px 1px 1px var(--Blue-color), 0 0 2px var(--Blue-color), 0 0 0.2em var(--Blue-color)";
 
-    const uniqueCategories = [...new Set(categories)].filter(c => c !== "projectsRow" && c !== "TypeScript");
+    function filterProjects() {
+        const projects = document.getElementsByClassName("projectsRow");
+        Array.from(projects).forEach(projectCard => {
+            const titleElement = projectCard.querySelector(".projTitle");
+            const tagsElement = projectCard.querySelector(".projTags");
+            const matchesCategory = activeCategory === "ALL" || projectCard.classList.contains(activeCategory);
+            const matchesTag = activeTag === "ALL" || projectCard.classList.contains(activeTag);
 
-    uniqueCategories.forEach(category => {
-        if (!category) return;
-
-        const btn = document.createElement("button");
-        btn.id = category;
-        btn.textContent = buttonLabels[category] || category;
-        projectsButtonContainer.appendChild(btn);
-    });
-
-
-    let pressedButtonTextShadowStyle = "1px 1px 1px white, 0 0 2px white, 0 0 0.2em white";
-    let pressedButtonBoxShadowStyle = "1px 1px 1px var(--Red-color), 0 0 2px var(--Red-color), 0 0 0.2em var(--Red-color)";
-
-    allButton.style.boxShadow = pressedButtonBoxShadowStyle;
-    allButton.style.textShadow = pressedButtonTextShadowStyle;
-
-    const allButtons = projectsButtonContainer.querySelectorAll("button");
-
-    allButtons.forEach(cardButton => cardButton.addEventListener("click", function () {
-        Array.prototype.forEach.call(document.getElementsByClassName("projectsRow"), projectCard => {
-            let titleElement = projectCard.querySelector(".projTitle");
-            if (cardButton.id === "ALL") {
+            if (matchesCategory && matchesTag) {
                 projectCard.style.display = "";
-                if (titleElement) titleElement.innerHTML = titleElement.dataset.fullTitle;
-            } else {
-                if (projectCard.classList.contains(cardButton.id)) {
-                    projectCard.style.display = "";
-                    if (titleElement) titleElement.innerHTML = titleElement.dataset.name;
-                } else {
-                    projectCard.style.display = "none";
+
+                // Title logic
+                if (titleElement) {
+                    if (activeCategory === "ALL") {
+                        titleElement.innerHTML = titleElement.dataset.fullTitle;
+                    } else {
+                        titleElement.innerHTML = titleElement.dataset.name;
+                    }
                 }
+
+                // Tags logic
+                if (tagsElement) {
+                    if (activeTag === "ALL") {
+                        tagsElement.style.display = "";
+                    } else {
+                        tagsElement.style.display = "none";
+                    }
+                }
+            } else {
+                projectCard.style.display = "none";
             }
         });
-
-        setButtonsStyle(cardButton);
-    }));
-
-    function setButtonsStyle(targetButton) {
-        allButtons.forEach(btn => setNoStyleToButton(btn));
-        setStyleToButton(targetButton);
     }
 
-    function setNoStyleToButton(button) {
-        button.style.boxShadow = "";
-        button.style.textShadow = "";
+    function createButton(id, label, container, isTag = false) {
+        const btn = document.createElement("button");
+        btn.id = id;
+        btn.textContent = label;
+        if (isTag) btn.classList.add("blueButton");
+
+        btn.addEventListener("click", () => {
+            if (isTag) {
+                activeTag = id;
+                updateButtonStyles(tagsButtonContainer, btn, bluePressedShadow);
+            } else {
+                activeCategory = id;
+                updateButtonStyles(projectsButtonContainer, btn, redPressedShadow);
+            }
+            filterProjects();
+        });
+
+        container.appendChild(btn);
+        return btn;
     }
 
-    function setStyleToButton(button) {
-        button.style.boxShadow = pressedButtonBoxShadowStyle;
-        button.style.textShadow = pressedButtonTextShadowStyle;
+    function updateButtonStyles(container, activeBtn, boxShadow) {
+        const buttons = container.querySelectorAll("button");
+        buttons.forEach(btn => {
+            btn.style.boxShadow = "";
+            btn.style.textShadow = "";
+        });
+        activeBtn.style.boxShadow = boxShadow;
+        activeBtn.style.textShadow = pressedButtonTextShadowStyle;
     }
+
+    // Category Buttons
+    const allCatBtn = createButton("ALL", "All", projectsButtonContainer);
+    updateButtonStyles(projectsButtonContainer, allCatBtn, redPressedShadow);
+
+    const uniqueCategories = [...new Set(categories)].filter(c => c !== "projectsRow" && c !== "TypeScript" && c !== "ALL");
+    uniqueCategories.forEach(category => {
+        if (category) createButton(category, buttonLabels[category] || category, projectsButtonContainer);
+    });
+
+    // Tag Buttons
+    const allTagBtn = createButton("ALL", "All", tagsButtonContainer, true);
+    updateButtonStyles(tagsButtonContainer, allTagBtn, bluePressedShadow);
+
+    const uniqueTags = [...new Set(tags)].filter(t => t !== "ALL");
+    uniqueTags.forEach(tag => {
+        if (tag) createButton(tag, tag, tagsButtonContainer, true);
+    });
 }
 
