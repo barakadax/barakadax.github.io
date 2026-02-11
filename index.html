@@ -41,6 +41,7 @@
       content="Portfolio of Barak Taya, a Software Engineer. Showcasing projects, skills, and professional experience.">
    <meta property="og:type" content="website">
    <meta property="og:image" content="https://barakadax.github.io/img/me.jpg">
+   <meta property="og:image:secure_url" content="https://barakadax.github.io/img/me.jpg">
    <meta property="og:url" content="https://barakadax.github.io/">
 
    <!-- Twitter Card Meta Tags -->
@@ -243,9 +244,21 @@
       </g>
    </svg>
    <h2>Projects</h2>
-   <div id="projectsButton">
-   </div>
-   <div id="tagsButton">
+   <div id="filterSection">
+      <button id="filterToggle" class="noSelect">
+         <span>Filters</span>
+         <span id="filterArrow">▼</span>
+      </button>
+      <div id="filterMenu" class="hidden noSelect">
+         <div class="filterColumn">
+            <h3>Languages</h3>
+            <div id="categoryFilter" class="scrollableFilter"></div>
+         </div>
+         <div class="filterColumn">
+            <h3>Tags</h3>
+            <div id="tagFilter" class="scrollableFilter"></div>
+         </div>
+      </div>
    </div>
    <div id="projectsColumn">
       <div class="loadingContainer">

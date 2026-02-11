@@ -9,53 +9,59 @@
     ''"'',,}{,,*/
 'use strict';
 
-
-let activeCategory = "ALL";
-let activeTag = "ALL";
+let selectedCategories = new Set();
+let selectedTags = new Set();
 
 function setProjectButton(categories = [], tags = []) {
-    const projectsButtonContainer = document.getElementById("projectsButton");
-    const tagsButtonContainer = document.getElementById("tagsButton");
-    projectsButtonContainer.innerHTML = "";
-    tagsButtonContainer.innerHTML = "";
+    const categoryContainer = document.getElementById("categoryFilter");
+    const tagContainer = document.getElementById("tagFilter");
+    const filterToggle = document.getElementById("filterToggle");
+    const filterMenu = document.getElementById("filterMenu");
+
+    categoryContainer.innerHTML = "";
+    tagContainer.innerHTML = "";
 
     const buttonLabels = {
-        "ALL": "All",
         "CLang": "C",
         "JavaScript": "JS/TS",
         "JavaLang": "Java"
     };
 
-    const pressedButtonTextShadowStyle = "1px 1px 1px white, 0 0 2px white, 0 0 0.2em white";
-    const redPressedShadow = "1px 1px 1px var(--Red-color), 0 0 2px var(--Red-color), 0 0 0.2em var(--Red-color)";
-    const bluePressedShadow = "1px 1px 1px var(--Blue-color), 0 0 2px var(--Blue-color), 0 0 0.2em var(--Blue-color)";
+    filterToggle.addEventListener("click", () => {
+        filterMenu.classList.toggle("hidden");
+        filterToggle.classList.toggle("active");
+    });
 
     function filterProjects() {
         const projects = document.getElementsByClassName("projectsRow");
         Array.from(projects).forEach(projectCard => {
             const titleElement = projectCard.querySelector(".projTitle");
             const tagsElement = projectCard.querySelector(".projTags");
-            const matchesCategory = activeCategory === "ALL" || projectCard.classList.contains(activeCategory);
-            const matchesTag = activeTag === "ALL" || projectCard.classList.contains(activeTag);
+
+            const cardClasses = Array.from(projectCard.classList);
+
+            const matchesCategory = selectedCategories.size === 0 ||
+                cardClasses.some(c => selectedCategories.has(c));
+
+            const matchesTag = selectedTags.size === 0 ||
+                cardClasses.some(t => selectedTags.has(t));
 
             if (matchesCategory && matchesTag) {
                 projectCard.style.display = "";
 
-                // Title logic
                 if (titleElement) {
-                    if (activeCategory === "ALL") {
-                        titleElement.innerHTML = titleElement.dataset.fullTitle;
-                    } else {
+                    if (selectedCategories.size > 0) {
                         titleElement.innerHTML = titleElement.dataset.name;
+                    } else {
+                        titleElement.innerHTML = titleElement.dataset.fullTitle;
                     }
                 }
 
-                // Tags logic
                 if (tagsElement) {
-                    if (activeTag === "ALL") {
-                        tagsElement.style.display = "";
-                    } else {
+                    if (selectedTags.size > 0) {
                         tagsElement.style.display = "none";
+                    } else {
+                        tagsElement.style.display = "";
                     }
                 }
             } else {
@@ -64,53 +70,39 @@ function setProjectButton(categories = [], tags = []) {
         });
     }
 
-    function createButton(id, label, container, isTag = false) {
-        const btn = document.createElement("button");
-        btn.id = id;
-        btn.textContent = label;
-        if (isTag) btn.classList.add("blueButton");
+    function createCheckbox(id, label, container, isTag = false) {
+        const wrapper = document.createElement("label");
+        wrapper.className = "filterOption noSelect";
 
-        btn.addEventListener("click", () => {
-            if (isTag) {
-                activeTag = id;
-                updateButtonStyles(tagsButtonContainer, btn, bluePressedShadow);
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = id;
+        checkbox.value = id;
+
+        const text = document.createTextNode(label);
+
+        checkbox.addEventListener("change", (e) => {
+            const set = isTag ? selectedTags : selectedCategories;
+            if (e.target.checked) {
+                set.add(id);
             } else {
-                activeCategory = id;
-                updateButtonStyles(projectsButtonContainer, btn, redPressedShadow);
+                set.delete(id);
             }
             filterProjects();
         });
 
-        container.appendChild(btn);
-        return btn;
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(text);
+        container.appendChild(wrapper);
     }
-
-    function updateButtonStyles(container, activeBtn, boxShadow) {
-        const buttons = container.querySelectorAll("button");
-        buttons.forEach(btn => {
-            btn.style.boxShadow = "";
-            btn.style.textShadow = "";
-        });
-        activeBtn.style.boxShadow = boxShadow;
-        activeBtn.style.textShadow = pressedButtonTextShadowStyle;
-    }
-
-    // Category Buttons
-    const allCatBtn = createButton("ALL", "All", projectsButtonContainer);
-    updateButtonStyles(projectsButtonContainer, allCatBtn, redPressedShadow);
 
     const uniqueCategories = [...new Set(categories)].filter(c => c !== "projectsRow" && c !== "TypeScript" && c !== "ALL");
     uniqueCategories.forEach(category => {
-        if (category) createButton(category, buttonLabels[category] || category, projectsButtonContainer);
+        if (category) createCheckbox(category, buttonLabels[category] || category, categoryContainer);
     });
-
-    // Tag Buttons
-    const allTagBtn = createButton("ALL", "All", tagsButtonContainer, true);
-    updateButtonStyles(tagsButtonContainer, allTagBtn, bluePressedShadow);
 
     const uniqueTags = [...new Set(tags)].filter(t => t !== "ALL");
     uniqueTags.forEach(tag => {
-        if (tag) createButton(tag, tag, tagsButtonContainer, true);
+        if (tag) createCheckbox(tag, tag, tagContainer, true);
     });
 }
-

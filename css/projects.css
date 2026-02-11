@@ -1,22 +1,152 @@
-#projectsButton {
+#filterSection {
     width: 920px;
-    max-width: 1400px;
-    text-align: center;
-    margin: 10px 0 0 0;
-    padding-bottom: 10px;
-}
-
-button.blueButton {
-    border: 2px var(--Blue-color) solid;
-}
-
-#tagsButton {
-    width: 920px;
-    max-width: 1400px;
-    text-align: center;
-    margin: 0;
-    padding-bottom: 10px;
+    max-width: 98%;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-bottom: 1px solid var(--Red-color);
+}
+
+#filterToggle {
+    background: transparent;
+    color: white;
+    border: 2px solid var(--Red-color);
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+#filterToggle.active {
+    margin-bottom: 0;
+}
+
+#filterToggle:hover {
+    box-shadow: 0 0 10px var(--Red-color);
+    text-shadow: 1px 1px 1px white, 0 0 2px white;
+}
+
+#filterArrow {
+    transition: transform 0.3s ease;
+}
+
+#filterToggle.active #filterArrow {
+    transform: rotate(180deg);
+}
+
+#filterMenu {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--Orange-color);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+#filterMenu.hidden {
+    display: none;
+}
+
+.filterColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.filterColumn h3 {
+    color: var(--Orange-color);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    border-bottom: 2px solid rgba(255, 140, 0, 0.2);
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.scrollableFilter {
+    max-height: 250px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 15px;
+}
+
+.scrollableFilter::-webkit-scrollbar {
+    display: unset !important;
+    width: 6px;
+}
+
+.scrollableFilter::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.scrollableFilter::-webkit-scrollbar-thumb {
+    background: var(--Orange-color);
+    border-radius: 10px;
+}
+
+.filterOption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #dfdfdf;
+    transition: all 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.filterOption:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Checkbox Styling */
+.filterOption input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--Orange-color);
+    border-radius: 3px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.filterOption input[type="checkbox"]:checked {
+    background: var(--Red-color);
+    border-color: var(--Red-color);
+    box-shadow: 0 0 5px var(--Red-color);
+}
+
+.filterOption input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 #projectsColumn {
