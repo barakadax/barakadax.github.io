@@ -86,7 +86,7 @@
 }
 
 .scrollableFilter::-webkit-scrollbar {
-    display: unset !important;
+    display: block !important;
     width: 6px;
 }
 

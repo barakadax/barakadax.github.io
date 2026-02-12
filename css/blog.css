@@ -111,7 +111,7 @@ td:last-child {
 }
 
 #article-list::-webkit-scrollbar {
-    display: unset !important;
+    display: block !important;
     width: 6px;
 }
 

@@ -9,304 +9,256 @@
     ''"'',,}{,,*/
 'use strict';
 
-try {
-    marked.use({
-        breaks: true,
-        gfm: true,
-        renderer: {
-            heading(arg1, arg2) {
-                const isObject = typeof arg1 === 'object' && arg1 !== null;
-                const text = isObject ? arg1.text : arg1;
-                const level = isObject ? arg1.depth : arg2;
+// --- Configuration & State ---
+const CONFIG = {
+    repoOwner: "barakadax",
+    repoName: "blog",
+    defaultBranch: "Master",
+    mobileBreakpoint: 768
+};
 
-                const id = typeof text === 'string'
-                    ? text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
-                    : 'header-' + level;
-                return `<h${level} id="${id}">${text}</h${level}>`;
-            }
-        }
-    });
-} catch (e) {
-    console.warn("Marked configuration failed, using default renderer", e);
-}
+const state = {
+    articleMeta: {},
+    articleCache: {}
+};
 
-const repoOwner = "barakadax";
-const repoName = "blog";
+// --- DOM Cache ---
+const UI = {
+    sidebar: document.getElementById('blog-sidebar'),
+    toggleBtn: document.getElementById('sidebar-toggle'),
+    backBtn: document.getElementById('back-to-list-btn'),
+    contentInner: document.getElementById('blog-content-inner'),
+    articleList: document.getElementById('article-list'),
+    searchInput: document.getElementById('article-search'),
+    blogContainer: document.getElementById('blog-container'),
+    authorHeader: document.getElementById('author')
+};
 
-const articleMeta = {};
-const articleCache = {};
-let defaultBranch = "Master";
-
-const sidebar = document.getElementById('blog-sidebar');
-const toggleBtn = document.getElementById('sidebar-toggle');
-
-if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-    });
-}
-
-const backBtn = document.getElementById('back-to-list-btn');
-if (backBtn) {
-    backBtn.onclick = () => {
-        const blogContainer = document.getElementById('blog-container');
-        if (blogContainer) {
-            blogContainer.scrollIntoView({ behavior: 'smooth' });
-        }
-        if (sidebar) {
-            sidebar.classList.remove('collapsed');
-        }
-    };
-}
-
-
-function setActiveArticle(articleName) {
-    const items = document.querySelectorAll('.article-item');
-    items.forEach(item => {
-        if (item.dataset.name === articleName) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-}
-
-async function getAllBlogArticlesNames() {
-    const articleList = document.getElementById('article-list');
-    articleList.innerHTML = '<li class="article-item">Loading articles...</li>';
-
+// --- Marked Configuration ---
+function initMarked() {
     try {
-        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/git/trees/Master?recursive=1`);
+        marked.use({
+            breaks: true,
+            gfm: true,
+            renderer: {
+                heading(arg1, arg2) {
+                    const isObject = typeof arg1 === 'object' && arg1 !== null;
+                    const text = isObject ? arg1.text : arg1;
+                    const level = isObject ? arg1.depth : arg2;
+                    const id = typeof text === 'string'
+                        ? text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
+                        : 'header-' + level;
+                    return `<h${level} id="${id}">${text}</h${level}>`;
+                },
+                link(href, title, text) {
+                    if (typeof href === 'object' && href !== null) ({ href, title, text } = href);
+                    const titleAttr = title ? ` title="${title}"` : '';
 
-        if (response.status === 403 || response.status === 429) {
-            articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px; line-height:1.4;'>I'm happy you're enjoying the website! However, GitHub limits the number of requests I can make. Please wait for the next hour to continue reading.</li>`;
-            return;
-        }
-
-        if (!response.ok) throw new Error("Failed to fetch article list");
-
-        const data = await response.json();
-        const tree = data.tree || [];
-
-        const directories = tree.filter(item => item.type === "tree" && !item.path.includes('/'));
-
-        const contents = directories.map(dir => ({
-            ...dir,
-            name: dir.path
-        }));
-
-        const articlesWithMeta = await Promise.all(contents.map(async (dir) => {
-            try {
-                const metaResponse = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${dir.name}/metadata.json`);
-                if (metaResponse.ok) {
-                    const metadata = await metaResponse.json();
-                    return {
-                        ...dir,
-                        ...metadata,
-                        date: new Date(metadata.date)
-                    };
+                    if (href?.startsWith('#')) {
+                        return `<a href="${href}"${titleAttr} class="anchor-link">${text}</a>`;
+                    }
+                    if (href?.includes('article=')) {
+                        return `<a href="${href}"${titleAttr} class="internal-blog-link">${text}</a>`;
+                    }
+                    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
                 }
-            } catch (e) {
-                console.warn(`Could not fetch metadata for ${dir.name}`, e);
             }
-
-            console.warn(`Couldn't retrieve the metadata for ${dir.name}, using default values`);
-            return {
-                ...dir,
-                author: 'Barak Taya',
-                date: new Date(0),
-                level: 'Beginner',
-                tags: []
-            };
-        }));
-
-        articlesWithMeta.sort((a, b) => {
-            const dateDiff = b.date - a.date;
-            if (dateDiff !== 0) return dateDiff;
-            return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
         });
-
-        articleList.innerHTML = "";
-
-        articlesWithMeta.forEach(element => {
-            articleMeta[element.name] = {
-                date: element.date,
-                author: element.author,
-                level: element.level,
-                tags: [...(element.tags || []), element.name]
-            };
-            const li = document.createElement('li');
-            li.className = 'article-item';
-            li.textContent = element.name;
-            li.dataset.name = element.name;
-
-            li.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const currentUrl = new URL(window.location.href);
-                if (currentUrl.searchParams.get('article') !== element.name) {
-                    history.pushState({ article: element.name }, "", `?article=${encodeURIComponent(element.name)}`);
-                }
-                getArticleContent(element.name);
-                setActiveArticle(element.name);
-                if (window.innerWidth <= 768 && sidebar) {
-                    sidebar.classList.add('collapsed');
-                }
-            });
-
-            articleList.appendChild(li);
-        });
-
-        filterArticles();
-        loadArticleFromURL();
     } catch (e) {
-        console.error("Error loading article list:", e);
-        articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
+        console.warn("Marked configuration failed", e);
     }
 }
 
-async function getArticleContent(articleName) {
-    const contentDiv = document.getElementById('blog-content-inner');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    contentDiv.innerHTML = '<div class="loadingText">Loading...</div>';
-    if (backBtn) {
-        backBtn.classList.remove('visible');
+// --- Helpers ---
+function collapseSidebarOnMobile() {
+    if (window.innerWidth <= CONFIG.mobileBreakpoint && UI.sidebar) {
+        UI.sidebar.classList.add('collapsed');
     }
+}
 
-    try {
-        let decodedContent;
-        if (articleCache[articleName]) {
-            decodedContent = articleCache[articleName];
-        } else {
-            const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/index.md`);
-
-            if (!response.ok) {
-                throw new Error("Could not fetch the article content.");
-            }
-
-            decodedContent = await response.text();
-            articleCache[articleName] = decodedContent;
-        }
-
-        contentDiv.innerHTML = marked.parse(decodedContent);
-        fixImageLinks(contentDiv, articleName);
-
-        const h1 = contentDiv.querySelector('h1');
-        if (h1) {
-            const meta = articleMeta[articleName];
-
-            const metaDiv = document.createElement('div');
-            metaDiv.className = 'article-meta';
-
-            const topRow = document.createElement('div');
-            topRow.className = 'article-meta-top';
-
-            const authorSpan = document.createElement('span');
-            authorSpan.className = 'article-author';
-            authorSpan.textContent = 'By: ' + (meta ? meta.author : 'Barak Taya');
-
-            const dateSpan = document.createElement('span');
-            dateSpan.className = 'article-date';
-            const date = meta ? meta.date : null;
-            if (date && date.getTime() !== 0) {
-                dateSpan.textContent = `Published: ${date.toLocaleDateString()}`;
-            } else {
-                dateSpan.textContent = 'Published: ERROR';
-            }
-
-            topRow.appendChild(authorSpan);
-            topRow.appendChild(dateSpan);
-
-            const levelDiv = document.createElement('div');
-            levelDiv.className = 'article-level-row';
-            levelDiv.textContent = `Level: ${meta ? meta.level : 'Unknown'}`;
-
-            metaDiv.appendChild(topRow);
-            metaDiv.appendChild(levelDiv);
-            h1.parentNode.insertBefore(metaDiv, h1.nextSibling);
-
-            const mainAuthorHeader = document.getElementById('author');
-            if (mainAuthorHeader) {
-                mainAuthorHeader.textContent = meta ? meta.author : 'Barak Taya';
-            }
-        }
-
-        if (backBtn) {
-            backBtn.classList.add('visible');
-        }
-
-    } catch (e) {
-        console.error("Error loading article content:", e);
-        contentDiv.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article or it doesn't exist. Please try again later.</p>";
-    }
+function setActiveArticleUI(articleName) {
+    document.querySelectorAll('.article-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.name === articleName);
+    });
 }
 
 function fixImageLinks(container, articleName) {
-    const images = container.querySelectorAll('img');
-    images.forEach(img => {
+    container.querySelectorAll('img').forEach(img => {
         const src = img.getAttribute('src');
         if (src && !src.startsWith('http') && !src.startsWith('//')) {
-            const newSrc = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${defaultBranch}/${articleName}/${src}`;
-            img.src = newSrc;
+            img.src = `https://raw.githubusercontent.com/${CONFIG.repoOwner}/${CONFIG.repoName}/${CONFIG.defaultBranch}/${articleName}/${src}`;
         }
     });
 }
 
-async function loadArticleFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const articleName = urlParams.get('article');
-    if (articleName) {
-        await getArticleContent(articleName);
-        setActiveArticle(articleName);
-        if (window.innerWidth <= 768 && sidebar) {
-            sidebar.classList.add('collapsed');
+// --- Logic ---
+async function fetchWithTimeout(url, options = {}) {
+    const response = await fetch(url, options);
+    if (response.status === 403 || response.status === 429) {
+        throw new Error('RATE_LIMIT');
+    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response;
+}
+
+async function loadArticle(articleName, pushToHistory = true) {
+    if (!UI.contentInner) return;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    UI.contentInner.innerHTML = '<div class="loadingText">Loading...</div>';
+    UI.backBtn?.classList.remove('visible');
+
+    try {
+        let content;
+        if (state.articleCache[articleName]) {
+            content = state.articleCache[articleName];
+        } else {
+            const res = await fetchWithTimeout(`https://raw.githubusercontent.com/${CONFIG.repoOwner}/${CONFIG.repoName}/${CONFIG.defaultBranch}/${articleName}/index.md`);
+            content = await res.text();
+            state.articleCache[articleName] = content;
         }
 
-        if (window.location.hash) {
-            const hash = window.location.hash;
-            try {
-                const computedId = decodeURIComponent(hash.substring(1));
-                const targetElement = document.getElementById(computedId);
-                if (targetElement) {
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                }
-            } catch (e) {
-                console.warn("Could not scroll to anchor", e);
+        UI.contentInner.innerHTML = marked.parse(content);
+        fixImageLinks(UI.contentInner, articleName);
+        renderMetadata(articleName);
+
+        if (pushToHistory && history.pushState) {
+            const url = `?article=${encodeURIComponent(articleName)}`;
+            if (new URLSearchParams(window.location.search).get('article') !== articleName) {
+                history.pushState({ article: articleName }, "", url);
             }
+        }
+
+        setActiveArticleUI(articleName);
+        collapseSidebarOnMobile();
+        UI.backBtn?.classList.add('visible');
+
+    } catch (e) {
+        console.error("Error loading article:", e);
+        UI.contentInner.innerHTML = "<h1>Error loading article</h1><p>Could not fetch the article. Please try again later.</p>";
+    }
+}
+
+function renderMetadata(articleName) {
+    const h1 = UI.contentInner.querySelector('h1');
+    if (!h1) return;
+
+    const meta = state.articleMeta[articleName] || { author: 'Barak Taya', level: 'Unknown', date: null };
+
+    const metaHtml = `
+        <div class="article-meta">
+            <div class="article-meta-top">
+                <span class="article-author">By: ${meta.author}</span>
+                <span class="article-date">Published: ${meta.date && meta.date.getTime() !== 0 ? meta.date.toLocaleDateString() : 'N/A'}</span>
+            </div>
+            <div class="article-level-row">Level: ${meta.level}</div>
+        </div>
+    `;
+    h1.insertAdjacentHTML('afterend', metaHtml);
+
+    if (UI.authorHeader) UI.authorHeader.textContent = meta.author;
+}
+
+async function initArticleList() {
+    if (!UI.articleList) return;
+    UI.articleList.innerHTML = '<li class="article-item">Loading articles...</li>';
+
+    try {
+        const res = await fetchWithTimeout(`https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/git/trees/Master?recursive=1`);
+        const data = await res.json();
+        const directories = (data.tree || []).filter(item => item.type === "tree" && !item.path.includes('/'));
+
+        const articles = await Promise.all(directories.map(async (dir) => {
+            try {
+                const metaRes = await fetch(`https://raw.githubusercontent.com/${CONFIG.repoOwner}/${CONFIG.repoName}/${CONFIG.defaultBranch}/${dir.path}/metadata.json`);
+                if (metaRes.ok) {
+                    const meta = await metaRes.json();
+                    return { name: dir.path, ...meta, date: new Date(meta.date) };
+                }
+            } catch (e) { }
+            return { name: dir.path, author: 'Barak Taya', date: new Date(0), level: 'Beginner', tags: [] };
+        }));
+
+        articles.sort((a, b) => b.date - a.date || a.name.localeCompare(b.name));
+
+        UI.articleList.innerHTML = "";
+        articles.forEach(art => {
+            state.articleMeta[art.name] = { ...art, tags: [...(art.tags || []), art.name] };
+            const li = document.createElement('li');
+            li.className = 'article-item';
+            li.textContent = art.name;
+            li.dataset.name = art.name;
+            li.onclick = () => loadArticle(art.name);
+            UI.articleList.appendChild(li);
+        });
+
+        filterArticles();
+        handleInitialURL();
+    } catch (e) {
+        if (e.message === 'RATE_LIMIT') {
+            UI.articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px;'>GitHub rate limit reached. Please try again in an hour.</li>`;
+        } else {
+            UI.articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
         }
     }
 }
 
-window.addEventListener('popstate', (event) => {
-    loadArticleFromURL();
-});
-
 function filterArticles() {
-    const searchInput = document.getElementById('article-search');
-    if (!searchInput) return;
-
-    const searchTerm = searchInput.value.toLowerCase();
-    const articleItems = document.querySelectorAll('.article-item');
-
-    articleItems.forEach(item => {
-        const articleName = item.dataset.name ? item.dataset.name.toLowerCase() : '';
-        const meta = articleMeta[item.dataset.name] || {};
-        const tags = (meta.tags || []).map(t => t.toLowerCase());
-
-        if (articleName.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
-        }
+    if (!UI.searchInput) return;
+    const term = UI.searchInput.value.toLowerCase();
+    document.querySelectorAll('.article-item').forEach(item => {
+        const name = item.dataset.name.toLowerCase();
+        const tags = (state.articleMeta[item.dataset.name]?.tags || []).map(t => t.toLowerCase());
+        item.style.display = (name.includes(term) || tags.some(t => t.includes(term))) ? '' : 'none';
     });
 }
 
-const searchInput = document.getElementById('article-search');
-if (searchInput) {
-    searchInput.addEventListener('input', filterArticles);
+function handleInitialURL() {
+    const name = new URLSearchParams(window.location.search).get('article');
+    if (name) {
+        loadArticle(name, false);
+        if (window.location.hash) {
+            setTimeout(() => {
+                const target = document.getElementById(decodeURIComponent(window.location.hash.substring(1)));
+                target?.scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+        }
+    }
 }
 
-getAllBlogArticlesNames();
+// --- Events ---
+function initEvents() {
+    UI.toggleBtn?.addEventListener('click', () => UI.sidebar?.classList.toggle('collapsed'));
+
+    UI.backBtn?.addEventListener('click', () => {
+        UI.blogContainer?.scrollIntoView({ behavior: 'smooth' });
+        UI.sidebar?.classList.remove('collapsed');
+    });
+
+    UI.contentInner?.addEventListener('click', (e) => {
+        const internalLink = e.target.closest('a.internal-blog-link');
+        const anchorLink = e.target.closest('a.anchor-link');
+
+        if (internalLink) {
+            e.preventDefault();
+            const artName = new URL(internalLink.getAttribute('href'), window.location.href).searchParams.get('article');
+            if (artName) loadArticle(artName);
+        } else if (anchorLink) {
+            e.preventDefault();
+            const id = anchorLink.getAttribute('href').substring(1);
+            const target = document.getElementById(id);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                history.replaceState(null, null, `#${id}`);
+            }
+        }
+    });
+
+    UI.searchInput?.addEventListener('input', filterArticles);
+    window.addEventListener('popstate', handleInitialURL);
+}
+
+// --- Start ---
+initMarked();
+initEvents();
+initArticleList();
