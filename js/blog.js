@@ -166,7 +166,7 @@ async function initArticleList() {
     try {
         const res = await fetchWithTimeout(`https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/git/trees/Master?recursive=1`);
         const data = await res.json();
-        const directories = (data.tree || []).filter(item => item.type === "tree" && !item.path.includes('/'));
+        const directories = (data.tree || []).filter(item => item.type === "tree" && !item.path.includes('/') && !item.path.includes('conductor'));
 
         const articles = await Promise.all(directories.map(async (dir) => {
             try {
