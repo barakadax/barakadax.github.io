@@ -190,6 +190,12 @@ td:last-child {
     margin-bottom: 10px;
 }
 
+#blog-content-inner h5 {
+    text-shadow: none;
+    margin-bottom: 15px;
+}
+
+
 #select-article-prompt .mobile-direction {
     display: none;
 }
