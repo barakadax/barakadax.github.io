@@ -168,7 +168,7 @@ if (menuController.shareButton) {
   menuController.shareButton.addEventListener('click', async () => {
     const shareData = {
       title: document.title,
-      text: 'Check out this article!',
+      text: menuController.shareButton.dataset.shareText || 'Check out this article!',
       url: window.location.href
     };
 

@@ -50,6 +50,18 @@ function initMarked() {
                         : 'header-' + level;
                     return `<h${level} id="${id}">${text}</h${level}>`;
                 },
+                code(arg1, arg2) {
+                    const isObject = typeof arg1 === 'object' && arg1 !== null;
+                    const code = isObject ? arg1.text : arg1;
+                    const lang = isObject ? arg1.lang : arg2;
+
+                    const copyIcon = `<svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>`;
+
+                    return `<div class="code-block-wrapper">
+                        <button class="copy-code-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">${copyIcon}</button>
+                        <pre><code class="language-${lang || 'none'}">${code}</code></pre>
+                    </div>`;
+                },
                 link(href, title, text) {
                     if (typeof href === 'object' && href !== null) ({ href, title, text } = href);
                     const titleAttr = title ? ` title="${title}"` : '';
@@ -91,7 +103,6 @@ function fixImageLinks(container, articleName) {
     });
 }
 
-// --- Logic ---
 async function fetchWithTimeout(url, options = {}) {
     const response = await fetch(url, options);
     if (response.status === 403 || response.status === 429) {
@@ -100,6 +111,24 @@ async function fetchWithTimeout(url, options = {}) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response;
 }
+
+window.copyToClipboard = async function (btn) {
+    const codeBlock = btn.parentElement.querySelector('code');
+    if (!codeBlock) return;
+
+    try {
+        await navigator.clipboard.writeText(codeBlock.innerText);
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="copied-text">Copied!</span>';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('copied');
+        }, 2000);
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+    }
+};
 
 async function loadArticle(articleName, pushToHistory = true) {
     if (!UI.contentInner) return;
@@ -119,6 +148,21 @@ async function loadArticle(articleName, pushToHistory = true) {
         }
 
         UI.contentInner.innerHTML = marked.parse(content);
+
+        try {
+            renderMathInElement(UI.contentInner, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                throwOnError: false
+            });
+        } catch (e) {
+            console.warn("KaTeX rendering failed", e);
+        }
+
         fixImageLinks(UI.contentInner, articleName);
         renderMetadata(articleName);
 
@@ -157,6 +201,15 @@ function renderMetadata(articleName) {
     h1.insertAdjacentHTML('afterend', metaHtml);
 
     if (UI.authorHeader) UI.authorHeader.textContent = meta.author;
+
+    const shareBtn = document.getElementById('shareButton');
+    if (shareBtn) {
+        if (meta.share_text) {
+            shareBtn.dataset.shareText = meta.share_text;
+        } else {
+            delete shareBtn.dataset.shareText;
+        }
+    }
 }
 
 async function initArticleList() {
