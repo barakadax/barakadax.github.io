@@ -1,12 +1,3 @@
-/*
-   _____ 	   |￣￣￣￣￣￣￣￣￣￣￣￣|
-/~/~    ~\ 	   |                      |
-| |   MY  \ 	|  code by Barak Taya  |
-\ \  SLEEP \	|                      |
- \ \        \	|＿＿＿＿＿＿＿＿＿＿＿＿|
---\ \       .\''          ||
---==\ \     ,,i!!i,	     ||
-    ''"'',,}{,,*/
 'use strict';
 
 getProjectsFromGitHub();
@@ -14,13 +5,13 @@ getProjectsFromGitHub();
 let contentIndex = getCarousel();
 
 document.getElementById("nextInfo").addEventListener("click", function () {
-   contentIndex.Next();
+    contentIndex.showNext();
 });
 
 document.getElementById("prevInfo").addEventListener("click", function () {
-   contentIndex.Previous();
+    contentIndex.showPrevious();
 });
 
 function carouselSetIndex(carouselContentIndex) {
-   contentIndex.SetAtIndex(carouselContentIndex);
-};
+    contentIndex.showAtIndex(carouselContentIndex);
+}

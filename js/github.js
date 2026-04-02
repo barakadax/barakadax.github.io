@@ -1,200 +1,199 @@
-/*
-   _____ 	    |￣￣￣￣￣￣￣￣￣￣￣￣|
-/~/~    ~\ 	    |                      |
-| |   MY  \ 	|  code by Barak Taya  |
-\ \  SLEEP \	|                      |
- \ \        \	|＿＿＿＿＿＿＿＿＿＿＿＿|
---\ \       .\''          ||
---==\ \     ,,i!!i,	      ||
-    ''"'',,}{,,*/
 'use strict';
+
+const LANGUAGE_CLASS_OVERRIDE = new Map([
+    ["XSLT", "Scala"],
+    ["HTML", "JavaScript"],
+    ["CSS", "JavaScript"],
+    ["C", "CLang"],
+    ["Java", "JavaLang"],
+]);
+
+const LANGUAGE_APPENDS_JS = new Set(["PHP", "TypeScript"]);
+
+const NAME_CLASS_OVERRIDE = new Map([
+    ["TouchBar", "Dart"],
+    ["SerialCommunication", "Python C++ Rust"],
+    ["Wordle", "Python Rust"],
+]);
+
+const NAME_APPENDS_CLASS = new Map([
+    ["SilentMessaging", "PHP"],
+    ["keychron-optical-keyboard", "Hardware"],
+]);
+
+const LANGUAGE_TITLE_PREFIX = new Map([
+    ["XSLT", "Scala"],
+    ["HTML", "JS"],
+    ["JavaScript", "JS"],
+    ["CSS", "JS"],
+    ["TypeScript", "TS"],
+]);
+
+const NAME_TITLE_PREFIX = new Map([
+    ["TouchBar", "Dart"],
+    ["keychron-optical-keyboard", "Hardware"],
+]);
+
+const EXCLUDED_REPOS = new Set(["barakadax", "blog"]);
 
 function getProjectsFromGitHub() {
     console.warn("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
-    const xhr = new XMLHttpRequest();
 
-    let functions = Object.create(null);
-    let projectsColumn = document.getElementById("projectsColumn");
+    const cardBuilder = Object.create(null);
+    const projectsColumn = document.getElementById("projectsColumn");
 
-    Object.defineProperty(functions, 'getProjectLink', {
+    Object.defineProperty(cardBuilder, 'resolveProjectClass', {
         writable: false,
         value: function (element) {
-            let newProjectLink = document.createElement("a");
-
-            newProjectLink.target = "_blank";
-            newProjectLink.href = element.html_url;
-
-            if (element.language === "XSLT") {
-                newProjectLink.className = "projectsRow " + "Scala";
+            if (LANGUAGE_CLASS_OVERRIDE.has(element.language)) {
+                return "projectsRow " + LANGUAGE_CLASS_OVERRIDE.get(element.language);
             }
-            else if (element.language === "HTML" || element.language === "CSS") {
-                newProjectLink.className = "projectsRow " + "JavaScript";
+            if (NAME_CLASS_OVERRIDE.has(element.name)) {
+                return "projectsRow " + NAME_CLASS_OVERRIDE.get(element.name);
             }
-            else if (element.name === "TouchBar") {
-                newProjectLink.className = "projectsRow " + "Dart";
+            if (LANGUAGE_APPENDS_JS.has(element.language)) {
+                return "projectsRow " + element.language + " JavaScript";
             }
-            else if (element.language === "C") {
-                newProjectLink.className = "projectsRow " + "CLang";
+            if (NAME_APPENDS_CLASS.has(element.name)) {
+                return "projectsRow " + element.language + " " + NAME_APPENDS_CLASS.get(element.name);
             }
-            else if (element.language === "Java") {
-                newProjectLink.className = "projectsRow " + "JavaLang";
-            }
-            else if (element.language === "PHP") {
-                newProjectLink.className = "projectsRow " + element.language + " JavaScript";
-            }
-            else if (element.language === "TypeScript") {
-                newProjectLink.className = "projectsRow " + element.language + " JavaScript";
-            }
-            else if (element.name === "SilentMessaging") {
-                newProjectLink.className = "projectsRow " + element.language + " PHP";
-            }
-            else if (element.name === "keychron-optical-keyboard") {
-                newProjectLink.className = "projectsRow " + element.language + " Hardware";
-            }
-            else if (element.name === "SerialCommunication") {
-                newProjectLink.className = "projectsRow Python C++ Rust";
-            }
-            else if (element.name === "Wordle") {
-                newProjectLink.className = "projectsRow Python Rust";
-            }
-            else {
-                newProjectLink.className = "projectsRow " + element.language;
-            }
-
-            return newProjectLink;
+            return "projectsRow " + element.language;
         }
     });
 
-    Object.defineProperty(functions, 'setProjectImage', {
+    Object.defineProperty(cardBuilder, 'resolveTitlePrefix', {
         writable: false,
-        value: function (element, newProjectLink) {
-            let newProjectImage = document.createElement("img");
-            newProjectImage.className = "projImages";
-            newProjectImage.alt = element.name;
-            newProjectImage.src = "projImg/" + element.name + ".png";
+        value: function (element) {
+            if (LANGUAGE_TITLE_PREFIX.has(element.language)) {
+                return LANGUAGE_TITLE_PREFIX.get(element.language);
+            }
+            if (NAME_TITLE_PREFIX.has(element.name)) {
+                return NAME_TITLE_PREFIX.get(element.name);
+            }
+            return element.language;
+        }
+    });
 
-            newProjectImage.onerror = function () {
-                newProjectImage.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
+    Object.defineProperty(cardBuilder, 'buildProjectLink', {
+        writable: false,
+        value: function (element) {
+            const link = document.createElement("a");
+            link.target = "_blank";
+            link.href = element.html_url;
+            link.className = cardBuilder.resolveProjectClass(element);
+            return link;
+        }
+    });
+
+    Object.defineProperty(cardBuilder, 'appendProjectImage', {
+        writable: false,
+        value: function (element, link) {
+            const img = document.createElement("img");
+            img.className = "projImages";
+            img.alt = element.name;
+            img.src = "projImg/" + element.name + ".png";
+            img.onerror = function () {
+                img.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
             };
-
-            newProjectLink.appendChild(newProjectImage);
+            link.appendChild(img);
         }
     });
 
-    Object.defineProperty(functions, 'getProjectInfoDiv', {
+    Object.defineProperty(cardBuilder, 'buildInfoContainer', {
         writable: false,
-        value: function (newProjectLink) {
-            let newProjectInfoDiv = document.createElement("div");
-            newProjectInfoDiv.className = "projectInfo";
-
-            newProjectLink.appendChild(newProjectInfoDiv);
-
-            return newProjectInfoDiv;
+        value: function (link) {
+            const infoDiv = document.createElement("div");
+            infoDiv.className = "projectInfo";
+            link.appendChild(infoDiv);
+            return infoDiv;
         }
     });
 
-    Object.defineProperty(functions, 'setProjectTitle', {
+    Object.defineProperty(cardBuilder, 'appendProjectTitle', {
         writable: false,
-        value: function (element, newProjectInfoDiv) {
-            let newProjectTitle = document.createElement("h3");
-            newProjectTitle.className = "projTitle";
-            let titleText = "";
-
-            if (element.language === "XSLT") {
-                titleText = "Scala - " + element.name;
-            }
-            else if (element.language === "HTML" || element.language === "JavaScript" || element.language === "CSS") {
-                titleText = "JS - " + element.name;
-            }
-            else if (element.name === "TouchBar") {
-                titleText = "Dart - " + element.name;
-            }
-            else if (element.name === "keychron-optical-keyboard") {
-                titleText = "Hardware - " + element.name;
-            }
-            else if (element.language === "TypeScript") {
-                titleText = "TS - " + element.name;
-            }
-            else {
-                titleText = element.language + " - " + element.name;
-            }
-
-            newProjectTitle.innerHTML = titleText;
-            newProjectTitle.setAttribute("data-full-title", titleText);
-            newProjectTitle.setAttribute("data-name", element.name);
-
-            newProjectInfoDiv.appendChild(newProjectTitle);
+        value: function (element, infoDiv) {
+            const titlePrefix = cardBuilder.resolveTitlePrefix(element);
+            const titleText = titlePrefix + " - " + element.name;
+            const title = document.createElement("h3");
+            title.className = "projTitle";
+            title.innerHTML = titleText;
+            title.setAttribute("data-full-title", titleText);
+            title.setAttribute("data-name", element.name);
+            infoDiv.appendChild(title);
         }
     });
 
-    Object.defineProperty(functions, 'setProjectDescription', {
+    Object.defineProperty(cardBuilder, 'appendProjectDescription', {
         writable: false,
-        value: function (element, newProjectInfoDiv) {
-            let newProjectDescription = document.createElement("div");
-            newProjectDescription.className = "projDescription";
-            newProjectDescription.innerHTML = element.description;
-
+        value: function (element, infoDiv) {
+            const description = document.createElement("div");
+            description.className = "projDescription";
+            description.innerHTML = element.description;
             if (Array.isArray(element.topics) && element.topics.length > 0) {
-                newProjectDescription.innerHTML += '<br><br><span class="projTags"><u>Tags:</u> ' + element.topics.join(', ') + '</span>';
+                description.innerHTML += '<br><br><span class="projTags"><u>Tags:</u> ' + element.topics.join(', ') + '</span>';
             }
-
-            newProjectInfoDiv.appendChild(newProjectDescription);
+            infoDiv.appendChild(description);
         }
     });
 
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            response.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+    Object.defineProperty(cardBuilder, 'buildProjectCard', {
+        writable: false,
+        value: function (element, categories, tags) {
+            const link = cardBuilder.buildProjectLink(element);
+            link.className.split(" ").forEach(c => {
+                categories.set(c, (categories.get(c) || 0) + 1);
+            });
+            if (Array.isArray(element.topics)) {
+                element.topics.forEach(topic => {
+                    tags.set(topic, (tags.get(topic) || 0) + 1);
+                    link.classList.add(topic);
+                });
+            }
+            const infoDiv = cardBuilder.buildInfoContainer(link);
+            cardBuilder.appendProjectTitle(element, infoDiv);
+            cardBuilder.appendProjectDescription(element, infoDiv);
+            cardBuilder.appendProjectImage(element, link);
+            return link;
+        }
+    });
 
-            let categories = new Map();
-            let tags = new Map();
-
-            response.forEach((element, _) => {
-                if (element.name === "barakadax" || element.name === "blog") {
-                    return;
+    Object.defineProperty(cardBuilder, 'fetchAndRenderProjects', {
+        writable: false,
+        value: async function () {
+            try {
+                const response = await fetch("https://api.github.com/users/barakadax/repos?sort=updated&per_page=200");
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
+                const repos = await response.json();
+                repos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
 
-                let newProjectLink = functions.getProjectLink(element);
-                newProjectLink.className.split(" ").forEach(c => {
-                    categories.set(c, (categories.get(c) || 0) + 1);
+                const categories = new Map();
+                const tags = new Map();
+
+                repos.forEach(element => {
+                    if (EXCLUDED_REPOS.has(element.name)) return;
+                    const card = cardBuilder.buildProjectCard(element, categories, tags);
+                    projectsColumn.appendChild(card);
                 });
 
-                if (Array.isArray(element.topics)) {
-                    element.topics.forEach(topic => {
-                        tags.set(topic, (tags.get(topic) || 0) + 1);
-                        newProjectLink.classList.add(topic);
-                    });
-                }
+                projectsColumn.removeChild(projectsColumn.firstElementChild);
 
-                let newProjectInfoDiv = functions.getProjectInfoDiv(newProjectLink);
-                functions.setProjectTitle(element, newProjectInfoDiv);
-                functions.setProjectDescription(element, newProjectInfoDiv);
-                functions.setProjectImage(element, newProjectLink);
+                const sortedCategories = Array.from(categories.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .map(entry => entry[0]);
 
-                projectsColumn.appendChild(newProjectLink);
-            });
-            projectsColumn.removeChild(projectsColumn.firstElementChild);
+                const sortedTags = Array.from(tags.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .map(entry => entry[0]);
 
-            const sortedCategories = Array.from(categories.entries())
-                .sort((a, b) => b[1] - a[1])
-                .map(entry => entry[0]);
-
-            const sortedTags = Array.from(tags.entries())
-                .sort((a, b) => b[1] - a[1])
-                .map(entry => entry[0]);
-
-            setProjectButton(sortedCategories, sortedTags);
-
-        } else {
-            console.log("Error loading data.");
-            projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";
+                setProjectButton(sortedCategories, sortedTags);
+            } catch (e) {
+                console.error("Error loading data.", e);
+                projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";
+            }
         }
+    });
 
-        xhr.abort();
-    };
-
-    xhr.open("GET", "https://api.github.com/users/barakadax/repos?sort=updated&per_page=200", true);
-
-    xhr.send();
+    cardBuilder.fetchAndRenderProjects();
 }

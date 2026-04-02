@@ -109,20 +109,6 @@ td:last-child {
     overflow-y: scroll;
 }
 
-#article-list::-webkit-scrollbar {
-    display: block !important;
-    width: 6px;
-}
-
-#article-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-#article-list::-webkit-scrollbar-thumb {
-    background: var(--Purple-color);
-    border-radius: 10px;
-}
-
 .article-item {
     padding: 15px;
     border-bottom: 1px solid #333;

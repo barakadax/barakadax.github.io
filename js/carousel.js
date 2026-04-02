@@ -1,109 +1,107 @@
-/*
-   _____ 	    |￣￣￣￣￣￣￣￣￣￣￣￣|
-/~/~    ~\ 	    |                      |
-| |   MY  \ 	|  code by Barak Taya  |
-\ \  SLEEP \	|                      |
- \ \        \	|＿＿＿＿＿＿＿＿＿＿＿＿|
---\ \       .\''          ||
---==\ \     ,,i!!i,	      ||
-    ''"'',,}{,,*/
 'use strict';
 
+const SWIPE_THRESHOLD = 40;
+
 function getCarousel() {
-    let carousel = Object.create(null);
-    carousel.skillsAndPersonalityCounter = 0;
-    carousel.allSkillsAndPersonality = document.getElementsByClassName("skillsAndPersonality");
+    const carousel = Object.create(null);
+    carousel.currentIndex = 0;
+    carousel.slides = document.getElementsByClassName("skillsAndPersonality");
+    carousel.swipeStartX = 0;
+    carousel.swipeEndX = 0;
+    carousel.indicatorDots = null;
 
-    const counter = document.getElementById("counter");
-    if (counter) {
-        counter.innerHTML = '';
-        for (let i = 0; i < carousel.allSkillsAndPersonality.length; i++) {
-            const dot = document.createElement("div");
-            dot.className = "index";
-            dot.onclick = () => carouselSetIndex(i);
-            counter.appendChild(dot);
-        }
-    }
-
-    carousel.visualIndexInGUI = document.getElementsByClassName("index");
-    carousel.touchStartX = 0;
-    carousel.touchEndX = 0;
-
-    Object.defineProperty(carousel, 'ChangeVisualGUIIndex', {
+    Object.defineProperty(carousel, 'buildDotIndicators', {
         writable: false,
         value: function () {
-            for (let divIndex = 0; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
-                carousel.visualIndexInGUI[divIndex].setAttribute("class", "index");
-            carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index meInIndex");
-        }
-    });
-
-    Object.defineProperty(carousel, 'Initialize', {
-        writable: false,
-        value: function () {
-            for (let divIndex = 1; divIndex < carousel.allSkillsAndPersonality.length; divIndex++)
-                carousel.allSkillsAndPersonality[divIndex].style.display = "none";
-            carousel.ChangeVisualGUIIndex();
-        }
-    });
-
-    Object.defineProperty(carousel, 'Next', {
-        writable: false,
-        value: function () {
-            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
-            carousel.skillsAndPersonalityCounter = (carousel.skillsAndPersonalityCounter + 1) % carousel.allSkillsAndPersonality.length;
-            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
-            carousel.ChangeVisualGUIIndex();
-        }
-    });
-
-    Object.defineProperty(carousel, 'Previous', {
-        writable: false,
-        value: function () {
-            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
-            carousel.skillsAndPersonalityCounter = carousel.skillsAndPersonalityCounter - 1 < 0 ? carousel.allSkillsAndPersonality.length - 1 : carousel.skillsAndPersonalityCounter - 1;
-            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "";
-            carousel.ChangeVisualGUIIndex();
-        }
-    });
-
-    Object.defineProperty(carousel, 'SetAtIndex', {
-        writable: false,
-        value: function (targetIndex) {
-            carousel.visualIndexInGUI[carousel.skillsAndPersonalityCounter].setAttribute("class", "index");
-            carousel.allSkillsAndPersonality[carousel.skillsAndPersonalityCounter].style.display = "none";
-            carousel.visualIndexInGUI[targetIndex].setAttribute("class", "index meInIndex");
-            carousel.allSkillsAndPersonality[targetIndex].style.display = "";
-            carousel.skillsAndPersonalityCounter = targetIndex;
-        }
-    });
-
-    Object.defineProperty(carousel, 'TouchStart', {
-        writable: false,
-        value: function (event) {
-            carousel.touchStartX = event.touches[0].clientX;
-        }
-    });
-
-    Object.defineProperty(carousel, 'TouchEnd', {
-        writable: false,
-        value: function (event) {
-            carousel.touchEndX = event.changedTouches[0].clientX;
-            const touchThreshold = 40;
-
-            if (carousel.touchStartX - carousel.touchEndX > touchThreshold) {
-                carousel.Next();
-            } else if (carousel.touchEndX - carousel.touchStartX > touchThreshold) {
-                carousel.Previous();
+            const counter = document.getElementById("counter");
+            if (!counter) return;
+            counter.innerHTML = '';
+            for (let i = 0; i < carousel.slides.length; i++) {
+                const dot = document.createElement("div");
+                dot.className = "index";
+                dot.onclick = () => carouselSetIndex(i);
+                counter.appendChild(dot);
             }
         }
     });
 
-    carousel.Initialize();
+    Object.defineProperty(carousel, 'syncDotIndicators', {
+        writable: false,
+        value: function () {
+            for (let i = 0; i < carousel.slides.length; i++) {
+                carousel.indicatorDots[i].setAttribute("class", "index");
+            }
+            carousel.indicatorDots[carousel.currentIndex].setAttribute("class", "index meInIndex");
+        }
+    });
+
+    Object.defineProperty(carousel, 'initialize', {
+        writable: false,
+        value: function () {
+            carousel.buildDotIndicators();
+            carousel.indicatorDots = document.getElementsByClassName("index");
+            for (let i = 1; i < carousel.slides.length; i++) {
+                carousel.slides[i].style.display = "none";
+            }
+            carousel.syncDotIndicators();
+        }
+    });
+
+    Object.defineProperty(carousel, 'showNext', {
+        writable: false,
+        value: function () {
+            carousel.slides[carousel.currentIndex].style.display = "none";
+            carousel.currentIndex = (carousel.currentIndex + 1) % carousel.slides.length;
+            carousel.slides[carousel.currentIndex].style.display = "";
+            carousel.syncDotIndicators();
+        }
+    });
+
+    Object.defineProperty(carousel, 'showPrevious', {
+        writable: false,
+        value: function () {
+            carousel.slides[carousel.currentIndex].style.display = "none";
+            carousel.currentIndex = carousel.currentIndex - 1 < 0 ? carousel.slides.length - 1 : carousel.currentIndex - 1;
+            carousel.slides[carousel.currentIndex].style.display = "";
+            carousel.syncDotIndicators();
+        }
+    });
+
+    Object.defineProperty(carousel, 'showAtIndex', {
+        writable: false,
+        value: function (targetIndex) {
+            carousel.indicatorDots[carousel.currentIndex].setAttribute("class", "index");
+            carousel.slides[carousel.currentIndex].style.display = "none";
+            carousel.indicatorDots[targetIndex].setAttribute("class", "index meInIndex");
+            carousel.slides[targetIndex].style.display = "";
+            carousel.currentIndex = targetIndex;
+        }
+    });
+
+    Object.defineProperty(carousel, 'recordSwipeStart', {
+        writable: false,
+        value: function (event) {
+            carousel.swipeStartX = event.touches[0].clientX;
+        }
+    });
+
+    Object.defineProperty(carousel, 'handleSwipeEnd', {
+        writable: false,
+        value: function (event) {
+            carousel.swipeEndX = event.changedTouches[0].clientX;
+            if (carousel.swipeStartX - carousel.swipeEndX > SWIPE_THRESHOLD) {
+                carousel.showNext();
+            } else if (carousel.swipeEndX - carousel.swipeStartX > SWIPE_THRESHOLD) {
+                carousel.showPrevious();
+            }
+        }
+    });
+
+    carousel.initialize();
 
     carousel.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
-    carousel.carouselElement.addEventListener("touchstart", (e) => carousel.TouchStart(e), { passive: true });
-    carousel.carouselElement.addEventListener("touchend", (e) => carousel.TouchEnd(e));
+    carousel.carouselElement.addEventListener("touchstart", (e) => carousel.recordSwipeStart(e), { passive: true });
+    carousel.carouselElement.addEventListener("touchend", (e) => carousel.handleSwipeEnd(e));
 
     return carousel;
 }
