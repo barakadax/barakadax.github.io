@@ -399,6 +399,7 @@
     margin-top: 370px;
     font-size: 80px;
     background: -webkit-linear-gradient(var(--Red-color), var(--Purple-color));
+    background: linear-gradient(var(--Red-color), var(--Purple-color));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
