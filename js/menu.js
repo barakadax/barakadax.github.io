@@ -208,7 +208,15 @@ if (menuController.shareButton) {
         } else {
             try {
                 await navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
+                const toast = document.createElement('div');
+                toast.textContent = 'Link copied to clipboard!';
+                toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--Orange-color);color:#000;padding:12px 24px;border-radius:8px;font-size:16px;z-index:10000;opacity:0;transition:opacity 0.3s;';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => toast.style.opacity = '1');
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
             } catch (err) {
                 console.error('Failed to copy:', err);
             }

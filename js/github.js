@@ -79,6 +79,7 @@ function getProjectsFromGitHub() {
         value: function (element) {
             const link = document.createElement("a");
             link.target = "_blank";
+            link.rel = "noopener noreferrer";
             link.href = element.html_url;
             link.className = cardBuilder.resolveProjectClass(element);
             return link;
@@ -91,6 +92,7 @@ function getProjectsFromGitHub() {
             const img = document.createElement("img");
             img.className = "projImages";
             img.alt = element.name;
+            img.loading = "lazy";
             img.src = "projImg/" + element.name + ".png";
             img.onerror = function () {
                 img.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
@@ -116,7 +118,7 @@ function getProjectsFromGitHub() {
             const titleText = titlePrefix + " - " + element.name;
             const title = document.createElement("h3");
             title.className = "projTitle";
-            title.innerHTML = titleText;
+            title.textContent = titleText;
             title.setAttribute("data-full-title", titleText);
             title.setAttribute("data-name", element.name);
             infoDiv.appendChild(title);
@@ -128,9 +130,19 @@ function getProjectsFromGitHub() {
         value: function (element, infoDiv) {
             const description = document.createElement("div");
             description.className = "projDescription";
-            description.innerHTML = element.description;
+            description.textContent = element.description;
             if (Array.isArray(element.topics) && element.topics.length > 0) {
-                description.innerHTML += '<br><br><span class="projTags"><u>Tags:</u> ' + element.topics.join(', ') + '</span>';
+                const spacer = document.createElement("br");
+                const spacer2 = document.createElement("br");
+                const tagsSpan = document.createElement("span");
+                tagsSpan.className = "projTags";
+                const underline = document.createElement("u");
+                underline.textContent = "Tags:";
+                tagsSpan.appendChild(underline);
+                tagsSpan.appendChild(document.createTextNode(" " + element.topics.join(', ')));
+                description.appendChild(spacer);
+                description.appendChild(spacer2);
+                description.appendChild(tagsSpan);
             }
             infoDiv.appendChild(description);
         }

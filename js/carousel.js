@@ -5,7 +5,7 @@ const SWIPE_THRESHOLD = 40;
 function getCarousel() {
     const carousel = Object.create(null);
     carousel.currentIndex = 0;
-    carousel.slides = document.getElementsByClassName("skillsAndPersonality");
+    carousel.slides = document.querySelectorAll(".skillsAndPersonality");
     carousel.swipeStartX = 0;
     carousel.swipeEndX = 0;
     carousel.indicatorDots = null;
@@ -39,7 +39,7 @@ function getCarousel() {
         writable: false,
         value: function () {
             carousel.buildDotIndicators();
-            carousel.indicatorDots = document.getElementsByClassName("index");
+            carousel.indicatorDots = document.querySelectorAll(".index");
             for (let i = 1; i < carousel.slides.length; i++) {
                 carousel.slides[i].style.display = "none";
             }

@@ -52,9 +52,14 @@
 
    <!-- Canonical URL -->
    <link rel="canonical" href="https://barakadax.github.io/blog.html">
+
+   <!-- Preconnect hints -->
+   <link rel="preconnect" href="https://api.github.com">
+   <link rel="preconnect" href="https://cdn.jsdelivr.net">
 </head>
 
 <body>
+   <a href="#blog-container" class="skip-link">Skip to content</a>
    <div id="menu">
       <span></span>
       <span></span>
@@ -94,6 +99,7 @@
    <div id="blog-container">
       <div id="blog-sidebar">
          <div class="sidebar-header">
+            <label for="article-search" class="sr-only">Search articles</label>
             <input type="text" id="article-search" placeholder="Search Articles..." autocomplete="off">
          </div>
          <ul id="article-list">
@@ -119,7 +125,7 @@
          alt="Valid CSS!" />
    </footer>
    <script defer src="js/menu.js"></script>
-   <script defer src="js/doodle.js"></script>
+   <script async src="js/doodle.js"></script>
    <script defer src="js/blog.js"></script>
 </body>
 
