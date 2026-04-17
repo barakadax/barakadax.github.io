@@ -186,6 +186,8 @@ menuController.menu.addEventListener('click', () => {
     const isOpen = menuController.menu.classList.contains('open');
     menuController.menuScreen.style.display = isOpen ? "flex" : "none";
     document.body.classList.toggle('no-scroll', isOpen);
+    menuController.menu.setAttribute('aria-expanded', String(isOpen));
+    menuController.menu.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
     if (menuController.shareButton) {
         menuController.shareButton.style.display = isOpen ? "none" : "flex";
     }

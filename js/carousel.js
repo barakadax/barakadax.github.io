@@ -102,6 +102,15 @@ function getCarousel() {
     carousel.carouselElement = document.getElementById("skillsAndPersonalityMiddleCell");
     carousel.carouselElement.addEventListener("touchstart", (e) => carousel.recordSwipeStart(e), { passive: true });
     carousel.carouselElement.addEventListener("touchend", (e) => carousel.handleSwipeEnd(e));
+    carousel.carouselElement.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+            e.preventDefault();
+            carousel.showNext();
+        } else if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            carousel.showPrevious();
+        }
+    });
 
     return carousel;
 }

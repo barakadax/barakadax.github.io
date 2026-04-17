@@ -56,15 +56,47 @@
 
    <!-- Preconnect hints -->
    <link rel="preconnect" href="https://api.github.com">
+
+   <!-- Structured data -->
+   <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@type": "Person",
+     "name": "Barak Taya",
+     "alternateName": "Barakadax",
+     "jobTitle": "Software Engineer",
+     "worksFor": {
+       "@type": "Organization",
+       "name": "SAP",
+       "url": "https://www.sap.com"
+     },
+     "url": "https://barakadax.github.io/",
+     "image": "https://barakadax.github.io/img/me.jpg",
+     "sameAs": [
+       "https://github.com/barakadax",
+       "https://www.linkedin.com/in/barakadax/",
+       "https://www.nuget.org/profiles/Barakadax",
+       "https://marketplace.visualstudio.com/publishers/Barakadax"
+     ],
+     "knowsAbout": [
+       "Backend Development",
+       "Distributed Systems",
+       "Low-level Programming",
+       "Networking",
+       "Observability",
+       "Generative AI"
+     ]
+   }
+   </script>
 </head>
 
 <body>
    <a href="#aboutMe" class="skip-link">Skip to content</a>
-   <div id="menu">
+   <button id="menu" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuScreen">
       <span></span>
       <span></span>
       <span></span>
-   </div>
+   </button>
    <div id="menuScreen">
       <div id="menuLinks">
          <a class="menuLink" href="projects">Projects</a>
@@ -96,7 +128,7 @@
    </css-doodle>
    <div id="aboutMe">
       <div id="AvatarGithubLinkedinContainer">
-         <img id="myself" src="img/me.jpg" alt="Barak Taya">
+         <img id="myself" src="img/me.jpg" alt="Barak Taya" fetchpriority="high" decoding="async">
          <div>
             <a href="https://github.com/barakadax" target="_blank" rel="noopener noreferrer">
                <img class="imgLink shakingImages" src="img/github.png" alt="Barak's GitHub">
@@ -108,10 +140,10 @@
       </div>
       <main id="textAboutMe">
          <h2>About me</h2>
-         Software Engineer at <a id="SapGigya" href="https://www.sap.com" target="_blank" rel="noopener noreferrer">SAP</a> focused on
-         high-performance distributed systems.<br>
-         I am passionate about low-level programming, networking, observability, and Generative AI.<br>
-         I am an active open-source author with tools published on <a href="https://www.nuget.org/profiles/Barakadax"
+         Software Engineer at <a id="SapGigya" href="https://www.sap.com" target="_blank" rel="noopener noreferrer">SAP</a>,
+         building high-performance distributed systems.<br>
+         I work across low-level programming, networking, observability, security, and Generative AI.<br>
+         I publish open-source tools on <a href="https://www.nuget.org/profiles/Barakadax"
             target="_blank" rel="noopener noreferrer">Nuget</a> and the <a href="https://marketplace.visualstudio.com/publishers/Barakadax"
             target="_blank" rel="noopener noreferrer">VS Code Marketplace</a>.<br>
       </main>
@@ -129,8 +161,8 @@
    </svg>
    <div id="carouselBackground" class="noSelect">
       <div id="carousel">
-         <div id="prevInfo"><img src="img/arrow.png" class="arrowSize" id="flipArrow" alt="rightArrow"></div>
-         <div id="skillsAndPersonalityMiddleCell">
+         <button id="prevInfo" type="button" aria-label="Previous skill category" aria-controls="skillsAndPersonalityMiddleCell"><img src="img/arrow.png" class="arrowSize" id="flipArrow" alt=""></button>
+         <div id="skillsAndPersonalityMiddleCell" tabindex="0" role="region" aria-label="Skills" aria-live="polite">
             <div class="skillsAndPersonality">
                <h2>Programming languages</h2>
                <div class="skillsAndPersonalityContent">
@@ -230,7 +262,7 @@
                </div>
             </div>
          </div>
-         <div id="nextInfo"><img src="img/arrow.png" class="arrowSize" alt="leftArrow"></div>
+         <button id="nextInfo" type="button" aria-label="Next skill category" aria-controls="skillsAndPersonalityMiddleCell"><img src="img/arrow.png" class="arrowSize" alt=""></button>
          <div id="counter">
          </div>
       </div>
@@ -267,11 +299,7 @@
          </div>
       </div>
    </section>
-   <footer>
-      GNU Affero General Public License v3.0
-      <img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss-blue"
-         alt="Valid CSS!" />
-   </footer>
+   <footer>&copy; 2026 Barak Taya &middot; Licensed under <a href="https://github.com/barakadax/barakadax.github.io/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></footer>
    <script defer src="js/github.js"></script>
    <script defer src="js/carousel.js"></script>
    <script async src="js/doodle.js"></script>

@@ -131,6 +131,12 @@
     text-align: center;
     font-size: 1.2rem;
     padding: 40px 20px;
+    line-height: 1.5;
+}
+
+.loadError a {
+    color: var(--Orange-color);
+    text-decoration: underline;
 }
 
 @keyframes cardFadeIn {

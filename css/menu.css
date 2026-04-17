@@ -2,6 +2,9 @@
   background: linear-gradient(135deg, #714fff, #d522bf);
   width: 50px;
   height: 50px;
+  border: none;
+  padding: 0;
+  margin: 0;
   border-radius: 50%;
   position: fixed;
   top: calc(20px + env(safe-area-inset-top));

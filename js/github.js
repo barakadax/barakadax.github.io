@@ -48,7 +48,7 @@ function getProjectsFromGitHub(options) {
     const isFeatured = opts.featured === true;
     const featuredNames = Array.isArray(opts.featuredNames) ? opts.featuredNames : [];
 
-    console.warn("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
+    const FETCH_TIMEOUT_MS = 10000;
 
     const cardBuilder = Object.create(null);
     const container = document.getElementById(containerId);
@@ -117,6 +117,7 @@ function getProjectsFromGitHub(options) {
             img.className = "projectCardImage";
             img.alt = element.name;
             img.loading = "lazy";
+            img.decoding = "async";
             img.src = "projImg/" + element.name + ".png";
             img.onerror = function () {
                 img.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
@@ -218,8 +219,10 @@ function getProjectsFromGitHub(options) {
     Object.defineProperty(cardBuilder, 'fetchAndRenderProjects', {
         writable: false,
         value: async function () {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
             try {
-                const response = await fetch("https://api.github.com/users/barakadax/repos?sort=updated&per_page=200");
+                const response = await fetch("https://api.github.com/users/barakadax/repos?sort=updated&per_page=200", { signal: controller.signal });
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
@@ -258,7 +261,14 @@ function getProjectsFromGitHub(options) {
                 }
             } catch (e) {
                 console.error("Error loading data.", e);
-                container.innerHTML = '<div class="loadError">Error loading projects</div>';
+                const wasTimeout = e && e.name === "AbortError";
+                const message = wasTimeout
+                    ? "Loading projects timed out."
+                    : "Couldn't load projects from GitHub right now.";
+                container.innerHTML = '<div class="loadError">' + message +
+                    ' View them directly on <a href="https://github.com/barakadax?tab=repositories" target="_blank" rel="noopener noreferrer">github.com/barakadax</a>.</div>';
+            } finally {
+                clearTimeout(timeoutId);
             }
         }
     });
