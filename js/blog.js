@@ -183,7 +183,19 @@ Object.defineProperty(blogController, 'loadArticle', {
         if (!UI.contentInner) return;
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        UI.contentInner.innerHTML = '<div class="loadingText">Loading...</div>';
+        UI.contentInner.innerHTML = `
+<div class="skeletonArticle" aria-busy="true" aria-label="Loading article">
+  <div class="skeletonArticle__h1 skeleton"></div>
+  <div class="skeletonArticle__meta skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+  <div class="skeletonArticle__para skeletonArticle__para--short skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+  <div class="skeletonArticle__para skeletonArticle__para--short skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+  <div class="skeletonArticle__para skeleton"></div>
+</div>`;
         UI.backBtn?.classList.remove('visible');
 
         try {
@@ -250,7 +262,12 @@ Object.defineProperty(blogController, 'initArticleList', {
     writable: false,
     value: async function () {
         if (!UI.articleList) return;
-        UI.articleList.innerHTML = '<li class="article-item">Loading articles...</li>';
+        UI.articleList.innerHTML = `
+<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:80%"></div></li>
+<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:60%"></div></li>
+<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:75%"></div></li>
+<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:55%"></div></li>
+<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:70%"></div></li>`;
 
         try {
             const res = await blogController.fetchOrThrow(`https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/git/trees/Master?recursive=1`);
