@@ -13,7 +13,7 @@
    <link href="css/aboutMe.css" rel="stylesheet">
    <link href="css/loading.css" rel="stylesheet">
    <link href="css/carousel.css" rel="stylesheet">
-   <link href="css/projects.css" rel="stylesheet">
+   <link href="css/projectsPage.css" rel="stylesheet">
    <link href="css/MainStyle.css" rel="stylesheet">
 
    <!-- Better Viewport for Accessibility (Removed user-scalable=no) -->
@@ -67,6 +67,7 @@
    </div>
    <div id="menuScreen">
       <div id="menuLinks">
+         <a class="menuLink" href="projects">Projects</a>
          <a class="menuLink" href="timeline">Timeline</a>
          <a class="menuLink" href="blog">Blog</a>
       </div>
@@ -245,49 +246,33 @@
          <use xlink:href="#lowerGentleWave" x="48" y="7" fill="#ff8c00" />
       </g>
    </svg>
-   <h2>Projects</h2>
-   <div id="filterSection">
-      <button id="filterToggle" class="noSelect">
-         <span>Filters</span>
-         <span id="filterArrow">▼</span>
-      </button>
-      <div id="filterMenu" class="hidden noSelect">
-         <div class="filterColumn">
-            <h3>Languages</h3>
-            <div id="categoryFilter" class="scrollableFilter"></div>
-         </div>
-         <div class="filterColumn">
-            <h3>Statuses</h3>
-            <div id="statusFilter" class="scrollableFilter"></div>
-         </div>
-         <div class="filterColumn">
-            <h3>Tags</h3>
-            <div id="tagFilter" class="scrollableFilter"></div>
-         </div>
+   <section id="featuredSection">
+      <div class="featuredHeader">
+         <h2>Featured Projects</h2>
+         <a class="viewAllLink" href="projects">View all projects →</a>
       </div>
-   </div>
-   <div id="projectsColumn">
-      <div class="loadingContainer">
-         <div class="cube">
-            <div class="sides">
-               <div class="top"></div>
-               <div class="right"></div>
-               <div class="bottom"></div>
-               <div class="left"></div>
-               <div class="front"></div>
-               <div class="back"></div>
+      <div id="featuredProjects">
+         <div class="loadingContainer">
+            <div class="cube">
+               <div class="sides">
+                  <div class="top"></div>
+                  <div class="right"></div>
+                  <div class="bottom"></div>
+                  <div class="left"></div>
+                  <div class="front"></div>
+                  <div class="back"></div>
+               </div>
             </div>
+            <div class="loadingText">Loading</div>
          </div>
-         <div class="loadingText">Loading</div>
       </div>
-   </div>
+   </section>
    <footer>
       GNU Affero General Public License v3.0
       <img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss-blue"
          alt="Valid CSS!" />
    </footer>
    <script defer src="js/github.js"></script>
-   <script defer src="js/projectsCards.js"></script>
    <script defer src="js/carousel.js"></script>
    <script async src="js/doodle.js"></script>
    <script defer src="js/menu.js"></script>

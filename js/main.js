@@ -1,6 +1,10 @@
 'use strict';
 
-getProjectsFromGitHub();
+getProjectsFromGitHub({
+    container: 'featuredProjects',
+    featured: true,
+    featuredNames: ['ContactsAndChatsRAG', 'OrleansMapReduce', 'SerialCommunication', 'Wordle']
+});
 
 let contentIndex = getCarousel();
 

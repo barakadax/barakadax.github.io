@@ -77,6 +77,29 @@
     letter-spacing: 1px;
 }
 
+.filterSearch {
+    width: 100%;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filterSearch:focus {
+    border-color: var(--Orange-color);
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+}
+
+.filterSearch::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
 .scrollableFilter {
     height: 250px;
     max-height: 250px;
@@ -151,64 +174,6 @@
     font-weight: bold;
 }
 
-#projectsColumn {
-    width: 920px;
-    display: flex;
-    max-width: 1400px;
-    position: relative;
-    align-items: center;
-    flex-direction: column;
-}
-
-.projectsRow {
-    width: 100%;
-    display: flex;
-    color: white;
-    padding-top: 10px;
-    max-width: 1400px;
-    position: relative;
-    align-items: center;
-    flex-direction: row;
-    padding-bottom: 10px;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--Red-color);
-}
-
-.projectInfo {
-    max-width: 680px;
-    padding-left: 2px;
-    word-break: break-word;
-}
-
-.projImages {
-    margin-left: 5px;
-    max-width: 240px;
-    max-height: 200px;
-    padding-right: 2px;
-}
-
-.projTitle {
-    font-size: 30px;
-    padding: 0 0 20px 0;
-    text-decoration: underline;
-}
-
-.projDescription {
-    font-size: 25px;
-}
-
-@media only screen and (max-width: 1024px) {
-
-    #projectsButton,
-    #tagsButton {
-        max-width: 94%;
-    }
-
-    #projectsColumn {
-        max-width: 94%;
-    }
-}
-
 @media only screen and (max-width: 767px) {
     #filterMenu {
         flex-direction: column;
@@ -243,6 +208,14 @@
         transform: rotate(180deg);
     }
 
+    .filterColumn .filterSearch {
+        display: none;
+    }
+
+    .filterColumn--open .filterSearch {
+        display: block;
+    }
+
     .filterColumn .scrollableFilter {
         display: none;
         height: auto;
@@ -256,47 +229,5 @@
 
     #statusFilter {
         height: auto;
-    }
-
-    .projTitle {
-        font-size: 20px;
-    }
-
-    .projImages {
-        max-width: 200px;
-        max-height: 160px;
-    }
-
-    .projDescription {
-        font-size: 14px;
-    }
-}
-
-@media only screen and (max-width: 280px) {
-    .projTitle {
-        font-size: 15px;
-    }
-
-    .projDescription {
-        font-size: 12px;
-    }
-
-    .projImages {
-        max-width: 150px;
-        max-height: 110px;
-    }
-}
-
-@keyframes borderAnimation {
-    0% {
-        border-color: var(--Red-color);
-    }
-
-    50% {
-        border-color: var(--Purple-color);
-    }
-
-    100% {
-        border-color: var(--Red-color);
     }
 }

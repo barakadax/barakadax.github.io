@@ -34,13 +34,24 @@ const NAME_TITLE_PREFIX = new Map([
     ["keychron-optical-keyboard", "Hardware"],
 ]);
 
+const LANGUAGE_DISPLAY_LABELS = new Map([
+    ["CLang", "C"],
+    ["JavaScript", "JS/TS"],
+    ["JavaLang", "Java"],
+]);
+
 const EXCLUDED_REPOS = new Set(["barakadax", "blog"]);
 
-function getProjectsFromGitHub() {
+function getProjectsFromGitHub(options) {
+    const opts = options || {};
+    const containerId = opts.container || "projectsGrid";
+    const isFeatured = opts.featured === true;
+    const featuredNames = Array.isArray(opts.featuredNames) ? opts.featuredNames : [];
+
     console.warn("\"net::ERR_BLOCKED_BY_CLIENT\": your ad blocker blocked something");
 
     const cardBuilder = Object.create(null);
-    const projectsColumn = document.getElementById("projectsColumn");
+    const container = document.getElementById(containerId);
 
     Object.defineProperty(cardBuilder, 'resolveProjectClass', {
         writable: false,
@@ -74,6 +85,13 @@ function getProjectsFromGitHub() {
         }
     });
 
+    Object.defineProperty(cardBuilder, 'displayLabel', {
+        writable: false,
+        value: function (token) {
+            return LANGUAGE_DISPLAY_LABELS.get(token) || token;
+        }
+    });
+
     Object.defineProperty(cardBuilder, 'buildProjectLink', {
         writable: false,
         value: function (element) {
@@ -81,70 +99,95 @@ function getProjectsFromGitHub() {
             link.target = "_blank";
             link.rel = "noopener noreferrer";
             link.href = element.html_url;
-            link.className = cardBuilder.resolveProjectClass(element);
+            const resolvedClass = cardBuilder.resolveProjectClass(element);
+            link.className = "projectCard " + resolvedClass;
+            if (isFeatured) {
+                link.classList.add("projectCard--featured");
+            }
             return link;
         }
     });
 
-    Object.defineProperty(cardBuilder, 'appendProjectImage', {
+    Object.defineProperty(cardBuilder, 'buildImageWrap', {
         writable: false,
         value: function (element, link) {
+            const wrap = document.createElement("div");
+            wrap.className = "projectCardImageWrap";
             const img = document.createElement("img");
-            img.className = "projImages";
+            img.className = "projectCardImage";
             img.alt = element.name;
             img.loading = "lazy";
             img.src = "projImg/" + element.name + ".png";
             img.onerror = function () {
                 img.src = "projImg/default" + (Math.floor(Math.random() * 3) + 1) + ".jpg";
             };
-            link.appendChild(img);
+            wrap.appendChild(img);
+            link.appendChild(wrap);
         }
     });
 
-    Object.defineProperty(cardBuilder, 'buildInfoContainer', {
+    Object.defineProperty(cardBuilder, 'buildBody', {
         writable: false,
         value: function (link) {
-            const infoDiv = document.createElement("div");
-            infoDiv.className = "projectInfo";
-            link.appendChild(infoDiv);
-            return infoDiv;
+            const body = document.createElement("div");
+            body.className = "projectCardBody";
+            link.appendChild(body);
+            return body;
         }
     });
 
     Object.defineProperty(cardBuilder, 'appendProjectTitle', {
         writable: false,
-        value: function (element, infoDiv) {
-            const titlePrefix = cardBuilder.resolveTitlePrefix(element);
-            const titleText = titlePrefix + " - " + element.name;
+        value: function (element, body) {
             const title = document.createElement("h3");
-            title.className = "projTitle";
-            title.textContent = titleText;
-            title.setAttribute("data-full-title", titleText);
+            title.className = "projectCardTitle projTitle";
+            title.textContent = element.name;
+            title.setAttribute("data-full-title", element.name);
             title.setAttribute("data-name", element.name);
-            infoDiv.appendChild(title);
+            body.appendChild(title);
         }
     });
 
     Object.defineProperty(cardBuilder, 'appendProjectDescription', {
         writable: false,
-        value: function (element, infoDiv) {
+        value: function (element, body) {
             const description = document.createElement("div");
-            description.className = "projDescription";
-            description.textContent = element.description;
-            if (Array.isArray(element.topics) && element.topics.length > 0) {
-                const spacer = document.createElement("br");
-                const spacer2 = document.createElement("br");
-                const tagsSpan = document.createElement("span");
-                tagsSpan.className = "projTags";
-                const underline = document.createElement("u");
-                underline.textContent = "Tags:";
-                tagsSpan.appendChild(underline);
-                tagsSpan.appendChild(document.createTextNode(" " + element.topics.join(', ')));
-                description.appendChild(spacer);
-                description.appendChild(spacer2);
-                description.appendChild(tagsSpan);
-            }
-            infoDiv.appendChild(description);
+            description.className = "projectCardDescription projDescription";
+            description.textContent = element.description || "";
+            body.appendChild(description);
+        }
+    });
+
+    Object.defineProperty(cardBuilder, 'appendProjectLanguages', {
+        writable: false,
+        value: function (resolvedClass, body) {
+            const tokens = resolvedClass.split(" ").filter(t => t && t !== "projectsRow");
+            if (tokens.length === 0) return;
+            const wrap = document.createElement("div");
+            wrap.className = "projectCardLanguages";
+            tokens.forEach((token, i) => {
+                const pill = document.createElement("span");
+                pill.className = "langPill " + (i === 0 ? "langPill--main" : "langPill--extra");
+                pill.textContent = cardBuilder.displayLabel(token);
+                wrap.appendChild(pill);
+            });
+            body.appendChild(wrap);
+        }
+    });
+
+    Object.defineProperty(cardBuilder, 'appendProjectTags', {
+        writable: false,
+        value: function (element, body) {
+            const topics = Array.isArray(element.topics) ? element.topics : [];
+            const wrap = document.createElement("div");
+            wrap.className = "projectCardTags projTags";
+            topics.forEach(topic => {
+                const pill = document.createElement("span");
+                pill.className = "tagPill";
+                pill.textContent = topic;
+                wrap.appendChild(pill);
+            });
+            body.appendChild(wrap);
         }
     });
 
@@ -152,8 +195,9 @@ function getProjectsFromGitHub() {
         writable: false,
         value: function (element, categories, tags) {
             const link = cardBuilder.buildProjectLink(element);
-            link.className.split(" ").forEach(c => {
-                categories.set(c, (categories.get(c) || 0) + 1);
+            const resolvedClass = link.className.split(" ").filter(c => c !== "projectCard" && c !== "projectCard--featured").join(" ");
+            resolvedClass.split(" ").forEach(c => {
+                if (c) categories.set(c, (categories.get(c) || 0) + 1);
             });
             if (Array.isArray(element.topics)) {
                 element.topics.forEach(topic => {
@@ -161,10 +205,12 @@ function getProjectsFromGitHub() {
                     link.classList.add(topic);
                 });
             }
-            const infoDiv = cardBuilder.buildInfoContainer(link);
-            cardBuilder.appendProjectTitle(element, infoDiv);
-            cardBuilder.appendProjectDescription(element, infoDiv);
-            cardBuilder.appendProjectImage(element, link);
+            cardBuilder.buildImageWrap(element, link);
+            const body = cardBuilder.buildBody(link);
+            cardBuilder.appendProjectTitle(element, body);
+            cardBuilder.appendProjectDescription(element, body);
+            cardBuilder.appendProjectLanguages(resolvedClass, body);
+            cardBuilder.appendProjectTags(element, body);
             return link;
         }
     });
@@ -177,32 +223,42 @@ function getProjectsFromGitHub() {
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
-                const repos = await response.json();
+                let repos = await response.json();
                 repos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+
+                if (isFeatured) {
+                    const byName = new Map(repos.map(r => [r.name, r]));
+                    repos = featuredNames
+                        .map(name => byName.get(name))
+                        .filter(Boolean);
+                }
 
                 const categories = new Map();
                 const tags = new Map();
 
-                repos.forEach(element => {
-                    if (EXCLUDED_REPOS.has(element.name)) return;
+                container.innerHTML = "";
+
+                repos.forEach((element, index) => {
+                    if (!isFeatured && EXCLUDED_REPOS.has(element.name)) return;
                     const card = cardBuilder.buildProjectCard(element, categories, tags);
-                    projectsColumn.appendChild(card);
+                    card.style.animationDelay = (index * 40) + "ms";
+                    container.appendChild(card);
                 });
 
-                projectsColumn.removeChild(projectsColumn.firstElementChild);
+                if (!isFeatured) {
+                    const sortedCategories = Array.from(categories.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .map(entry => entry[0]);
 
-                const sortedCategories = Array.from(categories.entries())
-                    .sort((a, b) => b[1] - a[1])
-                    .map(entry => entry[0]);
+                    const sortedTags = Array.from(tags.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .map(entry => entry[0]);
 
-                const sortedTags = Array.from(tags.entries())
-                    .sort((a, b) => b[1] - a[1])
-                    .map(entry => entry[0]);
-
-                setProjectButton(sortedCategories, sortedTags);
+                    setProjectButton(sortedCategories, sortedTags);
+                }
             } catch (e) {
                 console.error("Error loading data.", e);
-                projectsColumn.firstElementChild.lastElementChild.innerHTML = "Error";
+                container.innerHTML = '<div class="loadError">Error loading projects</div>';
             }
         }
     });

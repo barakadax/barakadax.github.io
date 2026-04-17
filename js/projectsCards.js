@@ -109,6 +109,22 @@ Object.defineProperty(filterState, 'initFilterToggle', {
     }
 });
 
+Object.defineProperty(filterState, 'initFilterSearches', {
+    writable: false,
+    value: function () {
+        document.querySelectorAll(".filterSearch").forEach(input => {
+            input.addEventListener("input", () => {
+                const query = input.value.trim().toLowerCase();
+                const column = input.closest(".filterColumn");
+                column.querySelectorAll(".filterOption").forEach(opt => {
+                    const text = opt.textContent.trim().toLowerCase();
+                    opt.style.display = text.includes(query) ? "" : "none";
+                });
+            });
+        });
+    }
+});
+
 function setProjectButton(categories = [], tags = []) {
     const categoryContainer = document.getElementById("categoryFilter");
     const statusContainer = document.getElementById("statusFilter");
@@ -141,4 +157,6 @@ function setProjectButton(categories = [], tags = []) {
     uniqueTags.forEach(tag => {
         if (tag) filterState.appendFilterCheckbox(tag, tag, tagContainer, true);
     });
+
+    filterState.initFilterSearches();
 }

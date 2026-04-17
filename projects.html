@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <title>Barak Taya | Projects</title>
+   <link rel="icon" href="img/icon.png">
+
+   <!-- Stylesheets -->
+   <link href="css/menu.css" rel="stylesheet">
+   <link href="css/Title.css" rel="stylesheet">
+   <link href="css/loading.css" rel="stylesheet">
+   <link href="css/projects.css" rel="stylesheet">
+   <link href="css/projectsPage.css" rel="stylesheet">
+   <link href="css/MainStyle.css" rel="stylesheet">
+
+   <!-- Better Viewport for Accessibility (Removed user-scalable=no) -->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+   <!-- PWA & Mobile -->
+   <link rel="manifest" href="manifest.json">
+   <meta name="theme-color" content="#ff8c00">
+   <link rel="apple-touch-icon" href="img/icon.png">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+   <meta name="mobile-web-app-capable" content="yes">
+
+   <!-- Define metadata for search engines -->
+   <meta name="title" content="Barak Taya | Projects">
+   <meta name="author" content="Barak Taya, Barakadax">
+   <meta name="description"
+      content="Full catalog of Barak Taya's software projects — fetched live from GitHub, filterable by language, status, and tags.">
+   <meta name="keywords"
+      content="Projects, Portfolio, Software Engineer, Barak Taya, Barakadax, GitHub, Open Source, Programming">
+   <meta name="robots" content="index, follow">
+
+   <!-- Open Graph Meta Tags -->
+   <meta property="og:title" content="Barak Taya | Projects">
+   <meta property="og:description"
+      content="Full catalog of Barak Taya's software projects — fetched live from GitHub, filterable by language, status, and tags.">
+   <meta property="og:type" content="website">
+   <meta property="og:image" content="https://barakadax.github.io/img/me.jpg">
+   <meta property="og:image:secure_url" content="https://barakadax.github.io/img/me.jpg">
+   <meta property="og:url" content="https://barakadax.github.io/projects.html">
+
+   <!-- Twitter Card Meta Tags -->
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:title" content="Barak Taya | Projects">
+   <meta name="twitter:description"
+      content="Full catalog of Barak Taya's software projects — fetched live from GitHub, filterable by language, status, and tags.">
+   <meta name="twitter:image" content="https://barakadax.github.io/img/me.jpg">
+
+   <!-- Canonical URL -->
+   <link rel="canonical" href="https://barakadax.github.io/projects.html">
+
+   <!-- Preconnect hints -->
+   <link rel="preconnect" href="https://api.github.com">
+</head>
+
+<body>
+   <a href="#projectsGrid" class="skip-link">Skip to content</a>
+   <div id="menu">
+      <span></span>
+      <span></span>
+      <span></span>
+   </div>
+   <div id="menuScreen">
+      <div id="menuLinks">
+         <a class="menuLink" href="/">Homepage</a>
+         <a class="menuLink" href="timeline">Timeline</a>
+         <a class="menuLink" href="blog">Blog</a>
+      </div>
+   </div>
+   <div id="title">
+      <h1>Barak Taya</h1>
+      <h2>Projects</h2>
+   </div>
+   <css-doodle class="titleEffect">
+      @size: 10px;
+      @grid: 100 x 17;
+      background: var(--Blue-color);
+      scale: 0;
+      opacity: 0;
+      animation: m 4s linear infinite;
+      transform: rotate(45deg) scale(1.6);
+
+      animation-delay: calc(
+      -1s/@I * @i * @sin(@i)
+      );
+
+      @keyframes m {
+      0%, 50%, 90% { scale: 1; opacity: 1 }
+      25%, 75%, 100% { scale: 0; opacity: 0 }
+      }
+   </css-doodle>
+   <div id="filterSection">
+      <button id="filterToggle" class="noSelect">
+         <span>Filters</span>
+         <span id="filterArrow">▼</span>
+      </button>
+      <div id="filterMenu" class="hidden noSelect">
+         <div class="filterColumn">
+            <h3>Languages</h3>
+            <input type="text" class="filterSearch" placeholder="Search languages..." aria-label="Search languages">
+            <div id="categoryFilter" class="scrollableFilter"></div>
+         </div>
+         <div class="filterColumn">
+            <h3>Statuses</h3>
+            <input type="text" class="filterSearch" placeholder="Search statuses..." aria-label="Search statuses">
+            <div id="statusFilter" class="scrollableFilter"></div>
+         </div>
+         <div class="filterColumn">
+            <h3>Tags</h3>
+            <input type="text" class="filterSearch" placeholder="Search tags..." aria-label="Search tags">
+            <div id="tagFilter" class="scrollableFilter"></div>
+         </div>
+      </div>
+   </div>
+   <div id="projectsGrid">
+      <div class="loadingContainer">
+         <div class="cube">
+            <div class="sides">
+               <div class="top"></div>
+               <div class="right"></div>
+               <div class="bottom"></div>
+               <div class="left"></div>
+               <div class="front"></div>
+               <div class="back"></div>
+            </div>
+         </div>
+         <div class="loadingText">Loading</div>
+      </div>
+   </div>
+   <footer>
+      GNU Affero General Public License v3.0
+      <img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss-blue"
+         alt="Valid CSS!" />
+   </footer>
+   <script defer src="js/github.js"></script>
+   <script defer src="js/projectsCards.js"></script>
+   <script defer src="js/projectsPage.js"></script>
+   <script async src="js/doodle.js"></script>
+   <script defer src="js/menu.js"></script>
+</body>
+
+</html>
