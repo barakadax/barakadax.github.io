@@ -202,12 +202,18 @@ svg {
 }
 
 @media (max-width: 768px) {
+   .menuLink {
+      font-size: 30px;
+   }
    body {
       font-size: 22px;
    }
 }
 
 @media (max-width: 480px) {
+   .menuLink {
+      font-size: 26px;
+   }
    body {
       font-size: 18px;
    }
