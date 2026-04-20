@@ -14,11 +14,12 @@ const NAME_CLASS_OVERRIDE = new Map([
     ["TouchBar", "Dart"],
     ["SerialCommunication", "Python C++ Rust"],
     ["Wordle", "Python Rust"],
+    ["InteractiveCLIForDotnet", "Rust C#"],
+    ["keychron-optical-keyboard", "Hardware"],
 ]);
 
 const NAME_APPENDS_CLASS = new Map([
     ["SilentMessaging", "PHP"],
-    ["keychron-optical-keyboard", "Hardware"],
 ]);
 
 const LANGUAGE_TITLE_PREFIX = new Map([
@@ -37,6 +38,7 @@ const NAME_TITLE_PREFIX = new Map([
 const LANGUAGE_DISPLAY_LABELS = new Map([
     ["CLang", "C"],
     ["JavaScript", "JS/TS"],
+    ["TypeScript", "JS/TS"],
     ["JavaLang", "Java"],
 ]);
 

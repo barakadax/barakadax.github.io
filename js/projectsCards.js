@@ -1,6 +1,6 @@
 'use strict';
 
-const STATUS_VALUES = ["completed", "university-project", "work-in-progress", "dropped"];
+const STATUS_VALUES = ["completed", "university-project", "work-in-progress", "dropped", "educational"];
 
 const filterState = Object.create(null);
 filterState.selectedCategories = new Set();

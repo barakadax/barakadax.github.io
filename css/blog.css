@@ -293,7 +293,7 @@ td:last-child {
 
 .copy-code-btn {
     position: absolute;
-    top: 8px;
+    top: 2px;
     right: 8px;
     padding: 6px;
     background: rgba(255, 255, 255, 0.05);

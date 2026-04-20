@@ -157,7 +157,7 @@ Object.defineProperty(blogController, 'renderArticleMetadata', {
         <div class="article-meta">
             <div class="article-meta-top">
                 <span class="article-author">By: ${meta.author}</span>
-                <span class="article-date">Published: ${meta.date && meta.date.getTime() !== 0 ? meta.date.toLocaleDateString() : 'N/A'}</span>
+                <span class="article-date">Published: ${meta.date && meta.date.getTime() !== 0 ? meta.date.toISOString().split('T')[0] : 'N/A'}</span>
             </div>
             <div class="article-level-row">Level: ${meta.level}</div>
         </div>
