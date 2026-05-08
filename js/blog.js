@@ -182,7 +182,7 @@ Object.defineProperty(blogController, 'loadArticle', {
     value: async function (articleName, pushToHistory = true) {
         if (!UI.contentInner) return;
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        UI.contentInner.scrollIntoView({ behavior: 'smooth' });
         UI.contentInner.innerHTML = `
 <div class="skeletonArticle" aria-busy="true" aria-label="Loading article">
   <div class="skeletonArticle__h1 skeleton"></div>
