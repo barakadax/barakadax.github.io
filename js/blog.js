@@ -208,7 +208,9 @@ Object.defineProperty(blogController, 'loadArticle', {
                 state.articleCache[articleName] = content;
             }
 
-            UI.contentInner.innerHTML = marked.parse(content);
+            const processedContent = content.replace(/<!--([\s\S]*?)-->/g, '');
+
+            UI.contentInner.innerHTML = marked.parse(processedContent);
 
             try {
                 renderMathInElement(UI.contentInner, {
@@ -225,6 +227,31 @@ Object.defineProperty(blogController, 'loadArticle', {
             }
 
             blogController.rebaseRelativeImages(UI.contentInner, articleName);
+
+            UI.contentInner.querySelectorAll('p').forEach(p => {
+                const images = p.querySelectorAll('img');
+                if (images.length >= 2) {
+                    const carousel = document.createElement('div');
+                    carousel.className = 'main-carousel';
+                    images.forEach(img => {
+                        const cell = document.createElement('div');
+                        cell.className = 'carousel-cell';
+                        cell.appendChild(img);
+                        carousel.appendChild(cell);
+                    });
+                    p.replaceWith(carousel);
+                    new Flickity(carousel, {
+                        wrapAround: true,
+                        pageDots: false,
+                        prevNextButtons: false,
+                        adaptiveHeight: true,
+                        selectedAttraction: 0.2,
+                        friction: 0.8,
+                        accessibility: true
+                    });
+                }
+            });
+
             blogController.renderArticleMetadata(articleName);
 
             if (pushToHistory && history.pushState) {
