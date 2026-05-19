@@ -239,7 +239,24 @@ Object.defineProperty(blogController, 'loadArticle', {
                         cell.appendChild(img);
                         carousel.appendChild(cell);
                     });
-                    p.replaceWith(carousel);
+
+                    const hasText = p.textContent.trim().length > 0;
+                    if (hasText) {
+                        while (p.lastChild) {
+                            const last = p.lastChild;
+                            if (last.nodeType === 3 && !last.textContent.trim()) {
+                                p.removeChild(last);
+                            } else if (last.nodeName === 'BR') {
+                                p.removeChild(last);
+                            } else {
+                                break;
+                            }
+                        }
+                        p.after(carousel);
+                    } else {
+                        p.replaceWith(carousel);
+                    }
+
                     new Flickity(carousel, {
                         wrapAround: true,
                         pageDots: false,
