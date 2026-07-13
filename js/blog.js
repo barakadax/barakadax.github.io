@@ -55,7 +55,7 @@ Object.defineProperty(blogController, 'initRenderer', {
                     heading(arg1, arg2) {
                         const { text, level } = blogController.parseMarkdownHeadingArgs(arg1, arg2);
                         const id = typeof text === 'string'
-                            ? text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
+                            ? text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s/g, '-').replace(/^-+|-+$/g, '')
                             : 'header-' + level;
                         return `<h${level} id="${id}">${text}</h${level}>`;
                     },
