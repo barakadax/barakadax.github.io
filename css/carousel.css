@@ -92,6 +92,8 @@
     box-shadow: none;
     margin: 0 10px 0 10px;
     background-color: var(--gray-color);
+    display: inline-block;
+    position: relative;
 }
 
 .meInIndex {
@@ -99,11 +101,24 @@
     box-shadow: 1px 1px 1px white, 0 0 1em white, 0 0 0.2em white;
 }
 
+.meInIndex::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid white;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
+}
+
 @-webkit-keyframes fade {
     from {
         transform: translate3d(0, -10%, 0);
         opacity: 0;
     }
+
     to {
         transform: translate3d(0, 0, 0);
         opacity: 1;
@@ -115,6 +130,7 @@
         transform: translate3d(0, -10%, 0);
         opacity: 0;
     }
+
     to {
         transform: translate3d(0, 0, 0);
         opacity: 1;
@@ -131,26 +147,32 @@
     #carousel {
         width: 100%;
     }
+
     .arrowSize {
         width: 40px;
         height: 40px;
     }
+
     .smallIcons {
         width: 40px;
         height: 40px;
     }
+
     .iconAndTextSameLine {
         justify-content: center;
     }
+
     .skillsAndPersonalityContent {
         grid-template-columns: repeat(2, 1fr);
     }
+
     @keyframes fade {
         from {
             transform: translate3d(0, -5%, 0);
             opacity: 0;
         }
     }
+
     @-webkit-keyframes fade {
         from {
             transform: translate3d(0, -5%, 0);
@@ -170,10 +192,12 @@
         width: 30px;
         height: 30px;
     }
+
     .smallIcons {
         width: 30px;
         height: 30px;
     }
+
     .skillsAndPersonality h2 {
         font-size: 32px;
     }
