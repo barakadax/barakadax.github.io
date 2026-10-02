@@ -46,11 +46,10 @@
 
    <!-- Canonical URL -->
    <link rel="canonical" href="https://barakadax.github.io/timeline">
-   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 
 <body>
-   <a href="#timelineTable" class="skip-link">Skip to content</a>
+   <a href="#mainTimeline" class="skip-link">Skip to content</a>
    <button id="menu" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuScreen">
       <span></span>
       <span></span>
@@ -85,87 +84,182 @@
       25%, 75%, 100% { scale: 0; opacity: 0 }
       }
    </css-doodle>
-   <table id="timelineTable">
-      <tbody>
-         <tr>
-            <td></td>
-            <td class="leftPadding">
-               <a href="https://www.sap.com/" target="_blank" rel="noopener noreferrer" data-aos="fade-up-left" data-aos-easing="linear"
-                  data-aos-anchor-placement="top-bottom">
-                  <img src="badges/sap.png" class="timelineImage">
-                  <div class="timelineText">
-                     • 2024-present - BDC - Software Engineer<br>
-                     • 2023-2024 - CDF - Software Engineer<br>
-                     • 2022-2023 - CDFL - Software Engineer
-                  </div>
-               </a>
-            </td>
-         </tr>
-         <tr>
-            <td class="rightPadding">
-               <a href="https://www.credly.com/badges/47c8643d-863c-40d9-a13b-78dc438ec8d4/public_url" target="_blank" rel="noopener noreferrer"
-                  data-aos="fade-up-left" data-aos-easing="linear" data-aos-anchor-placement="top-bottom">
-                  <img src="badges/sapGenAi.png" class="timelineImage">
-                  <div class="timelineText">2025 - SAP - Generative AI Developer</div>
-               </a>
-            </td>
-            <td></td>
-         </tr>
-         <tr>
-            <td></td>
-            <td class="leftPadding">
-               <a href="https://learn.nvidia.com/certificates?id=k78pQSFfSUCS8ntj5jofow" target="_blank" rel="noopener noreferrer"
-                  data-aos="fade-up-right" data-aos-easing="linear" data-aos-anchor-placement="top-bottom">
-                  <img src="badges/cuda.png" class="timelineImage">
-                  <div class="timelineText">2025 - Nvidia course - final score of 100</div>
-               </a>
-            </td>
-         </tr>
-         <tr>
-            <td class="rightPadding">
-               <a href="https://www.ncr.com/" target="_blank" rel="noopener noreferrer" data-aos="fade-up-right" data-aos-easing="linear"
-                  data-aos-anchor-placement="top-bottom">
-                  <img src="badges/ncr.png" class="timelineImage">
-                  <div class="timelineText">2021-2022 - Jumbo - Professional Specialist Engineer</div>
-               </a>
-            </td>
-            <td></td>
-         </tr>
-         <tr>
-            <td></td>
-            <td class="leftPadding">
-               <a href="https://www.pet.ac.il/" target="_blank" rel="noopener noreferrer" data-aos="fade-up-left" data-aos-easing="linear"
-                  data-aos-anchor-placement="top-bottom">
-                  <img src="badges/pet.png" class="timelineImage">
-                  <div class="timelineText">
-                     2018-2021 - Practical Software Engineer<br>
-                     Honorary student with a GPA of 87
-                  </div>
-               </a>
-            </td>
-         </tr>
-         <!--<tr>
-            <td class="rightPadding">
-               <a
-               href="https://www.netacad.com/courses/it-essentials?courseLang=en-US"
-               target="_blank" rel="noopener noreferrer"
-               data-aos="fade-up-right"
-               data-aos-easing="linear"
-               data-aos-anchor-placement="top-bottom">
-                  <img src="badges/it.png" class="timelineImage">
-                  <div class="timelineText">2015 - Cisco Netacad - IT Essential</div>
-               </a>
-            </td>
-            <td></td>
-         </tr>-->
-      </tbody>
-   </table>
+
+   <main id="mainTimeline" class="timelineContainer">
+      <ol class="timelineList">
+         <li class="timelineItem timelineItem--left" data-aos="fade-right">
+            <div class="timelineDot"></div>
+            <a href="https://www.sap.com/" target="_blank" rel="noopener noreferrer" class="timelineCard">
+               <img src="badges/sap.png" class="timelineImage" alt="SAP">
+               <div class="timelineDate">2022 — Present</div>
+               <div class="timelineTitle">SAP &middot; Software Engineer</div>
+               <div class="timelineSubtitle">BDC-FOS, CX, Gigya &middot; Tel Aviv, Israel</div>
+               <div class="timelineText">
+                  Software Engineer specializing in high-throughput backend infrastructure, microservices, and distributed systems.
+                  <ul class="timelineListDetails">
+                     <li><strong>Cross-Region Enterprise Architecture &amp; Tenant Lifecycle:</strong> Designed and implemented cross-region asynchronous APIs using Spring Boot, Kafka, Temporal, and PostgreSQL to validate data-sharing eligibility across hybrid enterprise landscapes. Prevented execution of actions prone to failure, reducing action failure rates from <strong>90% to 5%</strong>.</li>
+                     <li><strong>Resilience &amp; Error Remediation:</strong> Extended cross-microservice differentiation between permanent and temporary errors, delivering actionable error messages (intervene, wait, report) and reducing customer-reported bugs by <strong>50%</strong>.</li>
+                     <li><strong>High-Performance Microservices:</strong> Extensible FastAPI test collector routing data into HanaDB as an automated quality gate in the ring deployment flow. Built high-throughput microservices using Spring Boot, Kafka, and gRPC for dynamic topic orchestration.</li>
+                     <li><strong>Identity &amp; Zero-Trust Access:</strong> Built a FastAPI authentication microservice with SAP IAS/OIDC for dynamic scope-based RBAC, alongside NestJS Istio external authorizers for validating tenant mTLS certificates. Extended CDP gateway with MS Orleans for license allowlists.</li>
+                     <li><strong>Security &amp; Penetration Testing:</strong> Architected custom penetration testing suites against CIAM infrastructure using <strong>Rust Tokio</strong> to demonstrate account theft vulnerabilities, directly driving privilege hardening and comprehensive audit logging.</li>
+                     <li><strong>Generative AI &amp; Platform Tooling:</strong> Designed a LangChain-powered RAG service and FastAPI orchestrator integrating Slack, SMTP, Jenkins, GitHub, Artifactory, Jira, ArgoCD, and Kubernetes to automate ring deployment reports and bug triage.</li>
+                     <li><strong>Log Analytics &amp; Load Testing:</strong> Engineered a Blazor data analytics tool recursively extracting and flattening large-scale ElasticSearch JSON logs for rapid root-cause analysis; built Locust suites to load-test core microservices.</li>
+                     <li><strong>Engineering Leadership &amp; Culture:</strong> Directed a cross-functional Agile Kanban team of 5 engineers building internal developer tools (reaching 200 active users), and spearheaded a weekly technical lecture series for 10 engineers to accelerate technology adoption.</li>
+                  </ul>
+               </div>
+               <div class="timelineTags">
+                  <span class="timelineTag">Spring Boot</span>
+                  <span class="timelineTag">Kafka</span>
+                  <span class="timelineTag">Temporal</span>
+                  <span class="timelineTag">PostgreSQL</span>
+                  <span class="timelineTag">HanaDB</span>
+                  <span class="timelineTag">Rust Tokio</span>
+                  <span class="timelineTag">FastAPI</span>
+                  <span class="timelineTag">NestJS</span>
+                  <span class="timelineTag">Istio mTLS</span>
+                  <span class="timelineTag">Kubernetes</span>
+                  <span class="timelineTag">MS Orleans</span>
+                  <span class="timelineTag">LangChain RAG</span>
+                  <span class="timelineTag">gRPC</span>
+                  <span class="timelineTag">ElasticSearch</span>
+                  <span class="timelineTag">Locust</span>
+               </div>
+            </a>
+         </li>
+
+         <li class="timelineItem timelineItem--right" data-aos="fade-left">
+            <div class="timelineDot"></div>
+            <a href="https://learn.nvidia.com/certificates?id=k78pQSFfSUCS8ntj5jofow" target="_blank" rel="noopener noreferrer" class="timelineCard">
+               <img src="badges/cuda.png" class="timelineImage" alt="NVIDIA CUDA">
+               <div class="timelineDate">2025</div>
+               <div class="timelineTitle">NVIDIA &middot; CUDA Specialist</div>
+               <div class="timelineSubtitle">Accelerated Computing in CUDA C/C++ &middot; Certificate</div>
+               <div class="timelineText">
+                  High-performance accelerated computing and parallel systems engineering on modern NVIDIA GPU architectures.
+                  <ul class="timelineListDetails">
+                     <li><strong>Hardware &amp; Execution Optimization:</strong> Mastered GPU microarchitecture, warp execution, thread block scheduling, and high-performance kernel design &ndash; graduating with a <strong>final score of 100</strong>.</li>
+                     <li><strong>Memory Hierarchy &amp; Throughput:</strong> Optimized unified memory management, memory coalescing, grid-stride loops, and asynchronous data transfer streaming to maximize compute throughput.</li>
+                  </ul>
+               </div>
+               <div class="timelineTags">
+                  <span class="timelineTag">CUDA C/C++</span>
+                  <span class="timelineTag">GPU Architecture</span>
+                  <span class="timelineTag">Parallel Algorithms</span>
+                  <span class="timelineTag">Unified Memory</span>
+                  <span class="timelineTag">Kernel Optimization</span>
+                  <span class="timelineTag">Performance Profiling</span>
+               </div>
+            </a>
+         </li>
+
+         <li class="timelineItem timelineItem--left" data-aos="fade-right">
+            <div class="timelineDot"></div>
+            <a href="https://www.credly.com/badges/47c8643d-863c-40d9-a13b-78dc438ec8d4/public_url" target="_blank" rel="noopener noreferrer" class="timelineCard">
+               <img src="badges/sapGenAi.png" class="timelineImage" alt="SAP Generative AI">
+               <div class="timelineDate">2025</div>
+               <div class="timelineTitle">SAP &middot; Generative AI Developer</div>
+               <div class="timelineSubtitle">Enterprise LLM Systems &amp; Prompt Orchestration &middot; Certification</div>
+               <div class="timelineText">
+                  Certified specialization in production-grade LLM architectures, intelligent agent tooling, and enterprise AI platforms.
+                  <ul class="timelineListDetails">
+                     <li><strong>Enterprise AI Systems:</strong> Designed enterprise prompt orchestration workflows, vector retrieval pipelines (RAG), and integration with SAP AI Core infrastructure.</li>
+                     <li><strong>Autonomous Agent Tooling:</strong> Built automated tool calling, guardrails, and validation pipelines for contextual reasoning across complex enterprise business data.</li>
+                  </ul>
+               </div>
+               <div class="timelineTags">
+                  <span class="timelineTag">Generative AI</span>
+                  <span class="timelineTag">LLMs</span>
+                  <span class="timelineTag">LangChain</span>
+                  <span class="timelineTag">Vector RAG</span>
+                  <span class="timelineTag">SAP AI Core</span>
+                  <span class="timelineTag">Prompt Engineering</span>
+               </div>
+            </a>
+         </li>
+
+         <li class="timelineItem timelineItem--right" data-aos="fade-left">
+            <div class="timelineDot"></div>
+            <a href="https://www.ncr.com/" target="_blank" rel="noopener noreferrer" class="timelineCard">
+               <img src="badges/ncr.png" class="timelineImage" alt="NCR">
+               <div class="timelineDate">2021 — 2022</div>
+               <div class="timelineTitle">NCR (Jumbo) &middot; Specialist Engineer</div>
+               <div class="timelineSubtitle">POS Architecture &amp; Hardware Integration &middot; Raanana, Israel</div>
+               <div class="timelineText">
+                  Mission-critical point-of-sale systems, retail transaction engines, and secure enterprise peripheral hardware integration.
+                  <ul class="timelineListDetails">
+                     <li><strong>POS Architecture &amp; Extensibility:</strong> Engineered dynamic XML data injection for receipt printers using the decorator pattern, and architected modular support for coupons, deals, and stamp-based billing via reflection patterns.</li>
+                     <li><strong>Hardware Integration &amp; Compliance:</strong> Maintained and troubleshot critical hardware integrations with secure PIN pads and Fiscal Data Modules (FDM) to ensure high system availability, financial data integrity, and regulatory compliance.</li>
+                  </ul>
+               </div>
+               <div class="timelineTags">
+                  <span class="timelineTag">C#</span>
+                  <span class="timelineTag">.NET Core</span>
+                  <span class="timelineTag">XML Pipeline</span>
+                  <span class="timelineTag">Decorator Pattern</span>
+                  <span class="timelineTag">Fiscal Modules</span>
+                  <span class="timelineTag">Hardware Security</span>
+               </div>
+            </a>
+         </li>
+
+         <li class="timelineItem timelineItem--left" data-aos="fade-right">
+            <div class="timelineDot"></div>
+            <a href="https://www.pet.ac.il/" target="_blank" rel="noopener noreferrer" class="timelineCard">
+               <img src="badges/pet.png" class="timelineImage" alt="PET">
+               <div class="timelineDate">2018 — 2020</div>
+               <div class="timelineTitle">Technion (PET) &middot; Software Engineering</div>
+               <div class="timelineSubtitle">Practical Software Engineer &middot; Graduated with Honors (GPA 87)</div>
+               <div class="timelineText">
+                  Rigorous academic training in computer science fundamentals, software engineering, systems programming, and database architecture.
+                  <ul class="timelineListDetails">
+                     <li><strong>Academic Honors:</strong> Graduated with honors with an overall GPA of 87 across advanced algorithmic and engineering coursework.</li>
+                     <li><strong>Core Foundations:</strong> Low-level systems programming in ANSI C and C++, object-oriented design in Java and C#, relational database design, data structures, algorithms, operating systems, and computer networking.</li>
+                  </ul>
+               </div>
+               <div class="timelineTags">
+                  <span class="timelineTag">Algorithms</span>
+                  <span class="timelineTag">Data Structures</span>
+                  <span class="timelineTag">ANSI C</span>
+                  <span class="timelineTag">C++</span>
+                  <span class="timelineTag">Java</span>
+                  <span class="timelineTag">OOP</span>
+                  <span class="timelineTag">Database Design</span>
+                  <span class="timelineTag">Operating Systems</span>
+               </div>
+            </a>
+         </li>
+      </ol>
+   </main>
+
    <footer style="margin-top: 5px;">&copy; 2026 Barak Taya &middot; Licensed under <a href="https://github.com/barakadax/barakadax.github.io/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></footer>
    <script defer src="js/menu.js"></script>
-   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
    <script async src="js/doodle.js"></script>
    <script>
-      AOS.init();
+      (function() {
+         const items = document.querySelectorAll('.timelineItem');
+         if (!items.length) return;
+
+         if (!('IntersectionObserver' in window)) {
+            items.forEach(el => el.classList.add('is-visible'));
+            return;
+         }
+
+         const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+               } else {
+                  entry.target.classList.remove('is-visible');
+               }
+            });
+         }, {
+            root: null,
+            rootMargin: '-30px 0px -30px 0px',
+            threshold: 0.08
+         });
+
+         items.forEach((item) => observer.observe(item));
+      })();
    </script>
 </body>
 
