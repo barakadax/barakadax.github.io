@@ -21,6 +21,7 @@
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 140, 0, 0.3);
     border-radius: 12px;
+    corner-shape: squircle;
     overflow: hidden;
     color: white;
     text-decoration: none;
@@ -90,6 +91,7 @@
     padding: 3px 10px;
     font-size: 0.75rem;
     border-radius: 999px;
+    corner-shape: squircle;
     letter-spacing: 0.5px;
     line-height: 1.4;
 }
@@ -118,6 +120,7 @@
     padding: 2px 8px;
     font-size: 0.7rem;
     border-radius: 4px;
+    corner-shape: squircle;
     background: rgba(195, 0, 231, 0.18);
     color: #e3b3ff;
     border: 1px solid rgba(195, 0, 231, 0.35);

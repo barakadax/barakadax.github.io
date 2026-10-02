@@ -49,6 +49,7 @@
     backdrop-filter: blur(5px);
     padding: 20px;
     border-radius: 10px;
+    corner-shape: squircle;
     border: 1px solid var(--Orange-color);
     margin-top: 10px;
     margin-bottom: 10px;
@@ -84,6 +85,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 140, 0, 0.4);
     border-radius: 4px;
+    corner-shape: squircle;
     color: white;
     font-size: 0.9rem;
     outline: none;
@@ -134,6 +136,7 @@
     transition: all 0.2s;
     padding: 4px 8px;
     border-radius: 4px;
+    corner-shape: squircle;
     user-select: none;
 }
 

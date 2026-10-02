@@ -5,6 +5,7 @@
 
 .skeleton {
   border-radius: 6px;
+  corner-shape: squircle;
   background: rgba(255, 255, 255, 0.06);
   background-image: linear-gradient(
     90deg,
@@ -29,6 +30,7 @@
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 140, 0, 0.15);
   border-radius: 12px;
+  corner-shape: squircle;
   overflow: hidden;
 }
 .skeletonCard__image { width: 100%; aspect-ratio: 16 / 10; }
@@ -37,8 +39,8 @@
 .skeletonCard__desc  { height: 12px; width: 90%; }
 .skeletonCard__desc--short { width: 60%; }
 .skeletonCard__tags  { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
-.skeletonCard__tag   { display: inline-block; height: 18px; width: 44px; border-radius: 4px; }
-.skeletonCard__pill  { display: inline-block; height: 20px; width: 56px; border-radius: 999px; }
+.skeletonCard__tag   { display: inline-block; height: 18px; width: 44px; border-radius: 4px; corner-shape: squircle; }
+.skeletonCard__pill  { display: inline-block; height: 20px; width: 56px; border-radius: 999px; corner-shape: squircle; }
 
 .skeletonCard--featured .skeletonCard__image { aspect-ratio: 16 / 9; }
 .skeletonCard--featured .skeletonCard__title { height: 20px; width: 55%; }
@@ -46,7 +48,7 @@
 
 /* Blog sidebar: article list skeleton */
 .skeletonArticleItem { padding: 15px; border-bottom: 1px solid #333; }
-.skeletonArticleItem__line { height: 14px; border-radius: 4px; }
+.skeletonArticleItem__line { height: 14px; border-radius: 4px; corner-shape: squircle; }
 
 /* Blog content area skeleton */
 .skeletonArticle { display: flex; flex-direction: column; gap: 18px; padding-top: 10px; }

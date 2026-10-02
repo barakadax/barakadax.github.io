@@ -85,6 +85,7 @@ td:last-child {
     padding: 8px 12px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
+    corner-shape: squircle;
     background: rgba(255, 255, 255, 0.1);
     color: white;
     font-size: 1rem;
@@ -264,6 +265,7 @@ td:last-child {
     background-color: #333;
     padding: 2px 5px;
     border-radius: 4px;
+    corner-shape: squircle;
     color: var(--Orange-color);
 }
 
@@ -271,6 +273,7 @@ td:last-child {
     background-color: #1e1e1e;
     padding: 15px;
     border-radius: 8px;
+    corner-shape: squircle;
     overflow-x: auto;
     margin: 20px 0;
     font-size: 15px;
@@ -300,6 +303,7 @@ td:last-child {
     color: #999;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
+    corner-shape: squircle;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -361,6 +365,7 @@ td:last-child {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
+    corner-shape: squircle;
     margin: 20px auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -398,6 +403,7 @@ td:last-child {
     height: auto;
     margin: 0;
     border-radius: 8px;
+    corner-shape: squircle;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
@@ -448,6 +454,7 @@ td:last-child {
         color: white;
         border: none;
         border-radius: 8px;
+        corner-shape: squircle;
         font-size: 1.1rem;
         font-weight: bold;
         cursor: pointer;
