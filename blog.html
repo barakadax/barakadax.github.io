@@ -102,28 +102,48 @@
       }
    </css-doodle>
    <div id="blog-container">
-      <div id="blog-sidebar">
-         <div class="sidebar-header">
-            <label for="article-search" class="sr-only">Search articles</label>
-            <input type="text" id="article-search" placeholder="Search Articles..." autocomplete="off">
-         </div>
-         <ul id="article-list">
-         </ul>
-      </div>
       <div id="blog-content">
-         <button id="sidebar-toggle" title="Toggle Sidebar">☰</button>
          <div id="blog-scroll-container">
             <div id="blog-content-inner">
-               <h1 id="select-article-prompt">
-                  Select an article from the list
-                  <span class="desktop-direction">on the left</span>
-                  <span class="mobile-direction">above</span>
-               </h1>
+               <div class="skeletonArticle" aria-busy="true" aria-label="Loading article">
+                  <div class="skeletonArticle__h1 skeleton"></div>
+                  <div class="skeletonArticle__meta skeleton"></div>
+                  <div class="skeletonArticle__para skeleton"></div>
+                  <div class="skeletonArticle__para skeleton"></div>
+                  <div class="skeletonArticle__para skeletonArticle__para--short skeleton"></div>
+                  <div class="skeletonArticle__para skeleton"></div>
+                  <div class="skeletonArticle__para skeleton"></div>
+               </div>
             </div>
+            <button id="back-to-top-btn" class="back-to-top-btn" type="button" aria-label="Back to top of article">↑ Back to Top of Article</button>
          </div>
       </div>
    </div>
-   <button id="back-to-list-btn" class="back-to-list-btn">← Back to Article List</button>
+
+   <!-- Floating HUD Pill -->
+   <button id="palette-hud-btn" type="button" aria-label="Browse and search articles (Ctrl+K)">
+      <span class="hud-icon">🔍</span>
+      <span class="hud-text">Browse Articles</span>
+      <kbd class="hud-kbd">Ctrl+K</kbd>
+   </button>
+
+   <!-- Spotlight Command Palette Modal -->
+   <div id="command-palette-backdrop" class="palette-hidden" aria-hidden="true">
+      <div id="command-palette" role="dialog" aria-modal="true" aria-label="Article Switcher">
+         <div class="palette-search-box">
+            <span class="palette-search-icon">🔍</span>
+            <input type="text" id="palette-search-input" placeholder="Search by title, tag, or level..." autocomplete="off">
+            <button id="palette-close-btn" type="button" aria-label="Close palette">ESC</button>
+         </div>
+         <ul id="palette-results-list" role="listbox">
+         </ul>
+         <div class="palette-footer">
+            <span>Navigate: <kbd>&uarr;</kbd> <kbd>&darr;</kbd></span>
+            <span>Select: <kbd>&crarr;</kbd></span>
+            <span>Close: <kbd>ESC</kbd></span>
+         </div>
+      </div>
+   </div>
    <footer>&copy; 2026 Barak Taya &middot; Licensed under <a href="https://github.com/barakadax/barakadax.github.io/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></footer>
    <script defer src="js/menu.js"></script>
    <script async src="js/doodle.js"></script>

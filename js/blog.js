@@ -9,16 +9,20 @@ CONFIG.mobileBreakpoint = 768;
 const state = Object.create(null);
 state.articleMeta = Object.create(null);
 state.articleCache = Object.create(null);
+state.articles = [];
+state.activeArticleName = null;
 
 const UI = Object.create(null);
-UI.sidebar = document.getElementById('blog-sidebar');
-UI.toggleBtn = document.getElementById('sidebar-toggle');
-UI.backBtn = document.getElementById('back-to-list-btn');
 UI.contentInner = document.getElementById('blog-content-inner');
-UI.articleList = document.getElementById('article-list');
-UI.searchInput = document.getElementById('article-search');
 UI.blogContainer = document.getElementById('blog-container');
 UI.authorHeader = document.getElementById('author');
+UI.paletteBackdrop = document.getElementById('command-palette-backdrop');
+UI.paletteModal = document.getElementById('command-palette');
+UI.paletteInput = document.getElementById('palette-search-input');
+UI.paletteList = document.getElementById('palette-results-list');
+UI.paletteCloseBtn = document.getElementById('palette-close-btn');
+UI.paletteHudBtn = document.getElementById('palette-hud-btn');
+UI.backToTopBtn = document.getElementById('back-to-top-btn');
 
 const blogController = Object.create(null);
 
@@ -86,20 +90,14 @@ Object.defineProperty(blogController, 'initRenderer', {
     }
 });
 
-Object.defineProperty(blogController, 'collapseSidebarIfMobile', {
-    writable: false,
-    value: function () {
-        if (window.innerWidth <= CONFIG.mobileBreakpoint && UI.sidebar) {
-            UI.sidebar.classList.add('collapsed');
-        }
-    }
-});
-
 Object.defineProperty(blogController, 'highlightActiveArticle', {
     writable: false,
     value: function (articleName) {
-        document.querySelectorAll('.article-item').forEach(item => {
-            item.classList.toggle('active', item.dataset.name === articleName);
+        state.activeArticleName = articleName;
+        document.querySelectorAll('.palette-item').forEach(item => {
+            const isActive = item.dataset.name === articleName;
+            item.classList.toggle('active-article', isActive);
+            item.classList.toggle('selected', isActive);
         });
     }
 });
@@ -151,15 +149,17 @@ Object.defineProperty(blogController, 'renderArticleMetadata', {
         const h1 = UI.contentInner.querySelector('h1');
         if (!h1) return;
 
-        const meta = state.articleMeta[articleName] || { author: 'Barak Taya', level: 'Unknown', date: null };
+        const meta = state.articleMeta[articleName] || { author: 'Barak Taya', level: 'Unknown', date: null, tags: [] };
+        const dateStr = meta.date && meta.date.getTime() !== 0 ? meta.date.toISOString().split('T')[0] : 'N/A';
+        const levelClass = meta.level ? `level-${meta.level.toLowerCase()}` : '';
 
         const metaHtml = `
         <div class="article-meta">
             <div class="article-meta-top">
                 <span class="article-author">By: ${meta.author}</span>
-                <span class="article-date">Published: ${meta.date && meta.date.getTime() !== 0 ? meta.date.toISOString().split('T')[0] : 'N/A'}</span>
+                <span class="article-date">Published: ${dateStr}</span>
             </div>
-            <div class="article-level-row">Level: ${meta.level}</div>
+            <div class="article-level-row">Level: <span class="level-badge ${levelClass}">${meta.level || 'Unknown'}</span></div>
         </div>
     `;
         h1.insertAdjacentHTML('afterend', metaHtml);
@@ -182,7 +182,7 @@ Object.defineProperty(blogController, 'loadArticle', {
     value: async function (articleName, pushToHistory = true) {
         if (!UI.contentInner) return;
 
-        UI.contentInner.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         UI.contentInner.innerHTML = `
 <div class="skeletonArticle" aria-busy="true" aria-label="Loading article">
   <div class="skeletonArticle__h1 skeleton"></div>
@@ -196,7 +196,6 @@ Object.defineProperty(blogController, 'loadArticle', {
   <div class="skeletonArticle__para skeleton"></div>
   <div class="skeletonArticle__para skeleton"></div>
 </div>`;
-        UI.backBtn?.classList.remove('visible');
 
         try {
             let content;
@@ -279,8 +278,6 @@ Object.defineProperty(blogController, 'loadArticle', {
             }
 
             blogController.highlightActiveArticle(articleName);
-            blogController.collapseSidebarIfMobile();
-            UI.backBtn?.classList.add('visible');
 
         } catch (e) {
             console.error("Error loading article:", e);
@@ -289,29 +286,170 @@ Object.defineProperty(blogController, 'loadArticle', {
     }
 });
 
-Object.defineProperty(blogController, 'buildArticleListItem', {
+Object.defineProperty(blogController, 'buildPaletteItem', {
     writable: false,
-    value: function (art) {
+    value: function (art, index) {
         state.articleMeta[art.name] = { ...art, tags: [...(art.tags || []), art.name] };
+        const dateStr = art.date && art.date.getTime() !== 0 ? art.date.toISOString().split('T')[0] : 'N/A';
+        const levelClass = art.level ? `level-${art.level.toLowerCase()}` : '';
+        const shareTextHtml = art.share_text ? `<div class="palette-desc">${art.share_text}</div>` : '';
+
         const li = document.createElement('li');
-        li.className = 'article-item';
-        li.textContent = art.name;
+        const isActive = state.activeArticleName && art.name === state.activeArticleName;
+        li.className = 'palette-item' + (isActive ? ' selected active-article' : '');
+        li.setAttribute('role', 'option');
         li.dataset.name = art.name;
-        li.onclick = () => blogController.loadArticle(art.name);
+        li.innerHTML = `
+            <div class="palette-item-header">
+                <span class="level-badge ${levelClass}">${art.level || 'Unknown'}</span>
+                <span class="palette-date">${dateStr}</span>
+            </div>
+            <div class="palette-title">${art.name}</div>
+            ${shareTextHtml}
+        `;
+
+        li.addEventListener('click', () => {
+            blogController.loadArticle(art.name);
+            blogController.closePalette();
+        });
+
         return li;
+    }
+});
+
+Object.defineProperty(blogController, 'openPalette', {
+    writable: false,
+    value: function () {
+        if (!UI.paletteBackdrop) return;
+        UI.paletteBackdrop.classList.remove('palette-hidden');
+        UI.paletteBackdrop.setAttribute('aria-hidden', 'false');
+        if (UI.paletteInput) {
+            UI.paletteInput.value = '';
+            UI.paletteInput.focus();
+        }
+        blogController.filterPalette();
+        const target = UI.paletteList?.querySelector('.palette-item.selected') || UI.paletteList?.querySelector('.palette-item.active-article');
+        if (target) {
+            target.scrollIntoView({ block: 'nearest' });
+        }
+    }
+});
+
+Object.defineProperty(blogController, 'closePalette', {
+    writable: false,
+    value: function () {
+        if (!UI.paletteBackdrop) return;
+        UI.paletteBackdrop.classList.add('palette-hidden');
+        UI.paletteBackdrop.setAttribute('aria-hidden', 'true');
+    }
+});
+
+Object.defineProperty(blogController, 'filterPalette', {
+    writable: false,
+    value: function () {
+        if (!UI.paletteList) return;
+        const term = (UI.paletteInput?.value || '').trim().toLowerCase();
+        const items = UI.paletteList.querySelectorAll('.palette-item');
+        let firstMatch = null;
+        let visibleCount = 0;
+
+        items.forEach(item => {
+            const name = item.dataset.name.toLowerCase();
+            const meta = state.articleMeta[item.dataset.name] || {};
+            const tags = (meta.tags || []).map(t => t.toLowerCase());
+            const level = (meta.level || '').toLowerCase();
+            const shareText = (meta.share_text || '').toLowerCase();
+
+            const isMatch = !term || name.includes(term) || tags.some(t => t.includes(term)) || level.includes(term) || shareText.includes(term);
+
+            if (isMatch) {
+                item.style.display = '';
+                visibleCount++;
+                if (!firstMatch) firstMatch = item;
+            } else {
+                item.style.display = 'none';
+            }
+            item.classList.remove('selected');
+        });
+
+        let targetSelect = null;
+        if (!term && state.activeArticleName) {
+            targetSelect = Array.from(items).find(item => item.dataset.name === state.activeArticleName && item.style.display !== 'none');
+        }
+        if (!targetSelect) {
+            targetSelect = firstMatch;
+        }
+
+        if (targetSelect) {
+            targetSelect.classList.add('selected');
+        }
+
+        let emptyMsg = UI.paletteList.querySelector('.palette-empty');
+        if (visibleCount === 0) {
+            if (!emptyMsg) {
+                emptyMsg = document.createElement('div');
+                emptyMsg.className = 'palette-empty';
+                emptyMsg.textContent = 'No matching articles found.';
+                UI.paletteList.appendChild(emptyMsg);
+            }
+            emptyMsg.style.display = '';
+        } else if (emptyMsg) {
+            emptyMsg.style.display = 'none';
+        }
+    }
+});
+
+Object.defineProperty(blogController, 'handlePaletteKeyNav', {
+    writable: false,
+    value: function (e) {
+        if (!UI.paletteBackdrop || UI.paletteBackdrop.classList.contains('palette-hidden')) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                blogController.openPalette();
+            } else if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                blogController.openPalette();
+            }
+            return;
+        }
+
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            blogController.closePalette();
+            return;
+        }
+
+        const visibleItems = Array.from(UI.paletteList?.querySelectorAll('.palette-item') || []).filter(item => item.style.display !== 'none');
+        if (visibleItems.length === 0) return;
+
+        let currentIndex = visibleItems.findIndex(item => item.classList.contains('selected'));
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (currentIndex >= 0) visibleItems[currentIndex].classList.remove('selected');
+            const nextIndex = (currentIndex + 1) % visibleItems.length;
+            visibleItems[nextIndex].classList.add('selected');
+            visibleItems[nextIndex].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentIndex >= 0) visibleItems[currentIndex].classList.remove('selected');
+            const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+            visibleItems[prevIndex].classList.add('selected');
+            visibleItems[prevIndex].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (currentIndex >= 0 && visibleItems[currentIndex]) {
+                visibleItems[currentIndex].click();
+            }
+        }
     }
 });
 
 Object.defineProperty(blogController, 'initArticleList', {
     writable: false,
     value: async function () {
-        if (!UI.articleList) return;
-        UI.articleList.innerHTML = `
-<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:80%"></div></li>
-<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:60%"></div></li>
-<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:75%"></div></li>
-<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:55%"></div></li>
-<li class="skeletonArticleItem"><div class="skeletonArticleItem__line skeleton" style="width:70%"></div></li>`;
+        if (!UI.paletteList) return;
+        UI.paletteList.innerHTML = `<li class="palette-empty">Loading articles...</li>`;
 
         try {
             const res = await blogController.fetchOrThrow(`https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/git/trees/Master?recursive=1`);
@@ -330,34 +468,34 @@ Object.defineProperty(blogController, 'initArticleList', {
             }));
 
             articles.sort((a, b) => b.date - a.date || a.name.localeCompare(b.name));
+            state.articles = articles;
 
-            UI.articleList.innerHTML = "";
-            articles.forEach(art => {
-                UI.articleList.appendChild(blogController.buildArticleListItem(art));
+            UI.paletteList.innerHTML = "";
+            articles.forEach((art, index) => {
+                UI.paletteList.appendChild(blogController.buildPaletteItem(art, index));
             });
 
-            blogController.filterArticles();
-            blogController.loadFromURL();
+            const urlArticle = new URLSearchParams(window.location.search).get('article');
+            if (urlArticle) {
+                blogController.loadArticle(urlArticle, false);
+            } else if (articles.length > 0) {
+                blogController.loadArticle(articles[0].name, false);
+            }
+
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const target = document.getElementById(decodeURIComponent(window.location.hash.substring(1)));
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
         } catch (e) {
+            console.error("Error initializing articles:", e);
             if (e.message === 'RATE_LIMIT') {
-                UI.articleList.innerHTML = `<li class='article-item' style='color:#ffaa00; padding:10px;'>GitHub rate limit reached. Please try again in an hour.</li>`;
+                UI.paletteList.innerHTML = `<li class='palette-empty' style='color:#ffaa00;'>GitHub rate limit reached. Please try again in an hour.</li>`;
             } else {
-                UI.articleList.innerHTML = "<li class='article-item'>Error loading articles</li>";
+                UI.paletteList.innerHTML = "<li class='palette-empty'>Error loading articles</li>";
             }
         }
-    }
-});
-
-Object.defineProperty(blogController, 'filterArticles', {
-    writable: false,
-    value: function () {
-        if (!UI.searchInput) return;
-        const term = UI.searchInput.value.toLowerCase();
-        document.querySelectorAll('.article-item').forEach(item => {
-            const name = item.dataset.name.toLowerCase();
-            const tags = (state.articleMeta[item.dataset.name]?.tags || []).map(t => t.toLowerCase());
-            item.style.display = (name.includes(term) || tags.some(t => t.includes(term))) ? '' : 'none';
-        });
     }
 });
 
@@ -365,14 +503,8 @@ Object.defineProperty(blogController, 'loadFromURL', {
     writable: false,
     value: function () {
         const name = new URLSearchParams(window.location.search).get('article');
-        if (name) {
+        if (name && name !== state.activeArticleName) {
             blogController.loadArticle(name, false);
-            if (window.location.hash) {
-                setTimeout(() => {
-                    const target = document.getElementById(decodeURIComponent(window.location.hash.substring(1)));
-                    target?.scrollIntoView({ behavior: 'smooth' });
-                }, 200);
-            }
         }
     }
 });
@@ -380,12 +512,19 @@ Object.defineProperty(blogController, 'loadFromURL', {
 Object.defineProperty(blogController, 'initEvents', {
     writable: false,
     value: function () {
-        UI.toggleBtn?.addEventListener('click', () => UI.sidebar?.classList.toggle('collapsed'));
-
-        UI.backBtn?.addEventListener('click', () => {
-            UI.blogContainer?.scrollIntoView({ behavior: 'smooth' });
-            UI.sidebar?.classList.remove('collapsed');
+        UI.paletteHudBtn?.addEventListener('click', blogController.openPalette);
+        UI.paletteCloseBtn?.addEventListener('click', blogController.closePalette);
+        UI.backToTopBtn?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+        UI.paletteBackdrop?.addEventListener('click', (e) => {
+            if (e.target === UI.paletteBackdrop) {
+                blogController.closePalette();
+            }
+        });
+
+        UI.paletteInput?.addEventListener('input', blogController.filterPalette);
+        window.addEventListener('keydown', blogController.handlePaletteKeyNav);
 
         UI.contentInner?.addEventListener('click', (e) => {
             const internalLink = e.target.closest('a.internal-blog-link');
@@ -406,8 +545,14 @@ Object.defineProperty(blogController, 'initEvents', {
             }
         });
 
-        UI.searchInput?.addEventListener('input', blogController.filterArticles);
         window.addEventListener('popstate', blogController.loadFromURL);
+
+        // Set OS-appropriate shortcut label on the HUD pill
+        const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+        const kbdEl = document.querySelector('.hud-kbd');
+        if (kbdEl && isMac) {
+            kbdEl.textContent = '⌘K';
+        }
     }
 });
 
