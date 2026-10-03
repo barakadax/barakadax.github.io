@@ -332,12 +332,13 @@ body.palette-open {
     max-height: 48vh;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
 }
 
 .palette-item {
+    position: relative;
     padding: 12px 14px;
     border-radius: 8px;
     cursor: pointer;
@@ -347,6 +348,28 @@ body.palette-open {
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+.palette-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 8px;
+    right: 8px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.palette-item:last-child::after,
+.palette-item.last-visible::after {
+    display: none;
+}
+
+@supports selector(:has(p)) {
+    .palette-item:not(:has(~ .palette-item:not([style*="display: none"])))::after {
+        display: none;
+    }
 }
 
 .palette-item:hover,

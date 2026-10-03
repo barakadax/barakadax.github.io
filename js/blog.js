@@ -373,8 +373,12 @@ Object.defineProperty(blogController, 'filterPalette', {
             } else {
                 item.style.display = 'none';
             }
-            item.classList.remove('selected');
+            item.classList.remove('selected', 'last-visible');
         });
+
+        if (state.visiblePaletteItems.length > 0) {
+            state.visiblePaletteItems[state.visiblePaletteItems.length - 1].classList.add('last-visible');
+        }
 
         let targetSelect = null;
         if (!term && state.activeArticleName) {
@@ -493,6 +497,7 @@ Object.defineProperty(blogController, 'initArticleList', {
                 fragment.appendChild(blogController.buildPaletteItem(art, index));
             });
             UI.paletteList.appendChild(fragment);
+            blogController.filterPalette();
 
             const urlArticle = new URLSearchParams(window.location.search).get('article');
             if (urlArticle) {
