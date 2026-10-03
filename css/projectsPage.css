@@ -16,9 +16,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.6);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background: #0d0d0e;
     border: 1px solid rgba(255, 140, 0, 0.3);
     border-radius: 12px;
     corner-shape: squircle;
@@ -26,9 +24,9 @@
     color: white;
     text-decoration: none;
     opacity: 0;
-    transform: translateY(12px);
-    animation: cardFadeIn 0.4s ease forwards;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    animation: cardFadeIn 0.35s ease forwards;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    will-change: transform;
 }
 
 .projectCard:hover {
@@ -42,13 +40,15 @@
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
+    transform: translateZ(0);
 }
 
 .projectCardImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.45s ease;
+    transition: transform 0.35s ease;
+    will-change: transform;
 }
 
 .projectCard:hover .projectCardImage {
@@ -143,12 +143,10 @@
 @keyframes cardFadeIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 

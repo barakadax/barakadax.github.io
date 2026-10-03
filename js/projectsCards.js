@@ -17,30 +17,44 @@ Object.defineProperty(filterState, 'applyFilters', {
     writable: false,
     value: function () {
         const projects = document.getElementsByClassName("projectsRow");
-        Array.from(projects).forEach(projectCard => {
-            const titleElement = projectCard.querySelector(".projTitle");
-            const tagsElement = projectCard.querySelector(".projTags");
-            const cardClasses = Array.from(projectCard.classList);
+        const hasCategories = filterState.selectedCategories.size > 0;
+        const hasTags = filterState.selectedTags.size > 0;
+        const hasStatuses = filterState.selectedStatuses.size > 0;
 
-            const matchesCategory = filterState.selectedCategories.size === 0 ||
-                cardClasses.some(c => filterState.selectedCategories.has(c));
-            const matchesTag = filterState.selectedTags.size === 0 ||
-                cardClasses.some(t => filterState.selectedTags.has(t));
-            const matchesStatus = filterState.selectedStatuses.size === 0 ||
-                cardClasses.some(s => filterState.selectedStatuses.has(s));
+        Array.from(projects).forEach(projectCard => {
+            const cardClasses = projectCard.classList;
+
+            const matchesCategory = !hasCategories ||
+                Array.from(cardClasses).some(c => filterState.selectedCategories.has(c));
+            const matchesTag = !hasTags ||
+                Array.from(cardClasses).some(t => filterState.selectedTags.has(t));
+            const matchesStatus = !hasStatuses ||
+                Array.from(cardClasses).some(s => filterState.selectedStatuses.has(s));
 
             if (matchesCategory && matchesTag && matchesStatus) {
-                projectCard.style.display = "";
+                if (projectCard.style.display !== "") {
+                    projectCard.style.display = "";
+                }
+                const titleElement = projectCard.querySelector(".projTitle");
                 if (titleElement) {
-                    titleElement.innerHTML = filterState.selectedCategories.size > 0
+                    const newTitle = hasCategories
                         ? titleElement.dataset.name
                         : titleElement.dataset.fullTitle;
+                    if (titleElement.textContent !== newTitle) {
+                        titleElement.textContent = newTitle;
+                    }
                 }
+                const tagsElement = projectCard.querySelector(".projTags");
                 if (tagsElement) {
-                    tagsElement.style.display = filterState.selectedTags.size > 0 ? "none" : "";
+                    const newDisplay = hasTags ? "none" : "";
+                    if (tagsElement.style.display !== newDisplay) {
+                        tagsElement.style.display = newDisplay;
+                    }
                 }
             } else {
-                projectCard.style.display = "none";
+                if (projectCard.style.display !== "none") {
+                    projectCard.style.display = "none";
+                }
             }
         });
     }
@@ -64,7 +78,9 @@ Object.defineProperty(filterState, 'appendFilterCheckbox', {
             } else {
                 set.delete(id);
             }
-            filterState.applyFilters();
+            requestAnimationFrame(() => {
+                filterState.applyFilters();
+            });
         });
 
         wrapper.appendChild(checkbox);
@@ -90,7 +106,9 @@ Object.defineProperty(filterState, 'appendStatusCheckbox', {
             } else {
                 filterState.selectedStatuses.delete(id);
             }
-            filterState.applyFilters();
+            requestAnimationFrame(() => {
+                filterState.applyFilters();
+            });
         });
 
         wrapper.appendChild(checkbox);

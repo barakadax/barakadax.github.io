@@ -1,22 +1,18 @@
-@keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position:  600px 0; }
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
 }
 
 .skeleton {
   border-radius: 6px;
   corner-shape: squircle;
-  background: rgba(255, 255, 255, 0.06);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.06)   0%,
-    rgba(255, 255, 255, 0.13)  40%,
-    rgba(255, 140, 0,  0.08)   50%,
-    rgba(255, 255, 255, 0.13)  60%,
-    rgba(255, 255, 255, 0.06) 100%
-  );
-  background-size: 600px 100%;
-  animation: shimmer 1.6s ease-in-out infinite;
+  background: rgba(255, 255, 255, 0.08);
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+  will-change: opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -27,7 +23,7 @@
 .skeletonCard {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.6);
+  background: #0d0d0e;
   border: 1px solid rgba(255, 140, 0, 0.15);
   border-radius: 12px;
   corner-shape: squircle;
