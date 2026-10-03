@@ -300,11 +300,11 @@ Object.defineProperty(blogController, 'buildPaletteItem', {
         li.setAttribute('role', 'option');
         li.dataset.name = art.name;
         li.innerHTML = `
+            <div class="palette-title">${art.name}</div>
             <div class="palette-item-header">
                 <span class="level-badge ${levelClass}">${art.level || 'Unknown'}</span>
                 <span class="palette-date">${dateStr}</span>
             </div>
-            <div class="palette-title">${art.name}</div>
             ${shareTextHtml}
         `;
 
@@ -323,6 +323,8 @@ Object.defineProperty(blogController, 'openPalette', {
         if (!UI.paletteBackdrop) return;
         UI.paletteBackdrop.classList.remove('palette-hidden');
         UI.paletteBackdrop.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('palette-open');
+        document.body.classList.add('no-scroll');
         if (UI.paletteInput) {
             UI.paletteInput.value = '';
             UI.paletteInput.focus();
@@ -341,6 +343,8 @@ Object.defineProperty(blogController, 'closePalette', {
         if (!UI.paletteBackdrop) return;
         UI.paletteBackdrop.classList.add('palette-hidden');
         UI.paletteBackdrop.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('palette-open');
+        document.body.classList.remove('no-scroll');
     }
 });
 
@@ -522,6 +526,18 @@ Object.defineProperty(blogController, 'initEvents', {
                 blogController.closePalette();
             }
         });
+
+        UI.paletteBackdrop?.addEventListener('wheel', (e) => {
+            if (!e.target.closest('#palette-results-list')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        UI.paletteBackdrop?.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('#palette-results-list')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
         UI.paletteInput?.addEventListener('input', blogController.filterPalette);
         window.addEventListener('keydown', blogController.handlePaletteKeyNav);

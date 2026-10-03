@@ -228,6 +228,10 @@ footer {
     color: #ddd;
 }
 
+body.palette-open {
+    overflow: hidden !important;
+}
+
 /* Command Palette Backdrop & Modal */
 #command-palette-backdrop {
     position: fixed;
@@ -245,6 +249,7 @@ footer {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.2s ease, visibility 0.2s ease;
+    overscroll-behavior: contain;
 }
 
 #command-palette-backdrop.palette-hidden {
@@ -332,6 +337,8 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 .palette-item {
@@ -343,7 +350,7 @@ footer {
     transition: background 0.15s, border-color 0.15s;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .palette-item:hover,
@@ -362,7 +369,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
 }
 
 .palette-date {
@@ -370,7 +377,7 @@ footer {
 }
 
 .palette-title {
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: white;
     line-height: 1.3;
