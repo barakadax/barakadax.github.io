@@ -35,7 +35,7 @@ Object.defineProperty(filterState, 'applyFilters', {
                 if (projectCard.style.display !== "") {
                     projectCard.style.display = "";
                 }
-                const titleElement = projectCard.querySelector(".projTitle");
+                const titleElement = projectCard._titleEl || (projectCard._titleEl = projectCard.querySelector(".projTitle"));
                 if (titleElement) {
                     const newTitle = hasCategories
                         ? titleElement.dataset.name
@@ -44,7 +44,7 @@ Object.defineProperty(filterState, 'applyFilters', {
                         titleElement.textContent = newTitle;
                     }
                 }
-                const tagsElement = projectCard.querySelector(".projTags");
+                const tagsElement = projectCard._tagsEl || (projectCard._tagsEl = projectCard.querySelector(".projTags"));
                 if (tagsElement) {
                     const newDisplay = hasTags ? "none" : "";
                     if (tagsElement.style.display !== newDisplay) {

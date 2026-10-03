@@ -226,5 +226,14 @@ if (menuController.shareButton) {
     });
 }
 
+let resizeRafId = null;
+const onResizeThrottled = () => {
+    if (resizeRafId !== null) return;
+    resizeRafId = requestAnimationFrame(() => {
+        resizeRafId = null;
+        menuController.adjustMenuPosition();
+    });
+};
+
 window.addEventListener('load', menuController.adjustMenuPosition);
-window.addEventListener('resize', menuController.adjustMenuPosition);
+window.addEventListener('resize', onResizeThrottled, { passive: true });

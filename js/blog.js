@@ -11,6 +11,8 @@ state.articleMeta = Object.create(null);
 state.articleCache = Object.create(null);
 state.articles = [];
 state.activeArticleName = null;
+state.visiblePaletteItems = [];
+state.selectedPaletteIndex = -1;
 
 const UI = Object.create(null);
 UI.contentInner = document.getElementById('blog-content-inner');
@@ -289,7 +291,9 @@ Object.defineProperty(blogController, 'loadArticle', {
 Object.defineProperty(blogController, 'buildPaletteItem', {
     writable: false,
     value: function (art, index) {
-        state.articleMeta[art.name] = { ...art, tags: [...(art.tags || []), art.name] };
+        const tags = [...(art.tags || []), art.name];
+        const searchIndex = `${art.name} ${tags.join(' ')} ${art.level || ''} ${art.share_text || ''}`.toLowerCase();
+        state.articleMeta[art.name] = { ...art, tags, searchIndex };
         const dateStr = art.date && art.date.getTime() !== 0 ? art.date.toISOString().split('T')[0] : 'N/A';
         const levelClass = art.level ? `level-${art.level.toLowerCase()}` : '';
         const shareTextHtml = art.share_text ? `<div class="palette-desc">${art.share_text}</div>` : '';
@@ -354,21 +358,17 @@ Object.defineProperty(blogController, 'filterPalette', {
         if (!UI.paletteList) return;
         const term = (UI.paletteInput?.value || '').trim().toLowerCase();
         const items = UI.paletteList.querySelectorAll('.palette-item');
+        state.visiblePaletteItems = [];
         let firstMatch = null;
-        let visibleCount = 0;
+        let selectedIndex = -1;
 
         items.forEach(item => {
-            const name = item.dataset.name.toLowerCase();
             const meta = state.articleMeta[item.dataset.name] || {};
-            const tags = (meta.tags || []).map(t => t.toLowerCase());
-            const level = (meta.level || '').toLowerCase();
-            const shareText = (meta.share_text || '').toLowerCase();
-
-            const isMatch = !term || name.includes(term) || tags.some(t => t.includes(term)) || level.includes(term) || shareText.includes(term);
+            const isMatch = !term || (meta.searchIndex && meta.searchIndex.includes(term));
 
             if (isMatch) {
                 item.style.display = '';
-                visibleCount++;
+                state.visiblePaletteItems.push(item);
                 if (!firstMatch) firstMatch = item;
             } else {
                 item.style.display = 'none';
@@ -378,18 +378,24 @@ Object.defineProperty(blogController, 'filterPalette', {
 
         let targetSelect = null;
         if (!term && state.activeArticleName) {
-            targetSelect = Array.from(items).find(item => item.dataset.name === state.activeArticleName && item.style.display !== 'none');
+            const activeIdx = state.visiblePaletteItems.findIndex(item => item.dataset.name === state.activeArticleName);
+            if (activeIdx >= 0) {
+                targetSelect = state.visiblePaletteItems[activeIdx];
+                selectedIndex = activeIdx;
+            }
         }
-        if (!targetSelect) {
+        if (!targetSelect && firstMatch) {
             targetSelect = firstMatch;
+            selectedIndex = 0;
         }
 
         if (targetSelect) {
             targetSelect.classList.add('selected');
         }
+        state.selectedPaletteIndex = selectedIndex;
 
         let emptyMsg = UI.paletteList.querySelector('.palette-empty');
-        if (visibleCount === 0) {
+        if (state.visiblePaletteItems.length === 0) {
             if (!emptyMsg) {
                 emptyMsg = document.createElement('div');
                 emptyMsg.className = 'palette-empty';
@@ -423,26 +429,33 @@ Object.defineProperty(blogController, 'handlePaletteKeyNav', {
             return;
         }
 
-        const visibleItems = Array.from(UI.paletteList?.querySelectorAll('.palette-item') || []).filter(item => item.style.display !== 'none');
-        if (visibleItems.length === 0) return;
+        const visibleItems = state.visiblePaletteItems;
+        const count = visibleItems.length;
+        if (count === 0) return;
 
-        let currentIndex = visibleItems.findIndex(item => item.classList.contains('selected'));
+        let currentIndex = state.selectedPaletteIndex;
 
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            if (currentIndex >= 0) visibleItems[currentIndex].classList.remove('selected');
-            const nextIndex = (currentIndex + 1) % visibleItems.length;
+            if (currentIndex >= 0 && currentIndex < count) {
+                visibleItems[currentIndex].classList.remove('selected');
+            }
+            const nextIndex = (currentIndex + 1) % count;
             visibleItems[nextIndex].classList.add('selected');
             visibleItems[nextIndex].scrollIntoView({ block: 'nearest' });
+            state.selectedPaletteIndex = nextIndex;
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            if (currentIndex >= 0) visibleItems[currentIndex].classList.remove('selected');
-            const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+            if (currentIndex >= 0 && currentIndex < count) {
+                visibleItems[currentIndex].classList.remove('selected');
+            }
+            const prevIndex = (currentIndex - 1 + count) % count;
             visibleItems[prevIndex].classList.add('selected');
             visibleItems[prevIndex].scrollIntoView({ block: 'nearest' });
+            state.selectedPaletteIndex = prevIndex;
         } else if (e.key === 'Enter') {
             e.preventDefault();
-            if (currentIndex >= 0 && visibleItems[currentIndex]) {
+            if (currentIndex >= 0 && currentIndex < count && visibleItems[currentIndex]) {
                 visibleItems[currentIndex].click();
             }
         }
@@ -475,9 +488,11 @@ Object.defineProperty(blogController, 'initArticleList', {
             state.articles = articles;
 
             UI.paletteList.innerHTML = "";
+            const fragment = document.createDocumentFragment();
             articles.forEach((art, index) => {
-                UI.paletteList.appendChild(blogController.buildPaletteItem(art, index));
+                fragment.appendChild(blogController.buildPaletteItem(art, index));
             });
+            UI.paletteList.appendChild(fragment);
 
             const urlArticle = new URLSearchParams(window.location.search).get('article');
             if (urlArticle) {

@@ -148,6 +148,7 @@ function getProjectsFromGitHub(options) {
             title.setAttribute("data-full-title", element.name);
             title.setAttribute("data-name", element.name);
             body.appendChild(title);
+            return title;
         }
     });
 
@@ -191,6 +192,7 @@ function getProjectsFromGitHub(options) {
                 wrap.appendChild(pill);
             });
             body.appendChild(wrap);
+            return wrap;
         }
     });
 
@@ -210,10 +212,10 @@ function getProjectsFromGitHub(options) {
             }
             cardBuilder.buildImageWrap(element, link);
             const body = cardBuilder.buildBody(link);
-            cardBuilder.appendProjectTitle(element, body);
+            link._titleEl = cardBuilder.appendProjectTitle(element, body);
             cardBuilder.appendProjectDescription(element, body);
             cardBuilder.appendProjectLanguages(resolvedClass, body);
-            cardBuilder.appendProjectTags(element, body);
+            link._tagsEl = cardBuilder.appendProjectTags(element, body);
             return link;
         }
     });
@@ -229,7 +231,7 @@ function getProjectsFromGitHub(options) {
                     throw new Error(`HTTP ${response.status}`);
                 }
                 let repos = await response.json();
-                repos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+                repos.sort((a, b) => (b.pushed_at || '').localeCompare(a.pushed_at || ''));
 
                 if (isFeatured) {
                     const byName = new Map(repos.map(r => [r.name, r]));
@@ -242,13 +244,16 @@ function getProjectsFromGitHub(options) {
                 const tags = new Map();
 
                 container.innerHTML = "";
+                const fragment = document.createDocumentFragment();
 
                 repos.forEach((element, index) => {
                     if (!isFeatured && EXCLUDED_REPOS.has(element.name)) return;
                     const card = cardBuilder.buildProjectCard(element, categories, tags);
                     card.style.animationDelay = (index * 40) + "ms";
-                    container.appendChild(card);
+                    fragment.appendChild(card);
                 });
+
+                container.appendChild(fragment);
 
                 if (!isFeatured) {
                     const sortedCategories = Array.from(categories.entries())

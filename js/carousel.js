@@ -50,20 +50,16 @@ function getCarousel() {
     Object.defineProperty(carousel, 'showNext', {
         writable: false,
         value: function () {
-            carousel.slides[carousel.currentIndex].style.display = "none";
-            carousel.currentIndex = (carousel.currentIndex + 1) % carousel.slides.length;
-            carousel.slides[carousel.currentIndex].style.display = "";
-            carousel.syncDotIndicators();
+            const nextIndex = (carousel.currentIndex + 1) % carousel.slides.length;
+            carousel.showAtIndex(nextIndex);
         }
     });
 
     Object.defineProperty(carousel, 'showPrevious', {
         writable: false,
         value: function () {
-            carousel.slides[carousel.currentIndex].style.display = "none";
-            carousel.currentIndex = carousel.currentIndex - 1 < 0 ? carousel.slides.length - 1 : carousel.currentIndex - 1;
-            carousel.slides[carousel.currentIndex].style.display = "";
-            carousel.syncDotIndicators();
+            const prevIndex = carousel.currentIndex - 1 < 0 ? carousel.slides.length - 1 : carousel.currentIndex - 1;
+            carousel.showAtIndex(prevIndex);
         }
     });
 
