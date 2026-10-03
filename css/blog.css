@@ -456,7 +456,6 @@ body.palette-open {
     background-color: #333;
     padding: 2px 5px;
     border-radius: 4px;
-    corner-shape: squircle;
     color: var(--Orange-color);
 }
 
@@ -464,7 +463,6 @@ body.palette-open {
     background-color: #1e1e1e;
     padding: 15px;
     border-radius: 8px;
-    corner-shape: squircle;
     overflow-x: auto;
     margin: 20px 0;
     font-size: 15px;
@@ -494,7 +492,6 @@ body.palette-open {
     color: #999;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
-    corner-shape: squircle;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -554,7 +551,6 @@ body.palette-open {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
-    corner-shape: squircle;
     margin: 20px auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -592,7 +588,6 @@ body.palette-open {
     height: auto;
     margin: 0;
     border-radius: 8px;
-    corner-shape: squircle;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
@@ -718,7 +713,6 @@ body.palette-open {
         color: white;
         border: none;
         border-radius: 8px;
-        corner-shape: squircle;
         font-size: 1.05rem;
         font-weight: bold;
         cursor: pointer;

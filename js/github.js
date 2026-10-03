@@ -249,7 +249,7 @@ function getProjectsFromGitHub(options) {
                 repos.forEach((element, index) => {
                     if (!isFeatured && EXCLUDED_REPOS.has(element.name)) return;
                     const card = cardBuilder.buildProjectCard(element, categories, tags);
-                    card.style.animationDelay = (index * 40) + "ms";
+                    card.style.animationDelay = (Math.min(index, 6) * 40) + "ms";
                     fragment.appendChild(card);
                 });
 

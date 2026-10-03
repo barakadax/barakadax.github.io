@@ -6,10 +6,13 @@
    box-sizing: border-box;
 }
 
+html {
+   scroll-behavior: smooth;
+}
+
 * {
    margin: 0;
    padding: 0;
-   scroll-behavior: smooth;
    --SAP-color: #00A6E1;
    --Red-color: #f1181b;
    --gray-color: #808080;
@@ -33,7 +36,6 @@ body {
    position: relative;
    align-items: center;
    flex-direction: column;
-   scroll-behavior: smooth;
    background-color: black;
    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
 }
